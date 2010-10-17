@@ -32,9 +32,5 @@ public class RuntimeParserTest {
 		Collections.sort(tokens, Token.START_POS_ASCENDING);
 		
 		myParser.parse(new BeaverLexerAdapter(tokens));
-		
-		System.out.println("Tokens: "+tokens);
-		
-		BeaverLexerAdapter adapter = new BeaverLexerAdapter(tokens);
 	}
 }
