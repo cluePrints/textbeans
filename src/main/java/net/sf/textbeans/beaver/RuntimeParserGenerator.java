@@ -19,7 +19,6 @@ public class RuntimeParserGenerator {
 			ParserGenerator.CompiledParser parser = ParserGenerator.compile(
 					grammar, opt, log);
 			String tables = parser.encodeParsingTables();
-			System.out.println(tables);
 			RuntimeParser myParser = new RuntimeParser(grammar, tables);
 			return myParser;
 		} catch (Exception ex) {
