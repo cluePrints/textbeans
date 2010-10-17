@@ -23,16 +23,8 @@ public class RuntimeParserTest {
 	@Test
 	public void testGen() throws Exception
 	{
-		// compile parser
-		SrcReader src = new SrcReader(CompileTokensTest.BEAVER_GRAMMAR);
-		Options opt = new Options();
-		opt.no_compression = true;
-		Log log = new Log();
-		Grammar grammar = ParserGenerator.parseGrammar(src, log);
-		ParserGenerator.CompiledParser parser = ParserGenerator.compile(grammar, opt, log);
-		String tables = parser.encodeParsingTables();
-		System.out.println(tables);
-		RuntimeParser myParser = new RuntimeParser(grammar, tables);
+		RuntimeParserGenerator gen = new RuntimeParserGenerator();
+		RuntimeParser myParser = gen.compile(CompileTokensTest.BEAVER_GRAMMAR.getAbsolutePath());
 		
 		String text = Files.toString(CompileTokensTest.TEXT, Charsets.UTF_8);
 		Lexer l = new Lexer(CompileTokensTest.tokenize());

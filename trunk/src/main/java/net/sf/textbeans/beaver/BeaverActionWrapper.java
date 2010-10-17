@@ -1,13 +1,14 @@
 package net.sf.textbeans.beaver;
 
-import java.io.IOException;
-import java.io.Writer;
+import java.util.List;
 
 import beaver.Action;
 import beaver.Symbol;
-import beaver.comp.run.Options;
 import beaver.spec.Grammar;
 import beaver.spec.Production;
+import beaver.spec.ProductionType;
+
+import com.google.common.collect.Lists;
 
 /**
  * Is adaptor to grammar which allows it to act like a reduce action
@@ -51,7 +52,7 @@ public class BeaverActionWrapper {
 		}
 		else
 		{
-			return writeReduceActionCode(rule);
+			return writeReduceActionCode(rule, args, offset);
 		}
 	}
 	/*
@@ -143,7 +144,7 @@ public class BeaverActionWrapper {
 	}*/
 
 	
-	private static Symbol writeReduceActionCode(Production rule)
+	private static Symbol writeReduceActionCode(Production rule, Symbol[] args, int offset)
 	{
 		for (int i = 0; i < rule.rhs.items.length; i++)
 		{
@@ -215,6 +216,11 @@ public class BeaverActionWrapper {
 					}
 				}
 			}
+		}
+		if (rule.type == ProductionType.NEW_LIST) {
+			List<Symbol> lst = Lists.newArrayList();
+			lst.add(args[offset+1]);
+			return new Symbol(lst);
 		}
 		throw new RuntimeException("Not supported yet");
 		// rule.code here
