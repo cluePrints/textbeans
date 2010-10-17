@@ -16,7 +16,7 @@ import net.sf.textbeans.grammar.parser.ParserException;
 import com.google.common.collect.Lists;
 
 public class Compiler {
-	public Collection<Tokenizer> generateTokenizers(Reader grammarSource) {
+	public List<Tokenizer> generateTokenizers(Reader grammarSource) {
 		try {
 			net.sf.textbeans.grammar.lexer.Lexer lexer = new net.sf.textbeans.grammar.lexer.Lexer(new PushbackReader(grammarSource));
 			net.sf.textbeans.grammar.parser.Parser p = new net.sf.textbeans.grammar.parser.Parser(lexer);

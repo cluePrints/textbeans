@@ -1,0 +1,16 @@
+%package "net.sf.textbeans.beaver";
+%class "TextbeansParser";
+
+%terminals fee, id, at;
+
+%goal batch;
+
+
+batch
+	= order;
+	
+order
+	= id at fee
+	| id
+	| id fee
+	| fee id;
