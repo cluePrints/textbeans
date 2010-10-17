@@ -7,7 +7,7 @@
 
 
 batch
-	= order;
+	= order*;
 	
 order
 	= id at fee

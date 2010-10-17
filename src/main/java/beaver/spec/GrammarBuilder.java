@@ -672,7 +672,7 @@ public class GrammarBuilder extends TreeWalker
 			if (nts[i].definitions.size() != 2)
 				continue;
 			
-			Production new_list_rule = nts[i].definitions.start();
+			Production new_list_rule = nts[i].definitions.start();			
 			if (new_list_rule.rhs.size() != 1)
 			{
 				if ((new_list_rule = new_list_rule.next_definition).rhs.size() != 1)
@@ -701,11 +701,13 @@ public class GrammarBuilder extends TreeWalker
 				.append(Grammar.EBNF_LIST_TYPE_NAME).append(" lst = new ").append(Grammar.EBNF_LIST_TYPE_NAME).append("(); ")
 				.append("lst.add(_symbols[offset + 1]").append(elem.type != null ? ".value" : "").append("); ")
 				.append("return new Symbol(lst);")
-				.toString();
+				.toString();			
 			add_elem_rule.code = new StringBuffer(Grammar.EBNF_LIST_TYPE_NAME.length() + 88)
 			.append("((").append(Grammar.EBNF_LIST_TYPE_NAME).append(") _symbols[offset + 1].value).add(_symbols[offset + ").append(add_elem_rule.rhs.size()).append("]").append(elem.type != null ? ".value" : "").append("); ")
 			.append("return _symbols[offset + 1];")
 			.toString();
+			new_list_rule.type = ProductionType.NEW_LIST;
+			add_elem_rule.type = ProductionType.ADD_TO_LIST;
 		}
 	}
 }

@@ -11,14 +11,15 @@ import beaver.*;
 public class TextbeansParser extends Parser {
 	static public class Terminals {
 		static public final short EOF = 0;
-		static public final short fee = 1;
-		static public final short id = 2;
+		static public final short id = 1;
+		static public final short fee = 2;
 		static public final short at = 3;
 	}
 
 	static final ParsingTables PARSING_TABLES = new ParsingTables(
-		"U9nrZKaEW30C0uUqfMpYpRoRBRXHhrYQM8wi1DZzONGdKqcOdnH$$GQ$c81194rJeqH2RPH" +
-		"XFWYbdfjgsuj5h6Bh7Ml#HrU93rdtShW5umVp1XCI");
+		"U9oDZkqAmZ0CHM#w3pidWY08WY8#gK#jJkVYQRRVOYudDuMqlPAkwbKf#Tq77vJL#aUDEX#" +
+		"ZJw5Nw1bwXEPwgvQqqXflr399fiHxi$$NQtVSc3OtHMKuGG$RiW5dsC4UBd20OzadnxZSY$" +
+		"Clbkf8Qv38B32I6xzKK3m5#GiImpRX");
 
 	static final Action RETURN3 = new Action() {
 		public Symbol reduce(Symbol[] _symbols, int offset) {
@@ -37,11 +38,23 @@ public class TextbeansParser extends Parser {
 	public TextbeansParser() {
 		super(PARSING_TABLES);
 		actions = new Action[] {
-			Action.RETURN,	// [0] batch = order
-			RETURN3,	// [1] order = id at fee; returns 'fee' although none is marked
-			Action.RETURN,	// [2] order = id
-			RETURN2,	// [3] order = id fee; returns 'fee' although none is marked
-			RETURN2	// [4] order = fee id; returns 'id' although none is marked
+			new Action() {	// [0] lst$order = order
+				public Symbol reduce(Symbol[] _symbols, int offset) {
+					ArrayList lst = new ArrayList(); lst.add(_symbols[offset + 1]); return new Symbol(lst);
+				}
+			},
+			new Action() {	// [1] lst$order = lst$order order
+				public Symbol reduce(Symbol[] _symbols, int offset) {
+					((ArrayList) _symbols[offset + 1].value).add(_symbols[offset + 2]); return _symbols[offset + 1];
+				}
+			},
+			Action.NONE,  	// [2] opt$lst$order = 
+			Action.RETURN,	// [3] opt$lst$order = lst$order
+			Action.RETURN,	// [4] batch = opt$lst$order
+			RETURN3,	// [5] order = id at fee; returns 'fee' although none is marked
+			Action.RETURN,	// [6] order = id
+			RETURN2,	// [7] order = id fee; returns 'fee' although none is marked
+			RETURN2	// [8] order = fee id; returns 'id' although none is marked
 		};
 	}
 
