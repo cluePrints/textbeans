@@ -307,7 +307,7 @@ public abstract class Parser
 				Symbol token = in.nextToken();
 				while (true)
 				{
-					short act = tables.findParserAction(states[top], token.id);
+					short act = tables.findParserAction(states[top], token);
 					if (act > 0)
 					{
 						shift(act);
@@ -432,7 +432,7 @@ public abstract class Parser
             Symbol token = in.nextToken();
             while (true)
             {
-                short act = tables.findParserAction(states[top], token.id);
+                short act = tables.findParserAction(states[top], token);
                 if (act > 0)
                 {
                     shift(token, act);
