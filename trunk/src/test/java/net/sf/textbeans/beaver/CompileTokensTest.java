@@ -25,7 +25,7 @@ public class CompileTokensTest {
 	private static final String ROOT = "src/test/java/net/sf/textbeans/";
 	private static final File GRAMMAR = new File(ROOT+"beaver/OneLineExample.tbg");
 	private static final File TOKENS = new File(ROOT+"beaver/OneLineExample.tokens");
-	private static final File TEXT = new File(ROOT+"beaver/OneLineExample.txt");
+	public static final File TEXT = new File(ROOT+"beaver/OneLineExample.txt");
 	static final File BEAVER_GRAMMAR = new File(ROOT+"beaver/OneLineExample.beaver");
 
 	@Test
@@ -35,7 +35,7 @@ public class CompileTokensTest {
 		Assert.assertEquals(3, tokenizers.size());
 	}
 
-	private Collection<Tokenizer> tokenize() throws FileNotFoundException {
+	public static Collection<Tokenizer> tokenize() throws FileNotFoundException {
 		FileReader r = new FileReader(GRAMMAR);
 		Compiler c = new Compiler();
 		Collection<Tokenizer> tokenizers = c.generateTokenizers(r);

@@ -776,7 +776,7 @@ public class ParserGenerator
 			out.write("}\n");
 		}
 
-		private String encodeParsingTables() throws IOException
+		public String encodeParsingTables() throws IOException
 		{
 			return encode(serializeParsingTables(tables, rule_descr, grammar.error).toByteArray());
 		}

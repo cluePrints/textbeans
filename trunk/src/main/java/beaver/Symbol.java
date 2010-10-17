@@ -160,4 +160,9 @@ public class Symbol
 	{
 		return end;
 	}
+	
+	@Override
+	public String toString() {
+		return String.valueOf(value);
+	}
 }

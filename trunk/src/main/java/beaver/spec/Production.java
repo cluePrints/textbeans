@@ -205,6 +205,8 @@ public class Production
 
 	/** Code executed when this rule is reduced */
 	public String code;
+	
+	public ProductionType type;
 
 	/** Position of this rule in the source */
 	public int start_pos, end_pos;
