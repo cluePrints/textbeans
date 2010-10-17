@@ -13,7 +13,7 @@ public class RuntimeParserGenerator {
 		try {
 			SrcReader src = new SrcReader(new File(grammarPath));
 			Options opt = new Options();
-			opt.no_compression = true;
+			opt.no_compression = false;
 			Log log = new Log();
 			Grammar grammar = ParserGenerator.parseGrammar(src, log);
 			ParserGenerator.CompiledParser parser = ParserGenerator.compile(

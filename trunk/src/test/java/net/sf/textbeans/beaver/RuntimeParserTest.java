@@ -8,12 +8,6 @@ import net.sf.textbeans.internal.grammar.Token;
 
 import org.junit.Test;
 
-import beaver.comp.ParserGenerator;
-import beaver.comp.io.SrcReader;
-import beaver.comp.run.Options;
-import beaver.comp.util.Log;
-import beaver.spec.Grammar;
-
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 

@@ -173,16 +173,17 @@ public final class ParsingTables
 	 * Find the appropriate action for a parser in a given state with a specified terminal look-ahead.
 	 *
 	 * @param state     of a parser
-	 * @param lookahead
+	 * @param tokenId
 	 * @return parser action
 	 */
-	final short findParserAction(int state, short lookahead)
+	final short findParserAction(int state, Symbol token)
 	{
 		int index = actn_offsets[state];
 		if (index != UNUSED_OFFSET)
 		{
-			index += lookahead;
-			if (0 <= index && index < actions.length && lookaheads[index] == lookahead)
+			short tokenId = token.id;
+			index += tokenId;
+			if (0 <= index && index < actions.length && lookaheads[index] == tokenId)
 			{
 				return actions[index];
 			}

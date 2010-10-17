@@ -15,7 +15,6 @@ public class GenGrammarTest {
 	{
 		SrcReader src = new SrcReader(CompileTokensTest.BEAVER_GRAMMAR);
 		Options opt = new Options();
-		opt.no_compression = true;
 		opt.report_actions = true;
 		Log log = new Log();
 		ParserGenerator.compile(src, opt, log);

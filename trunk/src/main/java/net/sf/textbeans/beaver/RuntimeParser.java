@@ -1,6 +1,5 @@
 package net.sf.textbeans.beaver;
 
-import beaver.Action;
 import beaver.Parser;
 import beaver.ParsingTables;
 import beaver.Symbol;

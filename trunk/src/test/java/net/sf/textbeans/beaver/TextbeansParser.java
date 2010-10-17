@@ -11,15 +11,15 @@ import beaver.*;
 public class TextbeansParser extends Parser {
 	static public class Terminals {
 		static public final short EOF = 0;
-		static public final short id = 1;
-		static public final short fee = 2;
+		static public final short fee = 1;
+		static public final short id = 2;
 		static public final short at = 3;
 	}
 
 	static final ParsingTables PARSING_TABLES = new ParsingTables(
-		"U9oDZkqAmZ0CHM#w3pidWY08WY8#gK#jJkVYQRRVOYudDuMqlPAkwbKf#Tq77vJL#aUDEX#" +
-		"ZJw5Nw1bwXEPwgvQqqXflr399fiHxi$$NQtVSc3OtHMKuGG$RiW5dsC4UBd20OzadnxZSY$" +
-		"Clbkf8Qv38B32I6xzKK3m5#GiImpRX");
+		"U9njZjiEmZ0CGq#wZMqCaFXZlfhhm3XL9$50fECuIQKQEBFGKNJLcvb1QogJNkpe6O6z##0" +
+		"fVL2QXdldIqXrTxXGgpUB6TiycsFwDfysdqXQjtU$#t$a7xJIHq$hGtVhpGcegSCK9yM4yq" +
+		"RcCvcpLAOlU$OYv0==");
 
 	static final Action RETURN3 = new Action() {
 		public Symbol reduce(Symbol[] _symbols, int offset) {
@@ -51,8 +51,8 @@ public class TextbeansParser extends Parser {
 			Action.NONE,  	// [2] opt$lst$order = 
 			Action.RETURN,	// [3] opt$lst$order = lst$order
 			Action.RETURN,	// [4] batch = opt$lst$order
-			RETURN3,	// [5] order = id at fee; returns 'fee' although none is marked
-			Action.RETURN,	// [6] order = id
+			Action.RETURN,	// [5] order = id
+			RETURN3,	// [6] order = id at fee; returns 'fee' although none is marked
 			RETURN2,	// [7] order = id fee; returns 'fee' although none is marked
 			RETURN2	// [8] order = fee id; returns 'id' although none is marked
 		};

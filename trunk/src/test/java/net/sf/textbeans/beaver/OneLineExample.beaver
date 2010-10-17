@@ -10,7 +10,7 @@ batch
 	= order*;
 	
 order
-	= id at fee
-	| id
+	= id 
+	| id at fee
 	| id fee
 	| fee id;
