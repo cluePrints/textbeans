@@ -1,10 +1,9 @@
-%package "net.sf.textbeans.beaver";
-%class "TextbeansParser";
-
-%terminals fee, id, at;
-
+%tokens
+	fee		= [0-9]+bp
+	id  	= [A-Z]{2}[0-9]{8}
+	at  	= at
+	
 %goal batch;
-
 
 batch
 	= order*;

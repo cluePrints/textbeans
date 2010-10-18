@@ -71,7 +71,7 @@ public class Log
 		
 		public void report(String type, PrintStream out, SrcReader src_reader)
 		{
-			out.print(src_reader.file.getName());
+			//out.print(src_reader.file.getName());
 			out.print(':');
 			if (start_pos > 0)
 			{
@@ -99,8 +99,6 @@ public class Log
 				int end_line = Symbol.getLine(end_pos);
 				if (start_line == end_line)
 				{
-					String line = src_reader.getLine(start_line).replace('\t', ' ');
-					out.print(line);
 					int start_column = Symbol.getColumn(start_pos);
 					int n;
 					for (n = start_column - 1; n > 0; n--)

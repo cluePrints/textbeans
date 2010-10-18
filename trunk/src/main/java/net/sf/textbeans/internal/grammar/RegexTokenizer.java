@@ -30,4 +30,9 @@ public class RegexTokenizer implements Tokenizer {
 		}
 		return result;
 	}
+	
+	@Override
+	public String getName() {
+		return tokenType.getName();
+	}
 }
