@@ -1,6 +1,6 @@
 package net.sf.textbeans.beaver;
 
-import java.io.File;
+import java.io.Reader;
 
 import beaver.comp.ParserGenerator;
 import beaver.comp.io.SrcReader;
@@ -9,9 +9,9 @@ import beaver.comp.util.Log;
 import beaver.spec.Grammar;
 
 public class RuntimeParserGenerator {
-	public RuntimeParser compile(String grammarPath) {
+	public RuntimeParser compile(Reader grammarIn) {
 		try {
-			SrcReader src = new SrcReader(new File(grammarPath));
+			SrcReader src = new SrcReader(grammarIn);
 			Options opt = new Options();
 			opt.no_compression = false;
 			Log log = new Log();
