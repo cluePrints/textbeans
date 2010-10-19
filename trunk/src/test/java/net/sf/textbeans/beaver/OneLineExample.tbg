@@ -1,6 +1,0 @@
-tokens
-
-	
-rules
-	unit    : "order*"
-	order   : "id at fee"
