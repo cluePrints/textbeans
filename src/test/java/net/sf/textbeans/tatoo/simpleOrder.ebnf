@@ -1,0 +1,29 @@
+// calc grammar
+imports:
+ 
+priorities:
+
+tokens:
+	id  	= '[A-Z]{2}[0-9]{8}'
+	number	= '[0-9]+'
+	at  	= 'at'
+	bp		= 'bp'
+ 
+blanks:
+ 	space= "( |\t|\r|\n)+"
+ 
+comments:
+ 	comment="#([^\r\n])*(\r)?\n"  
+
+starts:
+ 	batch
+
+productions:
+	batch 
+		= order+;
+    
+    order 
+    	= 'id' 'at' fee;
+    	
+    fee
+    	= 'number' 'bp'; 

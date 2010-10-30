@@ -11,6 +11,7 @@ import beaver.Symbol;
 
 public class BeaverLexerAdapter extends Scanner{
 	private final Iterator<Token> tokens;
+	private Token lastToken;
 	private BeaverSymbolFactory beaver = new BeaverSymbolFactory();
 	public BeaverLexerAdapter(Collection<Token> tokens) {
 		this.tokens = tokens.iterator();
@@ -20,10 +21,15 @@ public class BeaverLexerAdapter extends Scanner{
 	public Symbol nextToken() throws IOException, Exception {
 		Token token;
 		if (tokens.hasNext()) {
-			token = tokens.next();			
+			int indAllowedSinceIncl = lastToken != null ? lastToken.getStartInd()+lastToken.getText().length() : 0;
+			do {
+				token = tokens.next(); 
+			} while (token != null && token.getStartInd() < indAllowedSinceIncl);
+			lastToken = token;
 		} else {
 			token = null;
 		}
+		System.out.println(token);
 		return beaver.translate(token);
 	}
 }
