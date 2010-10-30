@@ -42,14 +42,17 @@ public class TatooTest {
 	@Parameters
 	public static Collection<Object[]> cases() {
 		List<Object[]> cases = Lists.newLinkedList();
+		
+		cases.add(new Object[] { "adEmailOrder" });
+		/*
 		cases.add(new Object[] { "multipleSimpleOrder" });
 		cases.add(new Object[] { "simpleOrder" });
 
-		cases.add(new Object[] { "adEmailOrder" });
+		
 		cases.add(new Object[] { "simpleEmailOrder" });
 		cases.add(new Object[] { "simplerOrder" });
 		cases.add(new Object[] { "simpleOrder" });
-		cases.add(new Object[] { "simpleOrder2" });
+		cases.add(new Object[] { "simpleOrder2" });*/
 		return cases;
 	}
 
@@ -130,8 +133,8 @@ public class TatooTest {
 			public void ruleVerified(RuleDecl rule, int size,
 					ReaderWrapper buffer) {
 				TerminalDecl terminal = infoMap.get(rule).getTerminal();
-				System.out.println("Resolving " + rule + "-->" + terminal);
 				if (terminal != null) {
+					System.out.println("Resolving " + rule + "-->" + terminal);
 					parser.push(terminal);
 				}
 
