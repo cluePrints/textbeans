@@ -4,9 +4,9 @@ imports:
 priorities:
 
 tokens:
-	adType 	=	'flash|static|dynamic'
-	size	=	'[0-9]{2,3}x[0-9]{2,3}'
-	bye		=	'bye'
+	adType:String 	=	'flash|static|dynamic'
+	size:String		=	'[0-9]{2,3}x[0-9]{2,3}'
+	bye:String		=	'bye'
  
 blanks:
  	space= "( |\t|\r|\n)+"

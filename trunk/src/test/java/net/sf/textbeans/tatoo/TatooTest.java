@@ -23,8 +23,10 @@ import fr.umlv.tatoo.cc.main.main.EBNFParser;
 import fr.umlv.tatoo.cc.parser.grammar.EBNFSupport;
 import fr.umlv.tatoo.cc.parser.grammar.GrammarFactory;
 import fr.umlv.tatoo.cc.parser.grammar.NonTerminalDecl;
+import fr.umlv.tatoo.cc.parser.grammar.Priority;
 import fr.umlv.tatoo.cc.parser.grammar.ProductionDecl;
 import fr.umlv.tatoo.cc.parser.grammar.TerminalDecl;
+import fr.umlv.tatoo.cc.parser.grammar.VariableDecl;
 import fr.umlv.tatoo.cc.parser.grammar.VersionDecl;
 import fr.umlv.tatoo.cc.tools.tools.RuleInfo;
 import fr.umlv.tatoo.cc.tools.tools.ToolsFactory;
@@ -94,8 +96,12 @@ public class TatooTest {
 
 		VersionDecl version = grammarFactory.createVersion("DEFAULT", null);
 
+		final Map<VariableDecl, Type> typeMap = toolsFactory.getVariableTypeMap();
+		
 		ParserListener<TerminalDecl, NonTerminalDecl, ProductionDecl> listener = new ParserListener<TerminalDecl, NonTerminalDecl, ProductionDecl>() {
 			public void shift(TerminalDecl terminal) {
+				Map<VariableDecl, Type> map = typeMap;
+				CharSequence data = ((DTOTerminalDecl) terminal).data;
 				System.out.println("shift " + terminal);
 			}
 
@@ -135,7 +141,7 @@ public class TatooTest {
 				TerminalDecl terminal = infoMap.get(rule).getTerminal();
 				if (terminal != null) {
 					System.out.println("Resolving " + rule + "-->" + terminal);
-					parser.push(terminal);
+					parser.push(new DTOTerminalDecl(buffer.view(), terminal));
 				}
 
 				buffer.discard();
@@ -148,4 +154,45 @@ public class TatooTest {
 		this.caseName = caseName;
 	}
 
+}
+
+class DTOTerminalDecl extends TerminalDecl {
+	final CharSequence data;
+	final TerminalDecl decl;
+	DTOTerminalDecl(CharSequence data, TerminalDecl decl) {
+		super(null, null, false);
+		this.data = data;
+		this.decl = decl;
+	}
+	public String getId() {
+		return decl.getId();
+	}
+	public Priority getPriority() {
+		return decl.getPriority();
+	}
+	public boolean isBranching() {
+		return decl.isBranching();
+	}
+	public boolean isTerminal() {
+		return decl.isTerminal();
+	}
+	public void setAlias(String alias) {
+		decl.setAlias(alias);
+	}
+	public String getAlias() {
+		return decl.getAlias();
+	}
+	public String getName() {
+		return decl.getName();
+	}
+	public String toString() {
+		return decl.toString();
+	}
+	public int hashCode() {
+		return decl.hashCode();
+	}
+	public boolean equals(Object obj) {
+		return decl.equals(obj);
+	}	
+	
 }

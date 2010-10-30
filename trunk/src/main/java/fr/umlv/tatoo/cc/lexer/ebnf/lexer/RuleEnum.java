@@ -1,0 +1,47 @@
+package fr.umlv.tatoo.cc.lexer.ebnf.lexer;
+
+/** 
+ *  This class is generated - please do not edit it 
+ */
+public enum RuleEnum {
+space,
+directivesdecl,
+importsdecl,
+prioritiesdecl,
+tokensdecl,
+blanksdecl,
+commentsdecl,
+branchesdecl,
+errordecl,
+typesdecl,
+attributesdecl,
+startsdecl,
+versionsdecl,
+productionsdecl,
+eof,
+lbracket,
+rbracket,
+lsqbracket,
+rsqbracket,
+lpar,
+rpar,
+assign,
+pipe,
+dollar,
+star,
+plus,
+slash,
+qmark,
+quote,
+doublequote,
+semicolon,
+colon,
+quoted_name,
+assoc,
+comment,
+number,
+id,
+qualifiedid,
+regexquote,
+regexdoublequote;
+}
