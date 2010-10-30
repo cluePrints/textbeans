@@ -28,7 +28,7 @@ public class RuntimeParserGenerator {
 		try {
 			SrcReader src = new SrcReader(grammarIn);
 			Options opt = new Options();
-			opt.no_compression = false;
+			opt.no_compression = true;
 			Log log = new Log();
 			Grammar grammar = ParserGenerator.parseGrammar(src, log);
 			ParserGenerator.CompiledParser parser = ParserGenerator.compile(
@@ -91,6 +91,8 @@ public class RuntimeParserGenerator {
 				grammarExt.append("\n");
 			} while (line != null);
 
+			System.out.println(grammarExt.toString());
+			
 			RuntimeParser myParser = compile(new StringReader(
 					grammarExt.toString()));
 			Pair<RuntimeParser, Lexer> artifacts = new Pair<RuntimeParser, Lexer>(

@@ -1,15 +1,21 @@
 %tokens
-	fee		= [0-9]+bp
 	id  	= [A-Z]{2}[0-9]{8}
+	number	= [0-9]+
 	at  	= at
+	bp		= bp
 	
+%import "net.sf.textbeans.beaver.*";
+
+%left bp;
+%left at;
+
 %goal batch;
 
 batch
 	= order*;
 	
 order
-	= id 
-	| id at fee
-	| id fee
-	| fee id;
+	= id at fee;
+
+fee
+	= number bp;

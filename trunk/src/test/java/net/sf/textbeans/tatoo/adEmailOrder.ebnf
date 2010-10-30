@@ -1,0 +1,25 @@
+// calc grammar
+imports:
+ 
+priorities:
+
+tokens:
+	adType 	=	'flash|static|dynamic'
+	size	=	'[0-9]{2,3}x[0-9]{2,3}'
+	bye		=	'bye'
+ 
+blanks:
+ 	space= "( |\t|\r|\n)+"
+ 
+comments:
+ 	comment="#([^\r\n])*(\r)?\n"  
+
+starts:
+ 	batch
+
+productions:
+	batch 
+		= advertisement+ 'bye';
+		
+	advertisement
+		= 'adType' 'size';

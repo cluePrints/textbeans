@@ -1,8 +1,0 @@
-tokens
-	fee 	: "[0-9]+bp"
-	id  	: "[A-Z]{2}[0-9]{8}"
-	at  	: "at"
-	
-rules
-	unit    : "order*"
-	order   : "id at fee"
