@@ -28,7 +28,6 @@ import fr.umlv.tatoo.cc.parser.grammar.TerminalDecl;
 import fr.umlv.tatoo.cc.parser.grammar.VersionDecl;
 import fr.umlv.tatoo.cc.tools.tools.RuleInfo;
 import fr.umlv.tatoo.cc.tools.tools.ToolsFactory;
-import fr.umlv.tatoo.gui.jit.NamedObject;
 import fr.umlv.tatoo.runtime.buffer.impl.LocationTracker;
 import fr.umlv.tatoo.runtime.buffer.impl.ReaderWrapper;
 import fr.umlv.tatoo.runtime.lexer.Lexer;
@@ -39,25 +38,24 @@ import fr.umlv.tatoo.runtime.parser.ParserListener;
 @RunWith(Parameterized.class)
 public class TatooTest {
 	private String caseName;
-	
+
 	@Parameters
-	public static Collection<Object[]> cases() 
-	{
+	public static Collection<Object[]> cases() {
 		List<Object[]> cases = Lists.newLinkedList();
-		cases.add(new Object[]{"multipleSimpleOrder"});
-		cases.add(new Object[]{"simpleOrder"});
-		
-		cases.add(new Object[]{"adEmailOrder"});
-		cases.add(new Object[]{"simpleEmailOrder"});
-		cases.add(new Object[]{"simplerOrder"});
-		cases.add(new Object[]{"simpleOrder"});
-		cases.add(new Object[]{"simpleOrder2"});
+		cases.add(new Object[] { "multipleSimpleOrder" });
+		cases.add(new Object[] { "simpleOrder" });
+
+		cases.add(new Object[] { "adEmailOrder" });
+		cases.add(new Object[] { "simpleEmailOrder" });
+		cases.add(new Object[] { "simplerOrder" });
+		cases.add(new Object[] { "simpleOrder" });
+		cases.add(new Object[] { "simpleOrder2" });
 		return cases;
 	}
 
 	@Test
 	public void test() throws Exception {
-		System.out.println("\n\n\n\n =======================\n"+caseName);
+		System.out.println("\n\n\n\n =======================\n" + caseName);
 		compile(caseName);
 	}
 
@@ -107,78 +105,41 @@ public class TatooTest {
 			}
 		};
 
-		
-		
-		Parser<TerminalDecl,NonTerminalDecl,ProductionDecl,VersionDecl> emailParser = RuntimeParserFactory
+		Parser<TerminalDecl, NonTerminalDecl, ProductionDecl, VersionDecl> emailParser = RuntimeParserFactory
 				.createRuntimeParser(grammarFactory, start, version, listener);
 
 		ReaderWrapper emailReader = new ReaderWrapper(new FileReader(dataFile),
 				new LocationTracker());
-		
-		LexerListener<RuleDecl, ReaderWrapper> listener2 = createLexerListener(emailParser, toolsFactory);
 
-		
+		LexerListener<RuleDecl, ReaderWrapper> listener2 = createLexerListener(
+				emailParser, toolsFactory);
 
 		Lexer<ReaderWrapper> lexer = RuntimeLexerFactory.createRuntimeLexer(
 				ruleFactory, encoding, emailReader, listener2);
 		lexer.run();
-		
+
 	}
 
 	private LexerListener<RuleDecl, ReaderWrapper> createLexerListener(
 			final Parser<TerminalDecl, NonTerminalDecl, ProductionDecl, VersionDecl> parser,
 			ToolsFactory factory) {
-	    final Map<RuleDecl, RuleInfo> infoMap = factory.getRuleInfoMap();
-	    
-	    return new LexerListener<RuleDecl,ReaderWrapper>() {
-	      
-	      public void ruleVerified(RuleDecl rule, int size, ReaderWrapper buffer) {
-	    	final Map<RuleDecl, RuleInfo> map = infoMap;
-	    	
-	    	TerminalDecl terminal = infoMap.get(rule).getTerminal();	    	
-	    	System.out.println("Resolving "+rule+"-->"+terminal);
-	    	if (terminal != null) {
-	    		parser.push(terminal);
-	    	}
+		final Map<RuleDecl, RuleInfo> infoMap = factory.getRuleInfoMap();
 
-	        buffer.discard();
-	      }
-	    };
-	  }
-	
-	/*
-	 * public
-	 * LexerAndParser<LexerBuffer,TerminalDecl,NonTerminalDecl,ProductionDecl
-	 * ,VersionDecl> createAnalyzer( Parser<TerminalDecl, NonTerminalDecl,
-	 * ProductionDecl, VersionDecl> parser) {
-	 * 
-	 * 
-	 * // create lexer RuleActivator<R> activator=expertLexerBuilder.activator;
-	 * if (activator==null) {
-	 * expertLexerBuilder.activator(getDefaultActivator()); /
-	 * 
-	 * ParserForwarder<TerminalDecl,LexerBuffer> parserForwarder = new
-	 * ParserForwarder<T,B>(parser); }
-	 * 
-	 * LifecycleHandler<B> lifecycleHandler=expertLexerBuilder.lifecycleHandler;
-	 * if (lifecycleHandler==null) { lifecycleHandler=parserForwarder; }
-	 * expertLexerBuilder.lifecycleHandler(lifecycleHandler);
-	 * 
-	 * LexerErrorRecoveryPolicy<R,B>
-	 * lexerErrorPolicy=expertLexerBuilder.errorPolicy; if (lexerErrorPolicy ==
-	 * null) { // if there is a error terminal, forward the error to the parser
-	 * // else throw a lexing exception if (parser.getTable().getErrorTerminal()
-	 * == null) { lexerErrorPolicy=new NoLexerErrorRecoveryPolicy<R, B>(); }
-	 * else { lexerErrorPolicy=new DefaultLexerErrorRecoveryPolicy<R,B>(
-	 * parserForwarder, new DefaultLexerWarningReporter<B>()); } }
-	 * expertLexerBuilder.errorPolicy(lexerErrorPolicy);
-	 * 
-	 * final Lexer<B> lexer=expertLexerBuilder.createLexer(); return new
-	 * LexerAndParser<B,T,N,P,V>() { public Lexer<B> getLexer() { return lexer;
-	 * } public Parser<T,N,P,V> getParser() { return parser; } }; }
-	 */
-	
-	
+		return new LexerListener<RuleDecl, ReaderWrapper>() {
+
+			public void ruleVerified(RuleDecl rule, int size,
+					ReaderWrapper buffer) {
+				TerminalDecl terminal = infoMap.get(rule).getTerminal();
+				System.out.println("Resolving " + rule + "-->" + terminal);
+				if (terminal != null) {
+					parser.push(terminal);
+				}
+
+				buffer.discard();
+			}
+		};
+	}
+
 	public TatooTest(String caseName) {
 		super();
 		this.caseName = caseName;
