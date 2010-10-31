@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.sf.textbeans.parser.RuntimeLexerFactory;
-import net.sf.textbeans.parser.RuntimeParserFactory;
 import fr.umlv.tatoo.cc.common.generator.Type;
 import fr.umlv.tatoo.cc.lexer.charset.encoding.Encoding;
 import fr.umlv.tatoo.cc.lexer.charset.encoding.UTF8Encoding;
@@ -30,7 +28,7 @@ import fr.umlv.tatoo.runtime.parser.Parser;
 import fr.umlv.tatoo.runtime.parser.ParserListener;
 
 public class GrammarParser {
-	private Parser<TerminalDecl, NonTerminalDecl, ProductionDecl, VersionDecl> dataParser;
+	Parser<TerminalDecl, NonTerminalDecl, ProductionDecl, VersionDecl> dataParser;
 	private Encoding encoding = UTF8Encoding.getInstance();
 	// lexer
 	private RuleFactory ruleFactory = new RuleFactory();
@@ -39,12 +37,15 @@ public class GrammarParser {
 	private EBNFSupport ebnfSupport = new EBNFSupport(grammarFactory);
 
 	// tools
-	private ToolsFactory toolsFactory = new ToolsFactory();
+	ToolsFactory toolsFactory = new ToolsFactory();
 	private HashMap<String, Type> attributeMap = new HashMap<String, Type>();
 
-	public static GrammarParser compile(String grammarFileName) {
+	private DelegatingParserListener parserListener = new DelegatingParserListener();
+	LexerListener<RuleDecl, ReaderWrapper> lexerListener = new SimpleParserForwarder(this);
+	
+	public GrammarParser compile(String grammarFileName) {
 		try {
-			GrammarParser p = new GrammarParser();
+			GrammarParser p = this;
 			File grammarFile = new File(grammarFileName);
 
 			// ebnf
@@ -59,23 +60,9 @@ public class GrammarParser {
 
 			VersionDecl version = p.grammarFactory.createVersion("DEFAULT",
 					null);
-
-			ParserListener<TerminalDecl, NonTerminalDecl, ProductionDecl> listener = new ParserListener<TerminalDecl, NonTerminalDecl, ProductionDecl>() {
-				public void shift(TerminalDecl terminal) {
-					System.out.println("shift " + terminal);
-				}
-
-				public void reduce(ProductionDecl production) {
-					System.out.println("production " + production);
-				}
-
-				public void accept(NonTerminalDecl nonTerminal) {
-					System.out.println("accept " + nonTerminal);
-				}
-			};
-
+			
 			p.dataParser = RuntimeParserFactory.createRuntimeParser(
-					p.grammarFactory, start, version, listener);
+					p.grammarFactory, start, version, p.parserListener);
 			return p;
 		} catch (IOException ex) {
 			throw new RuntimeException(ex);
@@ -88,35 +75,71 @@ public class GrammarParser {
 			ReaderWrapper emailReader = new ReaderWrapper(new FileReader(
 					dataFile), new LocationTracker());
 
-			LexerListener<RuleDecl, ReaderWrapper> listener2 = createLexerListener(
-					this.dataParser, toolsFactory);
-
 			Lexer<ReaderWrapper> lexer = RuntimeLexerFactory
 					.createRuntimeLexer(ruleFactory, encoding, emailReader,
-							listener2);
+							lexerListener);
 			lexer.run();
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		}
 	}
+	
+	public void setParsingListener(ParserListener<TerminalDecl, NonTerminalDecl, ProductionDecl> l) {
+		parserListener.setDelegate(l);
+	}
+}
 
-	private LexerListener<RuleDecl, ReaderWrapper> createLexerListener(
-			final Parser<TerminalDecl, NonTerminalDecl, ProductionDecl, VersionDecl> parser,
-			ToolsFactory factory) {
-		final Map<RuleDecl, RuleInfo> infoMap = factory.getRuleInfoMap();
+class DelegatingParserListener implements ParserListener<TerminalDecl, NonTerminalDecl, ProductionDecl> {
+	private ParserListener<TerminalDecl, NonTerminalDecl, ProductionDecl>  delegate = new NopParserListener();
+	
+	public void setDelegate(
+			ParserListener<TerminalDecl, NonTerminalDecl, ProductionDecl> delegate) {
+		this.delegate = delegate;
+	}
+	public void shift(TerminalDecl terminal) {
+		delegate.shift(terminal);
+	}
 
-		return new LexerListener<RuleDecl, ReaderWrapper>() {
+	public void reduce(ProductionDecl production) {
+		delegate.reduce(production);
+	}
 
-			public void ruleVerified(RuleDecl rule, int size,
-					ReaderWrapper buffer) {
-				TerminalDecl terminal = infoMap.get(rule).getTerminal();
-				if (terminal != null) {
-					System.out.println("Resolving " + rule + "-->" + terminal);
-					parser.push(terminal);
-				}
+	public void accept(NonTerminalDecl nonTerminal) {
+		delegate.accept(nonTerminal);		
+	}
+}
 
-				buffer.discard();
-			}
-		};
+class NopParserListener implements ParserListener<TerminalDecl, NonTerminalDecl, ProductionDecl> {
+	public void shift(TerminalDecl terminal) {
+		System.out.println("shift " + terminal);
+	}
+
+	public void reduce(ProductionDecl production) {
+		System.out.println("production " + production);
+	}
+
+	public void accept(NonTerminalDecl nonTerminal) {
+		System.out.println("accept " + nonTerminal);
+	}
+}
+
+
+class SimpleParserForwarder implements LexerListener<RuleDecl, ReaderWrapper> {
+	GrammarParser parser;
+	
+	SimpleParserForwarder(GrammarParser parser) {
+		this.parser = parser;
+	}
+
+	public void ruleVerified(RuleDecl rule, int size,
+			ReaderWrapper buffer) {
+		final Map<RuleDecl, RuleInfo> infoMap = parser.toolsFactory.getRuleInfoMap();
+		TerminalDecl terminal = infoMap.get(rule).getTerminal();
+		if (terminal != null) {
+			System.out.println("Resolving " + rule + "-->" + terminal);
+			parser.dataParser.push(terminal);
+		}
+
+		buffer.discard();
 	}
 }

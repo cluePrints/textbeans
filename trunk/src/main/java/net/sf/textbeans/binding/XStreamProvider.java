@@ -6,10 +6,10 @@ public class XStreamProvider {
 	private final XStream xStream;
 	{
 		xStream = new XStream();
-		xStream.aliasType("bindingFormat", FormatBinding.class);
+		xStream.aliasType("binding", Binding.class);
 		xStream.aliasType("class", ClassBinding.class);
 		xStream.aliasType("rule2Field", RuleElementToFieldBinding.class);
-		xStream.processAnnotations(FormatBinding.class);
+		xStream.processAnnotations(Binding.class);
 		xStream.processAnnotations(ClassBinding.class);
 		xStream.processAnnotations(RuleElementToFieldBinding.class);
 	}

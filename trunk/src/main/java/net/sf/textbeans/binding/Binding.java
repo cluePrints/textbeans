@@ -3,10 +3,9 @@ package net.sf.textbeans.binding;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
-public class FormatBinding {
+public class Binding {
 	@XStreamImplicit
 	private List<ClassBinding> bindings = new LinkedList<ClassBinding>();
 

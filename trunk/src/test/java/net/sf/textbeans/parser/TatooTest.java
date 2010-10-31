@@ -3,17 +3,12 @@ package net.sf.textbeans.parser;
 import java.util.Collection;
 import java.util.List;
 
-import net.sf.textbeans.parser.GrammarParser;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 import com.google.common.collect.Lists;
-
-import fr.umlv.tatoo.cc.parser.grammar.Priority;
-import fr.umlv.tatoo.cc.parser.grammar.TerminalDecl;
 
 @RunWith(Parameterized.class)
 public class TatooTest {
@@ -46,9 +41,11 @@ public class TatooTest {
 		compile("src/test/resources/net/sf/textbeans/parser/", name);
 	}
 
-	private void compile(String dir, String name) throws Exception {
-		GrammarParser p = GrammarParser.compile(dir + name + ".ebnf");
-		p.parse(dir + name + ".txt");
+	void compile(String dir, String name) throws Exception {
+		String grammarFile = dir + name + ".ebnf";
+		GrammarParser p = new GrammarParser().compile(grammarFile);
+		String dataFile = dir + name + ".txt";
+		p.parse(dataFile);
 	}
 
 	public TatooTest(String caseName) {
@@ -57,45 +54,3 @@ public class TatooTest {
 	}
 
 }
-
-class DTOTerminalDecl extends TerminalDecl {
-	final CharSequence data;
-	final TerminalDecl decl;
-	DTOTerminalDecl(CharSequence data, TerminalDecl decl) {
-		super(null, null, false);
-		this.data = data;
-		this.decl = decl;
-	}
-	public String getId() {
-		return decl.getId();
-	}
-	public Priority getPriority() {
-		return decl.getPriority();
-	}
-	public boolean isBranching() {
-		return decl.isBranching();
-	}
-	public boolean isTerminal() {
-		return decl.isTerminal();
-	}
-	public void setAlias(String alias) {
-		decl.setAlias(alias);
-	}
-	public String getAlias() {
-		return decl.getAlias();
-	}
-	public String getName() {
-		return decl.getName();
-	}
-	public String toString() {
-		return decl.toString();
-	}
-	public int hashCode() {
-		return decl.hashCode();
-	}
-	public boolean equals(Object obj) {
-		return decl.equals(obj);
-	}	
-	
-}
-
