@@ -1,4 +1,4 @@
-package net.sf.textbeans.tatoo;
+package net.sf.textbeans.parser;
 
 import java.util.HashMap;
 
