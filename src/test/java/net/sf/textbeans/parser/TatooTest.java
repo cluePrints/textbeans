@@ -43,7 +43,7 @@ public class TatooTest {
 	}
 
 	private void compile(String name) throws Exception {
-		compile("src/test/java/net/sf/textbeans/tatoo/", name);
+		compile("src/test/resources/net/sf/textbeans/parser/", name);
 	}
 
 	private void compile(String dir, String name) throws Exception {
