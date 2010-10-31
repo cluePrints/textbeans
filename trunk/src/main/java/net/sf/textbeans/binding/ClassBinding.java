@@ -3,10 +3,31 @@ package net.sf.textbeans.binding;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import com.thoughtworks.xstream.annotations.XStreamImplicit;
+
 public class ClassBinding {
-	private String productionName;
-	private String className;
-	private List<FieldBinding> fields = new LinkedList<FieldBinding>();
+	@XStreamAsAttribute
+	private String name;
+	@XStreamAsAttribute
+	private String productionName;	
+	@XStreamImplicit
+	private List<RuleElementToFieldBinding> fields = new LinkedList<RuleElementToFieldBinding>();
+	public static ClassBinding forClass(Class<?> className) {
+		ClassBinding b = new ClassBinding();
+		b.setClassName(className.getCanonicalName());
+		return b;
+	}
+	public ClassBinding as(String prodName) {
+		this.productionName = prodName;
+		return this;
+	}
+	public void addField(String lhsName, String fieldName) {
+		addField(new RuleElementToFieldBinding(lhsName, fieldName));
+	}
+	public void addField(RuleElementToFieldBinding b) {
+		fields.add(b);
+	}
 	public String getProductionName() {
 		return productionName;
 	}
@@ -14,15 +35,15 @@ public class ClassBinding {
 		this.productionName = productionName;
 	}
 	public String getClassName() {
-		return className;
+		return name;
 	}
 	public void setClassName(String className) {
-		this.className = className;
+		this.name = className;
 	}
-	public List<FieldBinding> getFields() {
+	public List<RuleElementToFieldBinding> getFields() {
 		return fields;
 	}
-	public void setFields(List<FieldBinding> fields) {
+	public void setFields(List<RuleElementToFieldBinding> fields) {
 		this.fields = fields;
 	}
 }

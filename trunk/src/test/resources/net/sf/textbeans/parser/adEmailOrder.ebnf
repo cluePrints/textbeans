@@ -18,7 +18,7 @@ starts:
  	batch
 
 productions:
-	batch:Order 
+	batch
 		= advertisement+ 'bye' {batch}
 		| advertisement+ {batch};
 		
