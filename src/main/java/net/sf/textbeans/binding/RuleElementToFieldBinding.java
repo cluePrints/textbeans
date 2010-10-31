@@ -4,19 +4,19 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 
 public class RuleElementToFieldBinding {
 	@XStreamAsAttribute
-	private String rhsElement;
+	private String ruleRhs;
 	@XStreamAsAttribute
 	private String field;
 	RuleElementToFieldBinding(String rhsElement, String field) {
 		super();
-		this.rhsElement = rhsElement;
+		this.ruleRhs = rhsElement;
 		this.field = field;
 	}
 	public String getRhsElement() {
-		return rhsElement;
+		return ruleRhs;
 	}
 	public void setRhsElement(String rhsElement) {
-		this.rhsElement = rhsElement;
+		this.ruleRhs = rhsElement;
 	}
 	public String getField() {
 		return field;

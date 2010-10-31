@@ -9,10 +9,10 @@ public class XStreamBindingInfoReader implements BindingInfoReader{
 	private XStream xStream = new XStreamProvider().getxStream();
 	
 	@Override
-	public FormatBinding fromFile(String fileName) {
+	public Binding fromFile(String fileName) {
 		try {
 			FileReader r = new FileReader(fileName);
-			return (FormatBinding) xStream.fromXML(r);
+			return (Binding) xStream.fromXML(r);
 		} catch (FileNotFoundException ex) {
 			throw new RuntimeException(ex);
 		}

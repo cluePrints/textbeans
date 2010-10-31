@@ -8,7 +8,7 @@ import com.thoughtworks.xstream.XStream;
 public class XStreamBindingInfoWriter implements BindingInfoWriter{
 	private XStream xStream = new XStreamProvider().getxStream();
 	@Override
-	public void toFile(FormatBinding info, String fileName) {
+	public void toFile(Binding info, String fileName) {
 		try {
 			FileWriter writer = new FileWriter(fileName);			
 			xStream.toXML(info, writer);

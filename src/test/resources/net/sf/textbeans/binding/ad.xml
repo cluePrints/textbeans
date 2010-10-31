@@ -1,6 +1,6 @@
-<bindingFormat>
+<binding>
   <class name="net.sf.textbeans.binding.OrderObj" productionName="advertisement">
-    <rule2Field rhsElement="adType" field="type"/>
-    <rule2Field rhsElement="size" field="size"/>
+    <rule2Field ruleRhs="adType" field="type"/>
+    <rule2Field ruleRhs="size" field="size"/>
   </class>
-</bindingFormat>
+</binding>

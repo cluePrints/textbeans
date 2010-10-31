@@ -16,7 +16,7 @@ public class XMLSerializationTest {
 	
 	@Test
 	public void whatDoesItLooksLikeTest() throws Exception {
-		FormatBinding b = new FormatBinding();
+		Binding b = new Binding();
 		ClassBinding binding = ClassBinding.forClass(OrderObj.class).as("advertisement");
 		binding.addField("adType", "type");
 		binding.addField("size", "size");
@@ -24,7 +24,7 @@ public class XMLSerializationTest {
 				
 		String fileName = "src/test/resources/net/sf/textbeans/binding/ad.xml";
 		wr.toFile(b, fileName);
-		FormatBinding b1 = rr.fromFile(fileName);
+		Binding b1 = rr.fromFile(fileName);
 		Assert.assertEquals(1, b1.getBindings().size());
 		
 		Assert.assertEquals(2, b1.getBindings().get(0).getFields().size(), 2);
