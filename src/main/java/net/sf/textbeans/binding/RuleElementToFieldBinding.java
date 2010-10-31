@@ -1,8 +1,13 @@
 package net.sf.textbeans.binding;
-public class FieldBinding {
+
+import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+
+public class RuleElementToFieldBinding {
+	@XStreamAsAttribute
 	private String rhsElement;
+	@XStreamAsAttribute
 	private String field;
-	FieldBinding(String rhsElement, String field) {
+	RuleElementToFieldBinding(String rhsElement, String field) {
 		super();
 		this.rhsElement = rhsElement;
 		this.field = field;
