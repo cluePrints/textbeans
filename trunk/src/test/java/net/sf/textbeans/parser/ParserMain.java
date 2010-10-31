@@ -1,4 +1,4 @@
-package net.sf.textbeans.tatoo;
+package net.sf.textbeans.parser;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -62,4 +62,9 @@ public class ParserMain {
     parser.step(value);
     parser.close();
   } 
+}
+
+
+class ProductionMapping {
+	
 }

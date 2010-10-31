@@ -18,8 +18,9 @@ starts:
  	batch
 
 productions:
-	batch 
-		= advertisement+ 'bye';
+	batch:Order 
+		= advertisement+ 'bye' {batch}
+		| advertisement+ {batch};
 		
 	advertisement
-		= 'adType' 'size';
+		= 'adType' 'size' {ad};
