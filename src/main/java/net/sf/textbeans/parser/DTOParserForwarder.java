@@ -20,7 +20,6 @@ public class DTOParserForwarder implements LexerListener<RuleDecl, ReaderWrapper
 		final Map<RuleDecl, RuleInfo> infoMap = parser.toolsFactory.getRuleInfoMap();
 		TerminalDecl terminal = infoMap.get(rule).getTerminal();
 		if (terminal != null) {
-			System.out.println("Resolving " + rule + "-->" + terminal);
 			parser.dataParser.push(new DTOTerminalDecl(buffer.view(), terminal));
 		}
 
