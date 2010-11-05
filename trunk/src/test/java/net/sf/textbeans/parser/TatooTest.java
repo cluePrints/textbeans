@@ -12,6 +12,7 @@ import com.google.common.collect.Lists;
 
 @RunWith(Parameterized.class)
 public class TatooTest {
+	public static final String TEST_DIR = "src/test/resources/net/sf/textbeans/parser/";
 	private String caseName;
 
 	@Parameters
@@ -38,7 +39,7 @@ public class TatooTest {
 	}
 
 	private void compile(String name) throws Exception {
-		compile("src/test/resources/net/sf/textbeans/parser/", name);
+		compile(TEST_DIR, name);
 	}
 
 	void compile(String dir, String name) throws Exception {

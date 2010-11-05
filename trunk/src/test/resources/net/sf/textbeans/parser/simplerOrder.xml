@@ -1,6 +1,9 @@
 <binding>
-  <class name="net.sf.textbeans.binding.OrderObj" productionName="advertisement">
-    <rule2Field ruleRhs="adType" field="type"/>
-    <rule2Field ruleRhs="size" field="size"/>
+  <class name="net.sf.textbeans.parser.testobj.TSimplerOrder_Order" productionName="order__id_at_fee">
+    <rule2Field ruleRhs="id" field="id"/>
+    <rule2Field ruleRhs="fee" field="fee"/>
+  </class>
+  <class name="net.sf.textbeans.parser.testobj.TSimplerOrder_Batch" productionName="order_star_0_rec">
+  	<rule2Field ruleRhs="order" field="orders"/>
   </class>
 </binding>
