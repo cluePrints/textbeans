@@ -38,7 +38,7 @@ class BindingListener implements
 
 	public void shift(TerminalDecl terminal) {
 		DTOTerminalDecl dto = (DTOTerminalDecl) terminal;
-		semanticStack.push(Pair.newOne(dto.getId(), dto));
+		semanticStack.push(Pair.newOne(dto.getId(), dto.data.toString()));
 		System.out.println("shift " + terminal);
 	}
 
@@ -110,11 +110,6 @@ class BindingListener implements
 		// simple case
 		if (expectedType.isAssignableFrom(v.getClass())) {
 			return v;
-		}
-		
-		// unwrap
-		if (v instanceof DTOTerminalDecl) {
-			return convert(((DTOTerminalDecl) v).data.toString(), expectedType);
 		}
 		
 		// pray that it's what was declared in generic:)

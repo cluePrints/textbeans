@@ -11,4 +11,8 @@ public class Pair<K, V> {
 	public static <K, V> Pair<K, V> newOne(K k, V v) {
 		return new Pair<K, V>(k, v);
 	}
+	@Override
+	public String toString() {
+		return "("+k+","+v+")";
+	}
 }

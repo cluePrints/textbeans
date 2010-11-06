@@ -33,7 +33,7 @@ class DTOTerminalDecl extends TerminalDecl {
 		return decl.getName();
 	}
 	public String toString() {
-		return decl.toString();
+		return decl.toString()+"="+data;
 	}
 	public int hashCode() {
 		return decl.hashCode();
@@ -41,5 +41,4 @@ class DTOTerminalDecl extends TerminalDecl {
 	public boolean equals(Object obj) {
 		return decl.equals(obj);
 	}	
-	
 }
