@@ -1,5 +1,6 @@
 package net.sf.textbeans.binding;
 
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.LinkedList;
 import java.util.List;
@@ -7,8 +8,6 @@ import java.util.List;
 import junit.framework.Assert;
 
 import org.junit.Test;
-
-import com.thoughtworks.xstream.XStream;
 
 public class XMLSerializationTest {
 	BindingInfoWriter wr = new XStreamBindingInfoWriter();
@@ -23,8 +22,8 @@ public class XMLSerializationTest {
 		b.addClass(binding);
 				
 		String fileName = "src/test/resources/net/sf/textbeans/binding/ad.xml";
-		wr.toFile(b, fileName);
-		Binding b1 = rr.fromFile(fileName);
+		wr.toFile(b, new FileWriter(fileName));
+		Binding b1 = rr.fromFile(new FileReader(fileName));
 		Assert.assertEquals(1, b1.getBindings().size());
 		
 		Assert.assertEquals(2, b1.getBindings().get(0).getFields().size(), 2);
