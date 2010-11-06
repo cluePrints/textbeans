@@ -9,9 +9,9 @@ import fr.umlv.tatoo.runtime.buffer.impl.ReaderWrapper;
 import fr.umlv.tatoo.runtime.lexer.LexerListener;
 
 public class DTOParserForwarder implements LexerListener<RuleDecl, ReaderWrapper> {
-	GrammarParser parser;
+	ReaderGrammarParser parser;
 	
-	DTOParserForwarder(GrammarParser parser) {
+	DTOParserForwarder(ReaderGrammarParser parser) {
 		this.parser = parser;
 	}
 

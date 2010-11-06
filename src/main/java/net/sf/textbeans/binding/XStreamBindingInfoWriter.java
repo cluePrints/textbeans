@@ -1,16 +1,15 @@
 package net.sf.textbeans.binding;
 
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 
 import com.thoughtworks.xstream.XStream;
 
 public class XStreamBindingInfoWriter implements BindingInfoWriter{
 	private XStream xStream = new XStreamProvider().getxStream();
 	@Override
-	public void toFile(Binding info, String fileName) {
+	public void toFile(Binding info, Writer writer) {
 		try {
-			FileWriter writer = new FileWriter(fileName);			
 			xStream.toXML(info, writer);
 			writer.close();
 		} catch (IOException ex) {

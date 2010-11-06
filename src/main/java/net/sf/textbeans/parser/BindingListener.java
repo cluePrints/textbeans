@@ -26,6 +26,7 @@ import fr.umlv.tatoo.cc.parser.grammar.TerminalDecl;
 import fr.umlv.tatoo.cc.parser.grammar.VariableDecl;
 import fr.umlv.tatoo.runtime.parser.ParserListener;
 
+@SuppressWarnings({ "unchecked", "rawtypes" })
 class BindingListener implements
 		ParserListener<TerminalDecl, NonTerminalDecl, ProductionDecl> {
 	Binding binding;
@@ -139,7 +140,6 @@ class BindingListener implements
 
 	private Collection<Object> initCollection(Class<?> propType)
 			throws InstantiationException, IllegalAccessException {
-		Collection<Object> newPropValue;
 		if (propType == List.class) {
 			return Lists.newLinkedList();
 		}

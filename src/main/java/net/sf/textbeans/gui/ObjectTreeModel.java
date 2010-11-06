@@ -15,6 +15,7 @@ import javax.swing.tree.TreePath;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Sets;
 
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public class ObjectTreeModel implements TreeModel{
 	private Prop root;
 	

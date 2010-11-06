@@ -1,31 +1,27 @@
 package net.sf.textbeans.parser;
 
-import net.sf.textbeans.binding.Binding;
-import net.sf.textbeans.binding.BindingInfoReader;
-import net.sf.textbeans.binding.XStreamBindingInfoReader;
 
 public class TextBindingParser {
-	private GrammarParser parser;
-	private BindingInfoReader astDescReader = new XStreamBindingInfoReader();
-	BindingListener bindingListener;
-	public TextBindingParser compile(String grammarFileName) {
-		parser = new GrammarParser().compile(grammarFileName);
+	private ReaderTextBindingParser parser;
+
+	public TextBindingParser compile(String grammar) {
+		parser = new ReaderTextBindingParser();
+		parser.compile(GrammarParser.fileToReader(grammar));
 		return this;
 	}
-	public TextBindingParser loadAstRules(String fileName) {
-		Binding binding = astDescReader.fromFile(fileName);
-		bindingListener = new BindingListener(binding);
-		parser.lexerListener = new DTOParserForwarder(parser);
-		parser.setParsingListener(bindingListener);
+
+	public TextBindingParser loadAstRules(String ast) {
+		parser.loadAstRules(GrammarParser.fileToReader(ast));
 		return this;
 	}
+
 	public void parse(String name) {
-		parser.parse(name);
+		parser.parse(GrammarParser.fileToReader(name));
 	}
 	
 	public Object getResult()
 	{		
-		return bindingListener.semanticStack.get(0).v;
+		return parser.getResult();
 	}
 }
 
