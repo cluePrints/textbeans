@@ -19,15 +19,11 @@ public class TatooTest {
 	public static Collection<Object[]> cases() {
 		List<Object[]> cases = Lists.newLinkedList();
 		
-		cases.add(new Object[] { "adEmailOrder" });
-		
+		cases.add(new Object[] { "singleTokenToMultiFields" });
+		cases.add(new Object[] { "adEmailOrder" });		
 		cases.add(new Object[] { "multipleSimpleOrder" });
-		cases.add(new Object[] { "simpleOrder" });
-
-		
 		cases.add(new Object[] { "simpleEmailOrder" });
 		cases.add(new Object[] { "simplerOrder" });
-		cases.add(new Object[] { "simpleOrder" });
 		cases.add(new Object[] { "simpleOrder2" });
 		return cases;
 	}

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterators;
+import com.google.common.collect.Lists;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
@@ -16,9 +17,9 @@ public class ClassBinding {
 	@XStreamImplicit
 	private List<RuleElementToFieldBinding> fields = new LinkedList<RuleElementToFieldBinding>();
 	
-	public RuleElementToFieldBinding searchByRhsName(final String prodName)
+	public RuleElementToFieldBinding[] searchByRhsName(final String prodName)
 	{
-		return Iterators.getOnlyElement(Iterators.filter(fields.iterator(), new RhsNameEq(prodName)), null);
+		return Iterators.toArray(Iterators.filter(fields.iterator(), new RhsNameEq(prodName)), RuleElementToFieldBinding.class);
 	}
 
 	public static ClassBinding forClass(Class<?> className) {
@@ -68,6 +69,7 @@ class RhsNameEq implements Predicate<RuleElementToFieldBinding>
 
 	@Override
 	public boolean apply(RuleElementToFieldBinding input) {
-		return name.equalsIgnoreCase(input.getRhsElement());
+		String longName = input.getRhsElement();
+		return longName.startsWith(name +".") || name.equals(longName);
 	}
 }
