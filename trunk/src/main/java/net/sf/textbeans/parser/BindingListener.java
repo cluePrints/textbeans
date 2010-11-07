@@ -15,6 +15,7 @@ import net.sf.textbeans.binding.Binding;
 import net.sf.textbeans.binding.ClassBinding;
 import net.sf.textbeans.binding.RuleElementToFieldBinding;
 import net.sf.textbeans.util.Pair;
+import net.sf.textbeans.util.TypeConvertor;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -30,7 +31,10 @@ import fr.umlv.tatoo.runtime.parser.ParserListener;
 class BindingListener implements
 		ParserListener<TerminalDecl, NonTerminalDecl, ProductionDecl> {
 	Binding binding;
-	LinkedList<Pair<String, ? extends Object>> semanticStack = Lists.newLinkedList();
+	LinkedList<Pair<String, ? extends Object>> semanticStack = Lists
+			.newLinkedList();
+	
+	private TypeConvertor convertor = new TypeConvertor();
 
 	public BindingListener(Binding binding) {
 		super();
@@ -47,37 +51,41 @@ class BindingListener implements
 		try {
 			System.out.println("production " + production);
 			List<? extends VariableDecl> ruleRhs = production.getRight();
-			ClassBinding classBnd = binding.searchByProductionId(production.getId());
-			
-			// in any case we should push something on every shift as we'll pop that numer of elements in any case
-			if (classBnd == null || ruleRhs.size() == 0) {
-				semanticStack.push(Pair.newOne(production.getId(), this));
-				return;
-			}
-			
+			ClassBinding classBnd = binding.searchByProductionId(production
+					.getId());
+
 			// flush elements from stack to map(according to rhs num)
 			Map<String, Object> reducedDtos = Maps.newHashMap();
-			for (int i=0; i<ruleRhs.size(); i++) {
+			for (int i = 0; i < ruleRhs.size(); i++) {
 				Pair<String, ? extends Object> pair = semanticStack.pop();
 				reducedDtos.put(pair.k, pair.v);
 			}
 
+			// in any case we should push something on every shift as we'll pop
+			// that numer of elements in any case
+			if (classBnd == null || ruleRhs.size() == 0) {
+				semanticStack.push(Pair.newOne(production.getLeft().getId(),
+						reducedDtos));
+				return;
+			}
+
 			Class<?> prodClazz = Class.forName(classBnd.getClassName());
 			Object obj = prodClazz.newInstance();
-			
+
 			// for each rhs num try to get elem from map
 			for (VariableDecl rhsElem : ruleRhs) {
-				Object dto = reducedDtos.get(rhsElem.getId());
-				if (dto == null)
-					continue;
-				
-				RuleElementToFieldBinding rhsBnd = classBnd.searchByRhsName(rhsElem.getId());
-				if (rhsBnd == null)
-					continue;
-				
-				setField(obj, rhsBnd.getField(), dto);
+				String rhsName = rhsElem.getId();
+				RuleElementToFieldBinding[] rhsBnds = classBnd
+						.searchByRhsName(rhsName);
+
+				for (RuleElementToFieldBinding rhsBnd : rhsBnds) {
+					Object dto = lookFor(reducedDtos, rhsBnd.getRhsElement());
+					if (dto == null)
+						continue;
+
+					setField(obj, rhsBnd.getField(), dto);
+				}
 			}
-			
 
 			semanticStack.push(Pair.newOne(production.getLeft().getId(), obj));
 		} catch (Exception ex) {
@@ -85,49 +93,44 @@ class BindingListener implements
 		}
 	}
 
+	Object lookFor(Map<String, Object> reducedDtos, String path) {
+		int dotIdx = path.indexOf('.');
+		if (dotIdx >= 0) {
+			String preffix = path.substring(0, dotIdx);
+			Map<String, Object> subMap = (Map<String, Object>) reducedDtos
+					.get(preffix);
+			if (subMap != null) {
+				String subPath = path.substring(dotIdx + 1);
+				return lookFor(subMap, subPath);
+			}
+		}
+		return reducedDtos.get(path);
+	}
+
 	public void accept(NonTerminalDecl nonTerminal) {
 		System.out.println("accept " + nonTerminal);
 	}
 
-	private void setField(Object o, String name, Object valueToSetArg) throws Exception {
+	private void setField(Object o, String name, Object valueToSetArg)
+			throws Exception {
 		BeanInfo inf = Introspector.getBeanInfo(o.getClass());
 		for (PropertyDescriptor desc : inf.getPropertyDescriptors()) {
 			if (name.equalsIgnoreCase(desc.getName())) {
 				Object propValue = desc.getReadMethod().invoke(o);
 				Class<?> propType = desc.getPropertyType();
-				Object valueToSet = convert(valueToSetArg, propType);
+				Object valueToSet = convertor.convert(valueToSetArg, propType);
 				valueToSet = collectionConvert(valueToSet, propValue, propType);
 				desc.getWriteMethod().invoke(o, valueToSet);
 			}
 		}
 	}
 
-	// DTO -> String 
-	private Object convert(Object v, Class<?> expectedType) throws Exception {
-		if (v == null)
-			return null;
-		// TODO: primitives & null
-		
-		// simple case
-		if (expectedType.isAssignableFrom(v.getClass())) {
-			return v;
-		}
-		
-		// pray that it's what was declared in generic:)
-		if (Collection.class.isAssignableFrom(expectedType)) {
-			return v;
-		}
-		
-		// simple conversion strategy
-		Constructor<?> c = expectedType.getConstructor(v.getClass());
-		return c.newInstance(v);
-	}
-
-	private Object collectionConvert(Object valueToSet, Object currValue, Class<?> propType)
-			throws InstantiationException, IllegalAccessException {
+	private Object collectionConvert(Object valueToSet, Object currValue,
+			Class<?> propType) throws InstantiationException,
+			IllegalAccessException {
 		if (Collection.class.isAssignableFrom(propType)) {
 			Collection<Object> newPropValue;
-			if (currValue == null ) {
+			if (currValue == null) {
 				newPropValue = initCollection(propType);
 			} else {
 				newPropValue = (Collection) currValue;

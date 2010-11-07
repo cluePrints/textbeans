@@ -1,0 +1,12 @@
+<binding>
+  <class name="net.sf.textbeans.parser.testobj.TSingleTokenToMultiFields_Order" productionName="order__id_at_fee">
+    <rule2Field ruleRhs="id" field="id"/>
+    <rule2Field ruleRhs="fee.number" field="feeBd"/>
+    <rule2Field ruleRhs="fee.number" field="feeLong"/>
+    <rule2Field ruleRhs="fee.number" field="feeStr"/>
+    <rule2Field ruleRhs="fee.number" field="feeIntPrimitive"/>
+  </class>
+  <class name="net.sf.textbeans.parser.testobj.TSingleTokenToMultiFields_Batch" productionName="order_plus_0_element">
+  	<rule2Field ruleRhs="order" field="orders"/>
+  </class>
+</binding>
