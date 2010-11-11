@@ -3,13 +3,12 @@ package net.sf.textbeans.parser;
 import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
-import java.lang.reflect.Constructor;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import net.sf.textbeans.binding.Binding;
 import net.sf.textbeans.binding.ClassBinding;
@@ -19,7 +18,6 @@ import net.sf.textbeans.util.TypeConvertor;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 
 import fr.umlv.tatoo.cc.parser.grammar.NonTerminalDecl;
 import fr.umlv.tatoo.cc.parser.grammar.ProductionDecl;
@@ -63,14 +61,21 @@ class BindingListener implements
 
 			// in any case we should push something on every shift as we'll pop
 			// that numer of elements in any case
-			if (classBnd == null || ruleRhs.size() == 0) {
+			if (classBnd == null) {
 				semanticStack.push(Pair.newOne(production.getLeft().getId(),
 						reducedDtos));
 				return;
 			}
 
-			Class<?> prodClazz = Class.forName(classBnd.getClassName());
-			Object obj = prodClazz.newInstance();
+			Object obj;
+			if (classBnd.getClassName() != null) {
+				Class<?> prodClazz = Class.forName(classBnd.getClassName());
+				obj = prodClazz.newInstance();
+			} else if (classBnd.getRuleRhs() != null) {
+				obj = reducedDtos.get(classBnd.getRuleRhs());
+			} else {
+				throw new RuntimeException("Both could not be null");
+			}
 
 			// for each rhs num try to get elem from map
 			for (VariableDecl rhsElem : ruleRhs) {
@@ -129,25 +134,26 @@ class BindingListener implements
 			Class<?> propType) throws InstantiationException,
 			IllegalAccessException {
 		if (Collection.class.isAssignableFrom(propType)) {
-			Collection<Object> newPropValue;
+			Collection newPropValue;
 			if (currValue == null) {
 				newPropValue = initCollection(propType);
 			} else {
 				newPropValue = (Collection) currValue;
 			}
-			newPropValue.addAll(Collections.singleton(valueToSet));
+			// TODO: Queue and other ordered stuff?
+			newPropValue.add(valueToSet);
 			return newPropValue;
 		}
 		return valueToSet;
 	}
 
-	private Collection<Object> initCollection(Class<?> propType)
+	private Collection<?> initCollection(Class<?> propType)
 			throws InstantiationException, IllegalAccessException {
 		if (propType == List.class) {
-			return Lists.newLinkedList();
+			return new LinkedList();
 		}
 		if (propType == Set.class) {
-			return Sets.newHashSet();
+			return new TreeSet();
 		}
 		return (Collection) propType.newInstance();
 	}
