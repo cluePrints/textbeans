@@ -2,9 +2,8 @@ package net.sf.textbeans.parser;
 
 import java.io.File;
 
-import net.sf.textbeans.parser.testobj.TSimplerOrder_Batch;
+import net.sf.textbeans.util.XMLAssert;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import com.google.common.base.Charsets;
@@ -32,6 +31,6 @@ public class AbstractBindingParserTest {
 		XStream xStream = new XStream();
 		String actual = xStream.toXML(p.getResult());
 		String expected = Files.toString(new File(dir+name+".xml.res"), Charsets.UTF_8);
-		Assert.assertEquals("Actual: "+actual, expected, actual);
+		XMLAssert.assertEquals(expected, actual);
 	}
 }
