@@ -4,9 +4,9 @@ import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -16,8 +16,12 @@ import net.sf.textbeans.binding.RuleElementToFieldBinding;
 import net.sf.textbeans.util.Pair;
 import net.sf.textbeans.util.TypeConvertor;
 
+import com.google.common.base.Splitter;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.LinkedListMultimap;
+import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 import fr.umlv.tatoo.cc.parser.grammar.NonTerminalDecl;
 import fr.umlv.tatoo.cc.parser.grammar.ProductionDecl;
@@ -31,7 +35,7 @@ class BindingListener implements
 	Binding binding;
 	LinkedList<Pair<String, ? extends Object>> semanticStack = Lists
 			.newLinkedList();
-	
+
 	private TypeConvertor convertor = new TypeConvertor();
 
 	public BindingListener(Binding binding) {
@@ -53,10 +57,11 @@ class BindingListener implements
 					.getId());
 
 			// flush elements from stack to map(according to rhs num)
-			Map<String, Object> reducedDtos = Maps.newHashMap();
+			ListMultimap<String, Object> reducedDtos = LinkedListMultimap
+					.create();
 			for (int i = 0; i < ruleRhs.size(); i++) {
 				Pair<String, ? extends Object> pair = semanticStack.pop();
-				reducedDtos.put(pair.k, pair.v);
+				reducedDtos.get(pair.k).add(0, pair.v);
 			}
 
 			// in any case we should push something on every shift as we'll pop
@@ -72,14 +77,19 @@ class BindingListener implements
 				Class<?> prodClazz = Class.forName(classBnd.getClassName());
 				obj = prodClazz.newInstance();
 			} else if (classBnd.getRuleRhs() != null) {
-				obj = reducedDtos.get(classBnd.getRuleRhs());
+				obj = Iterables.getOnlyElement(reducedDtos.get(classBnd.getRuleRhs()));
 			} else {
 				throw new RuntimeException("Both could not be null");
 			}
 
-			// for each rhs num try to get elem from map
+			// for each rhs name num try to get elem from map
+			// we could have similarly named stuff at the right, so sort
+			Set<String> rhsNames = Sets.newHashSet();
 			for (VariableDecl rhsElem : ruleRhs) {
 				String rhsName = rhsElem.getId();
+				rhsNames.add(rhsName);
+			}
+			for (String rhsName : rhsNames) {
 				RuleElementToFieldBinding[] rhsBnds = classBnd
 						.searchByRhsName(rhsName);
 
@@ -92,24 +102,39 @@ class BindingListener implements
 				}
 			}
 
+
 			semanticStack.push(Pair.newOne(production.getLeft().getId(), obj));
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		}
 	}
 
-	Object lookFor(Map<String, Object> reducedDtos, String path) {
-		int dotIdx = path.indexOf('.');
-		if (dotIdx >= 0) {
-			String preffix = path.substring(0, dotIdx);
-			Map<String, Object> subMap = (Map<String, Object>) reducedDtos
-					.get(preffix);
-			if (subMap != null) {
-				String subPath = path.substring(dotIdx + 1);
-				return lookFor(subMap, subPath);
+	Object lookFor(ListMultimap<String, Object> reducedDtos, String path) {
+		Iterator<String> splitPath = Splitter.on('.').split(path).iterator();
+		if (splitPath.hasNext()) {
+			String preffix = splitPath.next();
+			String afterPreffix = null;
+			if (splitPath.hasNext()) {
+				afterPreffix = splitPath.next();
 			}
+			Integer pos = null;
+			try {
+				pos = Integer.valueOf(afterPreffix);
+			} catch (Exception ex) {
+				// ignore:)
+			}
+			List<Object> subContents = (List<Object>) reducedDtos.get(preffix);
+			if (pos != null) {
+				return subContents.get(pos);
+			}
+			if (afterPreffix != null) {
+				ListMultimap<String, Object> subMap = (ListMultimap<String, Object>) Iterables
+						.getOnlyElement(subContents);
+				return lookFor(subMap, afterPreffix);
+			}
+			return Iterables.getOnlyElement(subContents, null);
 		}
-		return reducedDtos.get(path);
+		return Iterables.getOnlyElement(reducedDtos.get(path));
 	}
 
 	public void accept(NonTerminalDecl nonTerminal) {
