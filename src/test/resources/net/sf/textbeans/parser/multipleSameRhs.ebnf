@@ -1,0 +1,18 @@
+tokens:
+	id  	= '[A-Z]{2}[0-9]{8}'
+	at  	= 'at'
+	fee		= '[0-9]+bp'
+	minus	= '-'
+ 
+blanks:
+ 	space= "( |\t|\r|\n)+"
+
+starts:
+ 	batch
+
+productions:
+	batch 
+		= order*;
+    
+    order 
+    	= 'id' 'at' 'fee' 'minus' 'fee';

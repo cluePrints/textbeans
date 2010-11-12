@@ -1,0 +1,10 @@
+<binding>
+  <class name="net.sf.textbeans.parser.testobj.TMultiSameRhs_Order" productionName="order__id_at_fee_minus_fee">
+    <rule2Field ruleRhs="id" field="id"/>
+    <rule2Field ruleRhs="fee.0" field="feeLow"/>
+    <rule2Field ruleRhs="fee.1" field="feeHigh"/>    
+  </class>
+  <class name="net.sf.textbeans.parser.testobj.TMultiSameRhs_Batch" productionName="order_star_0_rec">
+  	<rule2Field ruleRhs="order" field="orders"/>
+  </class>
+</binding>

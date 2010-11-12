@@ -1,15 +1,26 @@
-// calc grammar
-imports:
- 
-priorities:
-
 tokens:
 	adType:String 	=	'flash|static|dynamic'
 	size:String		=	'[0-9]{2,3}x[0-9]{2,3}'
 	bye:String		=	'bye'
+	
+	of				=	'of'
+	month			=	'[Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec]'
+	number2			=	'[0-9]{2}'
+	number12		=	'[0-9]{1,2}'// could be day or month
+	year			=	'(20)?[0-9]{2}'
+	hour			=	'[0-9]{2}[am|pm]'
+	
+	dateSeparator	=	'[/|-| ]'
+	minus			=	'-'
+	
+	tknYear			=	'year[s]'
+	
+	page			=	'main'
+	location		=	'at the top'
  
 blanks:
  	space= "( |\t|\r|\n)+"
+ 	ignored = "."
  
 comments:
  	comment="#([^\r\n])*(\r)?\n"  
@@ -19,8 +30,25 @@ starts:
 
 productions:
 	batch
-		= advertisement+ 'bye' {batch}
-		| advertisement+ {batch};
+		= advertisement* date;
 		
 	advertisement
-		= 'adType' 'size' {ad};
+		= 'size' 'adType' location page ageRange dayHoursRange;
+		
+	ageRange
+		= 'number2' 'minus' 'number2' 'tknYear';
+		
+	dayHoursRange
+		= 'hour' 'minus' 'hour';
+		
+	dateNoDay
+		= 'month' 'year'					// Jan 2010
+		| 'month' 'dateSeparator' 'year'	// Jan-2010
+		| 'month'							// Jan
+		;
+		
+	date
+		= 'number12' of dateNoDay	// 23 of Jan, 23 of Jan-2010, ...
+		| 'number12' 'dateSeparator' 'dateNoDay'
+		| 'number12'
+		;
