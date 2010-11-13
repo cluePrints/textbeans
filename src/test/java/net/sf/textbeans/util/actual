@@ -1,9 +1,106 @@
-<net.sf.textbeans.parser.testobj.TMultiSameRhs__Batch>
-  <orders class="linked-list">
-    <net.sf.textbeans.parser.testobj.TMultiSameRhs__Order>
-      <id>US11261048</id>
-      <feeLow>3bp</feeLow>
-      <feeHigh>4bp</feeHigh>
-    </net.sf.textbeans.parser.testobj.TMultiSameRhs__Order>
-  </orders>
-</net.sf.textbeans.parser.testobj.TMultiSameRhs__Batch>
+<com.google.common.collect.LinkedListMultimap serialization="custom">
+  <com.google.common.collect.LinkedListMultimap>
+    <default/>
+    <int>2</int>
+    <string>advertisement</string>
+    <com.google.common.collect.LinkedListMultimap serialization="custom">
+      <com.google.common.collect.LinkedListMultimap>
+        <default/>
+        <int>6</int>
+        <string>dayHoursRange</string>
+        <com.google.common.collect.LinkedListMultimap serialization="custom">
+          <com.google.common.collect.LinkedListMultimap>
+            <default/>
+            <int>3</int>
+            <string>hour</string>
+            <string>10a</string>
+            <string>hour</string>
+            <string>18p</string>
+            <string>minus</string>
+            <string>-</string>
+          </com.google.common.collect.LinkedListMultimap>
+        </com.google.common.collect.LinkedListMultimap>
+        <string>ageRange</string>
+        <com.google.common.collect.LinkedListMultimap serialization="custom">
+          <com.google.common.collect.LinkedListMultimap>
+            <default/>
+            <int>4</int>
+            <string>tknYear</string>
+            <string>years</string>
+            <string>number2</string>
+            <string>12</string>
+            <string>number2</string>
+            <string>22</string>
+            <string>minus</string>
+            <string>-</string>
+          </com.google.common.collect.LinkedListMultimap>
+        </com.google.common.collect.LinkedListMultimap>
+        <string>page</string>
+        <string>main</string>
+        <string>location</string>
+        <string>at the top</string>
+        <string>adType</string>
+        <string>static</string>
+        <string>size</string>
+        <string>120x60</string>
+      </com.google.common.collect.LinkedListMultimap>
+    </com.google.common.collect.LinkedListMultimap>
+    <string>advertisement_star_0</string>
+    <com.google.common.collect.LinkedListMultimap serialization="custom">
+      <com.google.common.collect.LinkedListMultimap>
+        <default/>
+        <int>2</int>
+        <string>advertisement</string>
+        <com.google.common.collect.LinkedListMultimap serialization="custom">
+          <com.google.common.collect.LinkedListMultimap>
+            <default/>
+            <int>6</int>
+            <string>dayHoursRange</string>
+            <com.google.common.collect.LinkedListMultimap serialization="custom">
+              <com.google.common.collect.LinkedListMultimap>
+                <default/>
+                <int>3</int>
+                <string>hour</string>
+                <string>12a</string>
+                <string>hour</string>
+                <string>18p</string>
+                <string>minus</string>
+                <string>-</string>
+              </com.google.common.collect.LinkedListMultimap>
+            </com.google.common.collect.LinkedListMultimap>
+            <string>ageRange</string>
+            <com.google.common.collect.LinkedListMultimap serialization="custom">
+              <com.google.common.collect.LinkedListMultimap>
+                <default/>
+                <int>4</int>
+                <string>tknYear</string>
+                <string>years</string>
+                <string>number2</string>
+                <string>14</string>
+                <string>number2</string>
+                <string>18</string>
+                <string>minus</string>
+                <string>-</string>
+              </com.google.common.collect.LinkedListMultimap>
+            </com.google.common.collect.LinkedListMultimap>
+            <string>page</string>
+            <string>main</string>
+            <string>location</string>
+            <string>at the top</string>
+            <string>adType</string>
+            <string>flash</string>
+            <string>size</string>
+            <string>120x120</string>
+          </com.google.common.collect.LinkedListMultimap>
+        </com.google.common.collect.LinkedListMultimap>
+        <string>advertisement_star_0</string>
+        <com.google.common.collect.LinkedListMultimap serialization="custom">
+          <com.google.common.collect.LinkedListMultimap>
+            <default/>
+            <int>0</int>
+          </com.google.common.collect.LinkedListMultimap>
+        </com.google.common.collect.LinkedListMultimap>
+      </com.google.common.collect.LinkedListMultimap>
+    </com.google.common.collect.LinkedListMultimap>
+  </com.google.common.collect.LinkedListMultimap>
+</com.google.common.collect.LinkedListMultimap>

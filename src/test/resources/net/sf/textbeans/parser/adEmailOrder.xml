@@ -1,0 +1,31 @@
+<binding>
+	<class name="net.sf.textbeans.parser.testobj.TAdEmail_Order"
+		productionName="order__id_at_fee_minus_fee">
+		<rule2Field ruleRhs="id" field="id" />
+		<rule2Field ruleRhs="fee.0" field="feeLow" />
+		<rule2Field ruleRhs="fee.1" field="feeHigh" />
+	</class>
+	<class name="net.sf.textbeans.parser.testobj.TAdEmail_Range"
+		production="ageRange__number2_minus_number2_tknYear">
+		<rule2Field ruleRhs="number2.0" field="low" />
+		<rule2Field ruleRhs="number2.1" field="high" />
+	</class>
+	<class name="net.sf.textbeans.parser.testobj.TAdEmail_Range"
+		production="dayHoursRange__hour_minus_hour">
+		<rule2Field ruleRhs="hour.0" field="low" />
+		<rule2Field ruleRhs="hour.1" field="high" />
+	</class>
+	<class name="net.sf.textbeans.parser.testobj.TAdEmail_Order"
+		production="advertisement__size_adType_location_page_ageRange_dayHoursRange">
+		<rule2Field ruleRhs="size" field="size" />
+		<rule2Field ruleRhs="adType" field="adType" />
+		<rule2Field ruleRhs="location" field="location" />
+		<rule2Field ruleRhs="page" field="page" />
+		<rule2Field ruleRhs="ageRange" field="age" />
+		<rule2Field ruleRhs="dayHoursRange" field="showHours" />
+	</class>
+	<class name="net.sf.textbeans.parser.testobj.TAdEmail_Batch"
+		productionName="order_star_0_rec">
+		<rule2Field ruleRhs="order" field="orders" />
+	</class>
+</binding>
