@@ -6,7 +6,6 @@ public class AdEmailParserTest extends AbstractBindingParserTest{
 	@Before
 	public void before()
 	{
-		generateTmpBinding = true;
 		name = "adEmailOrder";
 	}
 }

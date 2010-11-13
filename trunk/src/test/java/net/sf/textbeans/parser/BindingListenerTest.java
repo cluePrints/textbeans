@@ -1,18 +1,14 @@
 package net.sf.textbeans.parser;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
 import junit.framework.Assert;
 
 import org.junit.Test;
 
-import com.google.common.base.Supplier;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.ListMultimap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Multimaps;
 
 @SuppressWarnings("serial")
 public class BindingListenerTest {

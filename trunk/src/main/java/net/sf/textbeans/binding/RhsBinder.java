@@ -1,5 +1,5 @@
 package net.sf.textbeans.binding;
 
 public interface RhsBinder {
-	void bind(Object destination, RhsElementBinding binding, Object value) throws Exception;
+	void bind(Object destination, RhsElementBinding binding, Object value);
 }

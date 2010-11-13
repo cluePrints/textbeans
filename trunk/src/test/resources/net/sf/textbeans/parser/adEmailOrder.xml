@@ -16,39 +16,22 @@
     <rule2Field ruleRhs="dayHoursRange" field="dayHoursRange"/>
   </class>
   <class name="net.sf.textbeans.parser.testobj.TAdEmail_Range" productionName="ageRange__number2_minus_number2_tknYear">
-    <rule2Field ruleRhs="number2" field="number2"/>
-    <rule2Field ruleRhs="minus" field="minus"/>
-    <rule2Field ruleRhs="number2" field="number2"/>
-    <rule2Field ruleRhs="tknYear" field="tknYear"/>
+    <rule2Field ruleRhs="number2.0" field="low"/>
+    <rule2Field ruleRhs="number2.0" field="high"/>
   </class>
   <class name="net.sf.textbeans.parser.testobj.TAdEmail_Range" productionName="dayHoursRange__hour_minus_hour">
-    <rule2Field ruleRhs="hour" field="hour"/>
-    <rule2Field ruleRhs="minus" field="minus"/>
-    <rule2Field ruleRhs="hour" field="hour"/>
+    <rule2Field ruleRhs="hour.0" field="low"/>
+    <rule2Field ruleRhs="hour.1" field="high"/>
   </class>
-  <class name="net.sf.textbeans.parser.testobj.TAdEmail_Date" productionName="dateNoDay__month_year">
+  <class name="net.sf.textbeans.parser.testobj.TAdEmail_Date" productionName="date__month_year">
     <rule2Field ruleRhs="month" field="month"/>
     <rule2Field ruleRhs="year" field="year"/>
   </class>
-  <class name="net.sf.textbeans.parser.testobj.TAdEmail_Date" productionName="dateNoDay__month_dateSeparator_year">
+  <class name="net.sf.textbeans.parser.testobj.TAdEmail_Date" productionName="date__month_minus_year">
     <rule2Field ruleRhs="month" field="month"/>
-    <rule2Field ruleRhs="dateSeparator" field="dateSeparator"/>
     <rule2Field ruleRhs="year" field="year"/>
   </class>
-  <class name="net.sf.textbeans.parser.testobj.TAdEmail_Date" productionName="dateNoDay__month">
+  <class name="net.sf.textbeans.parser.testobj.TAdEmail_Date" productionName="date__month">
     <rule2Field ruleRhs="month" field="month"/>
-  </class>
-  <class name="?" productionName="date__number12_of_dateNoDay">
-    <rule2Field ruleRhs="number12" field="number12"/>
-    <rule2Field ruleRhs="of" field="of"/>
-    <rule2Field ruleRhs="dateNoDay" field="dateNoDay"/>
-  </class>
-  <class name="?" productionName="date__number12_dateSeparator_dateNoDay">
-    <rule2Field ruleRhs="number12" field="number12"/>
-    <rule2Field ruleRhs="dateSeparator" field="dateSeparator"/>
-    <rule2Field ruleRhs="dateNoDay" field="dateNoDay"/>
-  </class>
-  <class name="?" productionName="date__number12">
-    <rule2Field ruleRhs="number12" field="number12"/>
   </class>
 </binding>
