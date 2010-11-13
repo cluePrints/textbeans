@@ -47,14 +47,8 @@ productions:
 	dayHoursRange:TAdEmail_Range
 		= 'hour' 'minus' 'hour';
 		
-	dateNoDay:TAdEmail_Date
+	date:TAdEmail_Date
 		= 'month' 'year'					// Jan 2010
 		| 'month' 'dateSeparator' 'year'	// Jan-2010
 		| 'month'							// Jan
-		;
-		
-	date
-		= 'number12' 'of' 'dateNoDay'	// 23 of Jan, 23 of Jan-2010, ...
-		| 'number12' 'dateSeparator' 'dateNoDay'
-		| 'number12'
 		;

@@ -19,6 +19,7 @@ public class XMLSerializationTest {
 		ClassBinding binding = ClassBinding.forClass(OrderObj.class).as("advertisement");
 		binding.addField("adType", "type");
 		binding.addField("size", "size");
+		binding.add(new Rhs2MethodBinding("rhs", "method"));
 		b.addClass(binding);
 				
 		String fileName = "src/test/resources/net/sf/textbeans/binding/ad.xml";

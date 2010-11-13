@@ -3,6 +3,7 @@ package net.sf.textbeans.parser;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.Writer;
 import java.util.Collection;
 import java.util.Map;
@@ -34,12 +35,25 @@ public class AbstractBindingParserTest {
 		String grammarFile = dir + name + ".ebnf";
 		String rulesFile = dir + name + ".xml";
 		ReaderTextBindingParser p = new ReaderTextBindingParser().compile(new FileReader(grammarFile));
+		
+		generateBindingTemplate(dir, p);
+		
 		if (new File(rulesFile).exists()) {
 			p.loadAstRules(new FileReader(rulesFile));
 		}
 		String dataFile = dir + name + ".txt";
 		p.parse(new FileReader(dataFile));
 		
+		
+		// actually binding check
+		XStream xStream = new XStream();
+		String actual = xStream.toXML(p.getResult());
+		String expected = Files.toString(new File(dir+name+".xml.res"), Charsets.UTF_8);
+		XMLAssert.assertEquals(expected, actual);
+	}
+
+	private void generateBindingTemplate(String dir, ReaderTextBindingParser p)
+			throws IOException {
 		if (generateTmpBinding) {
 			Map<VariableDecl, Type> types = p.parser.getToolsFactory().getVariableTypeMap();
 			Collection<? extends ProductionDecl> prods = p.parser.getGrammarFactory().getAllProductions();
@@ -48,10 +62,5 @@ public class AbstractBindingParserTest {
 			Writer wr = new FileWriter(new File(dir+name+".btmp.xml"));
 			xWr.toFile(bGen.createBindingTemplate(), wr);
 		}
-		// actually binding check
-		XStream xStream = new XStream();
-		String actual = xStream.toXML(p.getResult());
-		String expected = Files.toString(new File(dir+name+".xml.res"), Charsets.UTF_8);
-		XMLAssert.assertEquals(expected, actual);
 	}
 }

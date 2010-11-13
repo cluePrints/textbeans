@@ -2,16 +2,16 @@ package net.sf.textbeans.binding;
 
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 
-public class RuleElementToFieldBinding implements RhsElementBinding{
+public class Rhs2MethodBinding implements RhsElementBinding {
 	@XStreamAsAttribute
 	private String ruleRhs;
 	@XStreamAsAttribute
-	private String field;
+	private String method;
 
-	RuleElementToFieldBinding(String rhsElement, String field) {
+	Rhs2MethodBinding(String rhsElement, String target) {
 		super();
 		this.ruleRhs = rhsElement;
-		this.field = field;
+		this.method = target;
 	}
 	
 	public String getRhsElement() {
@@ -22,11 +22,11 @@ public class RuleElementToFieldBinding implements RhsElementBinding{
 		this.ruleRhs = rhsElement;
 	}
 
-	public String getField() {
-		return field;
+	public String getMethod() {
+		return method;
 	}
 
-	public void setField(String field) {
-		this.field = field;
+	public void setMethod(String method) {
+		this.method = method;
 	}
 }

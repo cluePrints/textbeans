@@ -1,31 +1,54 @@
 <binding>
-	<class name="net.sf.textbeans.parser.testobj.TAdEmail_Order"
-		productionName="order__id_at_fee_minus_fee">
-		<rule2Field ruleRhs="id" field="id" />
-		<rule2Field ruleRhs="fee.0" field="feeLow" />
-		<rule2Field ruleRhs="fee.1" field="feeHigh" />
-	</class>
-	<class name="net.sf.textbeans.parser.testobj.TAdEmail_Range"
-		production="ageRange__number2_minus_number2_tknYear">
-		<rule2Field ruleRhs="number2.0" field="low" />
-		<rule2Field ruleRhs="number2.1" field="high" />
-	</class>
-	<class name="net.sf.textbeans.parser.testobj.TAdEmail_Range"
-		production="dayHoursRange__hour_minus_hour">
-		<rule2Field ruleRhs="hour.0" field="low" />
-		<rule2Field ruleRhs="hour.1" field="high" />
-	</class>
-	<class name="net.sf.textbeans.parser.testobj.TAdEmail_Order"
-		production="advertisement__size_adType_location_page_ageRange_dayHoursRange">
-		<rule2Field ruleRhs="size" field="size" />
-		<rule2Field ruleRhs="adType" field="adType" />
-		<rule2Field ruleRhs="location" field="location" />
-		<rule2Field ruleRhs="page" field="page" />
-		<rule2Field ruleRhs="ageRange" field="age" />
-		<rule2Field ruleRhs="dayHoursRange" field="showHours" />
-	</class>
-	<class name="net.sf.textbeans.parser.testobj.TAdEmail_Batch"
-		productionName="order_star_0_rec">
-		<rule2Field ruleRhs="order" field="orders" />
-	</class>
+  <class name="java.util.LinkedList" productionName="advertisement_star_0_empty"/>
+  <class ruleRhs="advertisement_star_0" productionName="advertisement_star_0_rec">
+    <rule2Method ruleRhs="advertisement" method="add"/>
+  </class>
+  <class name="net.sf.textbeans.parser.testobj.TAdEmail_Batch" productionName="batch__advertisement_star_0_date">
+    <rule2Field ruleRhs="advertisement_star_0" field="orders"/>
+    <rule2Field ruleRhs="date" field="date"/>
+  </class>
+  <class name="net.sf.textbeans.parser.testobj.TAdEmail_Order" productionName="advertisement__size_adType_location_page_ageRange_dayHoursRange">
+    <rule2Field ruleRhs="size" field="size"/>
+    <rule2Field ruleRhs="adType" field="adType"/>
+    <rule2Field ruleRhs="location" field="location"/>
+    <rule2Field ruleRhs="page" field="page"/>
+    <rule2Field ruleRhs="ageRange" field="ageRange"/>
+    <rule2Field ruleRhs="dayHoursRange" field="dayHoursRange"/>
+  </class>
+  <class name="net.sf.textbeans.parser.testobj.TAdEmail_Range" productionName="ageRange__number2_minus_number2_tknYear">
+    <rule2Field ruleRhs="number2" field="number2"/>
+    <rule2Field ruleRhs="minus" field="minus"/>
+    <rule2Field ruleRhs="number2" field="number2"/>
+    <rule2Field ruleRhs="tknYear" field="tknYear"/>
+  </class>
+  <class name="net.sf.textbeans.parser.testobj.TAdEmail_Range" productionName="dayHoursRange__hour_minus_hour">
+    <rule2Field ruleRhs="hour" field="hour"/>
+    <rule2Field ruleRhs="minus" field="minus"/>
+    <rule2Field ruleRhs="hour" field="hour"/>
+  </class>
+  <class name="net.sf.textbeans.parser.testobj.TAdEmail_Date" productionName="dateNoDay__month_year">
+    <rule2Field ruleRhs="month" field="month"/>
+    <rule2Field ruleRhs="year" field="year"/>
+  </class>
+  <class name="net.sf.textbeans.parser.testobj.TAdEmail_Date" productionName="dateNoDay__month_dateSeparator_year">
+    <rule2Field ruleRhs="month" field="month"/>
+    <rule2Field ruleRhs="dateSeparator" field="dateSeparator"/>
+    <rule2Field ruleRhs="year" field="year"/>
+  </class>
+  <class name="net.sf.textbeans.parser.testobj.TAdEmail_Date" productionName="dateNoDay__month">
+    <rule2Field ruleRhs="month" field="month"/>
+  </class>
+  <class name="?" productionName="date__number12_of_dateNoDay">
+    <rule2Field ruleRhs="number12" field="number12"/>
+    <rule2Field ruleRhs="of" field="of"/>
+    <rule2Field ruleRhs="dateNoDay" field="dateNoDay"/>
+  </class>
+  <class name="?" productionName="date__number12_dateSeparator_dateNoDay">
+    <rule2Field ruleRhs="number12" field="number12"/>
+    <rule2Field ruleRhs="dateSeparator" field="dateSeparator"/>
+    <rule2Field ruleRhs="dateNoDay" field="dateNoDay"/>
+  </class>
+  <class name="?" productionName="date__number12">
+    <rule2Field ruleRhs="number12" field="number12"/>
+  </class>
 </binding>
