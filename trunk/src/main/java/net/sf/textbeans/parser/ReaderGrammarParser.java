@@ -2,7 +2,6 @@ package net.sf.textbeans.parser;
 
 import java.io.Reader;
 import java.util.HashMap;
-import java.util.Map;
 
 import fr.umlv.tatoo.cc.common.generator.Type;
 import fr.umlv.tatoo.cc.lexer.charset.encoding.Encoding;
@@ -16,7 +15,6 @@ import fr.umlv.tatoo.cc.parser.grammar.NonTerminalDecl;
 import fr.umlv.tatoo.cc.parser.grammar.ProductionDecl;
 import fr.umlv.tatoo.cc.parser.grammar.TerminalDecl;
 import fr.umlv.tatoo.cc.parser.grammar.VersionDecl;
-import fr.umlv.tatoo.cc.tools.tools.RuleInfo;
 import fr.umlv.tatoo.cc.tools.tools.ToolsFactory;
 import fr.umlv.tatoo.runtime.buffer.impl.LocationTracker;
 import fr.umlv.tatoo.runtime.buffer.impl.ReaderWrapper;
@@ -35,7 +33,7 @@ public class ReaderGrammarParser {
 	private EBNFSupport ebnfSupport = new EBNFSupport(grammarFactory);
 
 	// tools
-	ToolsFactory toolsFactory = new ToolsFactory();
+	private ToolsFactory toolsFactory = new ToolsFactory();
 	private HashMap<String, Type> attributeMap = new HashMap<String, Type>();
 
 	private DelegatingParserListener parserListener = new DelegatingParserListener();
@@ -44,7 +42,7 @@ public class ReaderGrammarParser {
 
 	public ReaderGrammarParser compile(Reader grammarFileReader) {
 		ReaderGrammarParser p = this;
-
+		
 		// ebnf
 		EBNFParser textBeansGrammarParser = EBNFParser.createEBNFParser(
 				p.ruleFactory, p.encoding, p.grammarFactory, p.ebnfSupport,
@@ -56,7 +54,7 @@ public class ReaderGrammarParser {
 				.iterator().next();
 
 		VersionDecl version = p.grammarFactory.createVersion("DEFAULT", null);
-
+		
 		p.dataParser = RuntimeParserFactory.createRuntimeParser(
 				p.grammarFactory, start, version, p.parserListener);
 		return p;
@@ -75,60 +73,14 @@ public class ReaderGrammarParser {
 			ParserListener<TerminalDecl, NonTerminalDecl, ProductionDecl> l) {
 		parserListener.setDelegate(l);
 	}
-}
-
-class DelegatingParserListener implements
-		ParserListener<TerminalDecl, NonTerminalDecl, ProductionDecl> {
-	private ParserListener<TerminalDecl, NonTerminalDecl, ProductionDecl> delegate = new NopParserListener();
-
-	public void setDelegate(
-			ParserListener<TerminalDecl, NonTerminalDecl, ProductionDecl> delegate) {
-		this.delegate = delegate;
+	
+	public GrammarFactory getGrammarFactory() {
+		return grammarFactory;
 	}
-
-	public void shift(TerminalDecl terminal) {
-		delegate.shift(terminal);
+	public HashMap<String, Type> getAttributeMap() {
+		return attributeMap;
 	}
-
-	public void reduce(ProductionDecl production) {
-		delegate.reduce(production);
-	}
-
-	public void accept(NonTerminalDecl nonTerminal) {
-		delegate.accept(nonTerminal);
-	}
-}
-
-class NopParserListener implements
-		ParserListener<TerminalDecl, NonTerminalDecl, ProductionDecl> {
-	public void shift(TerminalDecl terminal) {
-		System.out.println("shift " + terminal);
-	}
-
-	public void reduce(ProductionDecl production) {
-		System.out.println("production " + production);
-	}
-
-	public void accept(NonTerminalDecl nonTerminal) {
-		System.out.println("accept " + nonTerminal);
-	}
-}
-
-class SimpleParserForwarder implements LexerListener<RuleDecl, ReaderWrapper> {
-	ReaderGrammarParser parser;
-
-	SimpleParserForwarder(ReaderGrammarParser parser) {
-		this.parser = parser;
-	}
-
-	public void ruleVerified(RuleDecl rule, int size, ReaderWrapper buffer) {
-		final Map<RuleDecl, RuleInfo> infoMap = parser.toolsFactory
-				.getRuleInfoMap();
-		TerminalDecl terminal = infoMap.get(rule).getTerminal();
-		if (terminal != null) {
-			parser.dataParser.push(terminal);
-		}
-
-		buffer.discard();
+	public ToolsFactory getToolsFactory() {
+		return toolsFactory;
 	}
 }

@@ -1,3 +1,9 @@
+imports:
+	net.sf.textbeans.parser.testobj.TAdEmail_Batch
+	net.sf.textbeans.parser.testobj.TAdEmail_Order
+	net.sf.textbeans.parser.testobj.TAdEmail_Date
+	net.sf.textbeans.parser.testobj.TAdEmail_Range
+
 tokens:
 	adType:String 	=	'flash|static|dynamic'
 	size:String		=	'[0-9]{2,3}x[0-9]{2,3}'
@@ -29,26 +35,26 @@ starts:
  	batch
 
 productions:
-	batch
+	batch:TAdEmail_Batch
 		= advertisement* date;
 		
-	advertisement
-		= 'size' 'adType' location page ageRange dayHoursRange;
+	advertisement:TAdEmail_Order
+		= 'size' 'adType' 'location' 'page' ageRange dayHoursRange;
 		
-	ageRange
+	ageRange:TAdEmail_Range
 		= 'number2' 'minus' 'number2' 'tknYear';
 		
-	dayHoursRange
+	dayHoursRange:TAdEmail_Range
 		= 'hour' 'minus' 'hour';
 		
-	dateNoDay
+	dateNoDay:TAdEmail_Date
 		= 'month' 'year'					// Jan 2010
 		| 'month' 'dateSeparator' 'year'	// Jan-2010
 		| 'month'							// Jan
 		;
 		
 	date
-		= 'number12' of dateNoDay	// 23 of Jan, 23 of Jan-2010, ...
+		= 'number12' 'of' 'dateNoDay'	// 23 of Jan, 23 of Jan-2010, ...
 		| 'number12' 'dateSeparator' 'dateNoDay'
 		| 'number12'
 		;

@@ -12,7 +12,7 @@ import com.google.common.collect.Lists;
 
 @RunWith(Parameterized.class)
 public class TatooTest {
-	public static final String TEST_DIR = "src/test/resources/net/sf/textbeans/parser/";
+	public static final String TEST_DIR = "src/test/resources/net/sf/textbeans/";
 	private String caseName;
 
 	@Parameters

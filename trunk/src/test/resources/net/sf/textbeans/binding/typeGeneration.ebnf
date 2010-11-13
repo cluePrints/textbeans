@@ -1,0 +1,12 @@
+imports:
+	net.sf.textbeans.TestObj
+
+tokens:
+	whatever= 'beers time'
+
+starts:
+ 	test
+
+productions:
+	test:TestObj
+		= 'whatever';

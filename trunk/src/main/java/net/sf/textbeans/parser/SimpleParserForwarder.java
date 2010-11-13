@@ -8,19 +8,19 @@ import fr.umlv.tatoo.cc.tools.tools.RuleInfo;
 import fr.umlv.tatoo.runtime.buffer.impl.ReaderWrapper;
 import fr.umlv.tatoo.runtime.lexer.LexerListener;
 
-public class DTOParserForwarder implements LexerListener<RuleDecl, ReaderWrapper> {
+class SimpleParserForwarder implements LexerListener<RuleDecl, ReaderWrapper> {
 	ReaderGrammarParser parser;
-	
-	DTOParserForwarder(ReaderGrammarParser parser) {
+
+	SimpleParserForwarder(ReaderGrammarParser parser) {
 		this.parser = parser;
 	}
 
-	public void ruleVerified(RuleDecl rule, int size,
-			ReaderWrapper buffer) {
-		final Map<RuleDecl, RuleInfo> infoMap = parser.getToolsFactory().getRuleInfoMap();
+	public void ruleVerified(RuleDecl rule, int size, ReaderWrapper buffer) {
+		final Map<RuleDecl, RuleInfo> infoMap = parser.getToolsFactory()
+				.getRuleInfoMap();
 		TerminalDecl terminal = infoMap.get(rule).getTerminal();
 		if (terminal != null) {
-			parser.dataParser.push(new DTOTerminalDecl(buffer.view(), terminal));
+			parser.dataParser.push(terminal);
 		}
 
 		buffer.discard();
