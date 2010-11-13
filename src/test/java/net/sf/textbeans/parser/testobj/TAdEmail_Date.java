@@ -1,13 +1,13 @@
 package net.sf.textbeans.parser.testobj;
 
 public class TAdEmail_Date {
-	private int year;
+	private Integer year;
 	private String month;
-	private int day;
-	public int getYear() {
+	private Integer day;
+	public Integer getYear() {
 		return year;
 	}
-	public void setYear(int year) {
+	public void setYear(Integer year) {
 		this.year = year;
 	}
 	public String getMonth() {
@@ -16,10 +16,10 @@ public class TAdEmail_Date {
 	public void setMonth(String month) {
 		this.month = month;
 	}
-	public int getDay() {
+	public Integer getDay() {
 		return day;
 	}
-	public void setDay(int day) {
+	public void setDay(Integer day) {
 		this.day = day;
 	}	
 }
