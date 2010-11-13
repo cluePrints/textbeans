@@ -31,8 +31,7 @@ public class TemplateBindingGenerator {
 				cl.setClassName(lhsType.getName());
 			}
 			for (VariableDecl rhs : rule.getRight()) {
-				RuleElementToFieldBinding field = new RuleElementToFieldBinding(rhs.getId(), rhs.getId());
-				cl.addField(field);
+				cl.addField(rhs.getId(), rhs.getId());
 			}
 			unit.addClass(cl);
 		}

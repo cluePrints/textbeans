@@ -35,7 +35,7 @@ public class TatooTest {
 	}
 
 	private void compile(String name) throws Exception {
-		compile(TEST_DIR, name);
+		compile(TEST_DIR+"/parser/", name);
 	}
 
 	void compile(String dir, String name) throws Exception {

@@ -16,11 +16,11 @@ public class ClassBinding {
 	@XStreamAsAttribute
 	private String ruleRhs;		// for clases like 'elements = elements element' 
 	@XStreamImplicit
-	private List<RuleElementToFieldBinding> fields = new LinkedList<RuleElementToFieldBinding>();
+	private List<RhsElementBinding> fields = new LinkedList<RhsElementBinding>();
 	
-	public RuleElementToFieldBinding[] searchByRhsName(final String prodName)
+	public RhsElementBinding[] searchByRhsName(final String prodName)
 	{
-		return Iterators.toArray(Iterators.filter(fields.iterator(), new RhsNameEq(prodName)), RuleElementToFieldBinding.class);
+		return Iterators.toArray(Iterators.filter(fields.iterator(), new RhsNameEq(prodName)), RhsElementBinding.class);
 	}
 
 	public String getRuleRhs() {
@@ -43,9 +43,10 @@ public class ClassBinding {
 		return this;
 	}
 	public void addField(String lhsName, String fieldName) {
-		addField(new RuleElementToFieldBinding(lhsName, fieldName));
+		RuleElementToFieldBinding b = new RuleElementToFieldBinding(lhsName, fieldName);
+		add(b);
 	}
-	public void addField(RuleElementToFieldBinding b) {
+	public void add(RhsElementBinding b) {
 		fields.add(b);
 	}
 	public String getProductionName() {
@@ -63,16 +64,16 @@ public class ClassBinding {
 
 		this.name = className;
 	}
-	public List<RuleElementToFieldBinding> getFields() {
+	public List<RhsElementBinding> getFields() {
 		return fields;
 	}
-	public void setFields(List<RuleElementToFieldBinding> fields) {
+	public void setFields(List<RhsElementBinding> fields) {
 		this.fields = fields;
 	}
 }
 
 
-class RhsNameEq implements Predicate<RuleElementToFieldBinding>
+class RhsNameEq implements Predicate<RhsElementBinding>
 {
 	private final String name;
 	
@@ -82,7 +83,7 @@ class RhsNameEq implements Predicate<RuleElementToFieldBinding>
 	}
 
 	@Override
-	public boolean apply(RuleElementToFieldBinding input) {
+	public boolean apply(RhsElementBinding input) {
 		String longName = input.getRhsElement();
 		return longName.startsWith(name +".") || name.equals(longName);
 	}
