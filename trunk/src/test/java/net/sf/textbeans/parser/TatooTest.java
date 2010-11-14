@@ -1,7 +1,10 @@
 package net.sf.textbeans.parser;
 
+import java.io.FileReader;
 import java.util.Collection;
 import java.util.List;
+
+import net.sf.textbeans.util.Const;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,6 +13,10 @@ import org.junit.runners.Parameterized.Parameters;
 
 import com.google.common.collect.Lists;
 
+/**
+ * Just test to ensure that Tattoo is able to parse certain things.
+ * No errors -> test passed. Inspired by previous not luck attempts with other parsers.
+ */
 @RunWith(Parameterized.class)
 public class TatooTest {
 	public static final String TEST_DIR = "src/test/resources/net/sf/textbeans/";
@@ -39,10 +46,10 @@ public class TatooTest {
 	}
 
 	void compile(String dir, String name) throws Exception {
-		String grammarFile = dir + name + ".ebnf";
-		GrammarParser p = new GrammarParser().compile(grammarFile);
-		String dataFile = dir + name + ".txt";
-		p.parse(dataFile);
+		String grammarFile = dir + name + Const.EBNF_EXT;
+		SimpleParser p = new SimpleParser().compile(new FileReader(grammarFile));
+		String dataFile = dir + name + Const.TEST_CASE_EXT;
+		p.parse(new FileReader(dataFile));
 	}
 
 	public TatooTest(String caseName) {
