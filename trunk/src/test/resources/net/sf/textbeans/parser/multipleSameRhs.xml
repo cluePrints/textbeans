@@ -1,10 +1,14 @@
 <binding>
+  <class name="java.util.LinkedList" productionName="order_star_0_empty"/>
+  <class ruleRhs="order_star_0" productionName="order_star_0_rec">
+    <rule2Method ruleRhs="order" method="add"/>
+  </class>
+  <class name="net.sf.textbeans.parser.testobj.TMultiSameRhs_Batch" productionName="batch__order_star_0">
+    <rule2Field ruleRhs="order_star_0" field="orders"/>
+  </class>
   <class name="net.sf.textbeans.parser.testobj.TMultiSameRhs_Order" productionName="order__id_at_fee_minus_fee">
     <rule2Field ruleRhs="id" field="id"/>
     <rule2Field ruleRhs="fee.0" field="feeLow"/>
-    <rule2Field ruleRhs="fee.1" field="feeHigh"/>    
-  </class>
-  <class name="net.sf.textbeans.parser.testobj.TMultiSameRhs_Batch" productionName="order_star_0_rec">
-  	<rule2Field ruleRhs="order" field="orders"/>
+    <rule2Field ruleRhs="fee.1" field="feeHigh"/>
   </class>
 </binding>

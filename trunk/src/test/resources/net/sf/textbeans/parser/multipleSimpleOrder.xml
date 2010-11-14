@@ -1,13 +1,19 @@
 <binding>
-  <class name="net.sf.textbeans.parser.testobj.TMultipleSimpleOrder_Order" productionName="order__id_at_fee">
-    <rule2Field ruleRhs="id" field="id"/>
-    <rule2Field ruleRhs="fee.number" field="feeBd"/>
-    <rule2Field ruleRhs="fee.number" field="feeLong"/>
-    <rule2Field ruleRhs="fee.number" field="feeStr"/>
-    <rule2Field ruleRhs="fee.number" field="feeIntPrimitive"/>
-  </class>
-  <class name="net.sf.textbeans.parser.testobj.TMultipleSimpleOrder_Batch" productionName="order_star_0_empty"/>
-  <class productionName="order_star_0_rec" ruleRhs="order_star_0">
-  	<rule2Field ruleRhs="order" field="orders"/>
-  </class>
+	<class name="java.util.LinkedList" productionName="order_star_0_empty">
+		<rule2Method ruleRhs="order" method="add" />
+	</class>
+	<class ruleRhs="order_star_0" productionName="order_star_0_rec">
+		<rule2Method ruleRhs="order" method="add" />
+	</class>
+	<class name="net.sf.textbeans.parser.testobj.TMultipleSimpleOrder_Order"
+		productionName="order__id_at_fee">
+		<rule2Field ruleRhs="id" field="id" />
+		<rule2Field ruleRhs="fee.number" field="feeBd" />
+		<rule2Field ruleRhs="fee.number" field="feeLong" />
+		<rule2Field ruleRhs="fee.number" field="feeStr" />
+		<rule2Field ruleRhs="fee.number" field="feeIntPrimitive" />
+	</class>	
+	<class name="net.sf.textbeans.parser.testobj.TMultipleSimpleOrder_Batch" productionName="batch__order_star_0">
+		<rule2Field ruleRhs="order_star_0" field="orders" />
+	</class>
 </binding>
