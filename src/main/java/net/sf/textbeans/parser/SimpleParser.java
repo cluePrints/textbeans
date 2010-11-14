@@ -23,7 +23,8 @@ import fr.umlv.tatoo.runtime.lexer.LexerListener;
 import fr.umlv.tatoo.runtime.parser.Parser;
 import fr.umlv.tatoo.runtime.parser.ParserListener;
 
-public class ReaderGrammarParser {
+
+public class SimpleParser {
 	Parser<TerminalDecl, NonTerminalDecl, ProductionDecl, VersionDecl> dataParser;
 	private Encoding encoding = UTF8Encoding.getInstance();
 	// lexer
@@ -40,8 +41,8 @@ public class ReaderGrammarParser {
 	LexerListener<RuleDecl, ReaderWrapper> lexerListener = new SimpleParserForwarder(
 			this);
 
-	public ReaderGrammarParser compile(Reader grammarFileReader) {
-		ReaderGrammarParser p = this;
+	public SimpleParser compile(Reader grammarFileReader) {
+		SimpleParser p = this;
 		
 		// ebnf
 		EBNFParser textBeansGrammarParser = EBNFParser.createEBNFParser(

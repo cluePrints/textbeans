@@ -23,15 +23,14 @@ import javax.swing.JTextArea;
 import javax.swing.JTree;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import net.sf.textbeans.parser.ReaderTextBindingParser;
+import net.sf.textbeans.parser.BindingParser;
 import net.sf.textbeans.parser.TatooTest;
+import net.sf.textbeans.util.Const;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 
 public class DemoGui {
-	private static final String FILE_EXT = ".ebnf";
-
 	public static void main(String[] args) {
 		final JFrame wndMain = new JFrame();
 		wndMain.setSize(800, 600);
@@ -79,15 +78,15 @@ public class DemoGui {
 			public void mouseClicked(MouseEvent e) {
 				JFileChooser fChooser = new JFileChooser(TatooTest.TEST_DIR);
 				FileNameExtensionFilter filter = new FileNameExtensionFilter(
-						"EBNF grammar descriptions", FILE_EXT.substring(1));
+						"EBNF grammar descriptions", Const.EBNF_EXT.substring(1));
 				fChooser.setFileFilter(filter);
 				int returnVal = fChooser.showOpenDialog(wndMain);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					File selectedFile = fChooser.getSelectedFile();
 					String nameNExt = selectedFile.getName();
-					String name = nameNExt.substring(0, nameNExt.length()-FILE_EXT.length());
+					String name = nameNExt.substring(0, nameNExt.length()-Const.EBNF_EXT.length());
 					String dir = selectedFile.getParentFile().getPath() +"/";
-					tryLoad(taGrammar, dir + name + FILE_EXT);
+					tryLoad(taGrammar, dir + name + Const.EBNF_EXT);
 					tryLoad(taText, dir + name +".txt");
 					tryLoad(taBinding, dir + name +".xml");
 				}
@@ -125,7 +124,7 @@ public class DemoGui {
 
 	private static void test(final JTree trResult, final JTextArea taText,
 			final JTextArea taGrammar, final JTextArea taBinding) {
-		ReaderTextBindingParser parser = new ReaderTextBindingParser();
+		BindingParser parser = new BindingParser();
 		parser.compile(asReader(taGrammar));
 		parser.loadAstRules(asReader(taBinding));
 		parser.parse(asReader(taText));

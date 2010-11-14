@@ -6,15 +6,15 @@ import net.sf.textbeans.binding.Binding;
 import net.sf.textbeans.binding.BindingInfoReader;
 import net.sf.textbeans.binding.XStreamBindingInfoReader;
 
-public class ReaderTextBindingParser {
-	ReaderGrammarParser parser;
+public class BindingParser {
+	SimpleParser parser;
 	private BindingInfoReader astDescReader = new XStreamBindingInfoReader();
 	BindingListener bindingListener;
-	public ReaderTextBindingParser compile(Reader grammar) {
-		parser = new ReaderGrammarParser().compile(grammar);
+	public BindingParser compile(Reader grammar) {
+		parser = new SimpleParser().compile(grammar);
 		return this;
 	}
-	public ReaderTextBindingParser loadAstRules(Reader ast) {
+	public BindingParser loadAstRules(Reader ast) {
 		Binding binding = astDescReader.fromFile(ast);
 		bindingListener = new BindingListener(binding);
 		parser.lexerListener = new DTOParserForwarder(parser);

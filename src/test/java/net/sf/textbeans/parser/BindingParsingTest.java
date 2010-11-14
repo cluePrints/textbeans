@@ -1,6 +1,9 @@
 package net.sf.textbeans.parser;
 
 import java.io.File;
+import java.io.FileReader;
+
+import net.sf.textbeans.util.Const;
 
 public class BindingParsingTest extends TatooTest {
 	
@@ -10,13 +13,13 @@ public class BindingParsingTest extends TatooTest {
 	
 	@Override
 	protected void compile(String dir, String name) throws Exception {
-		String grammarFile = dir + name + ".ebnf";
-		String rulesFile = dir + name + ".xml";
-		TextBindingParser p = new TextBindingParser().compile(grammarFile);
+		String grammarFile = dir + name + Const.EBNF_EXT;
+		String rulesFile = dir + name + Const.BINDING_EXT;
+		BindingParser p = new BindingParser().compile(new FileReader(grammarFile));
 		if (new File(rulesFile).exists()) {
-			p.loadAstRules(rulesFile);
+			p.loadAstRules(new FileReader(rulesFile));
 		}		
-		String dataFile = dir + name + ".txt";
-		p.parse(dataFile);
+		String dataFile = dir + name + Const.TEST_CASE_EXT;
+		p.parse(new FileReader(dataFile));
 	}
 }
