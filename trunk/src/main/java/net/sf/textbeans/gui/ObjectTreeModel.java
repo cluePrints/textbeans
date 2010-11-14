@@ -111,16 +111,16 @@ public class ObjectTreeModel implements TreeModel{
 		return root;
 	}
 	@Override
-	public void removeTreeModelListener(TreeModelListener l) {
-		throw new RuntimeException("not supported");	
-	}
-	@Override
 	public void valueForPathChanged(TreePath path, Object newValue) {
 		throw new RuntimeException("not supported");
 	}
 	@Override
 	public void addTreeModelListener(TreeModelListener l) {
-		//throw new RuntimeException("not supported");
+		// do nothing
+	}
+	@Override
+	public void removeTreeModelListener(TreeModelListener l) {
+		// do nothing	
 	}
 	
 	class Prop {

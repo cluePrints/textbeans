@@ -1,10 +1,11 @@
 <binding>
-  <class name="java.util.LinkedList" productionName="advertisement_star_0_empty"/>
-  <class ruleRhs="advertisement_star_0" productionName="advertisement_star_0_rec">
-    <rule2Method ruleRhs="advertisement" method="add"/>
+  <class name="?" productionName="advertisement_star_0_empty"/>
+  <class name="?" productionName="advertisement_star_0_rec">
+    <rule2Field ruleRhs="advertisement_star_0" field="advertisement_star_0"/>
+    <rule2Field ruleRhs="advertisement" field="advertisement"/>
   </class>
   <class name="net.sf.textbeans.parser.testobj.TAdEmail_Batch" productionName="batch__advertisement_star_0_date">
-    <rule2Field ruleRhs="advertisement_star_0" field="orders"/>
+    <rule2Field ruleRhs="advertisement_star_0" field="advertisement_star_0"/>
     <rule2Field ruleRhs="date" field="date"/>
   </class>
   <class name="net.sf.textbeans.parser.testobj.TAdEmail_Order" productionName="advertisement__size_adType_location_page_ageRange_dayHoursRange">
@@ -12,16 +13,19 @@
     <rule2Field ruleRhs="adType" field="adType"/>
     <rule2Field ruleRhs="location" field="location"/>
     <rule2Field ruleRhs="page" field="page"/>
-    <rule2Field ruleRhs="ageRange" field="age"/>
+    <rule2Field ruleRhs="ageRange" field="ageRange"/>
     <rule2Field ruleRhs="dayHoursRange" field="dayHoursRange"/>
   </class>
   <class name="net.sf.textbeans.parser.testobj.TAdEmail_Range" productionName="ageRange__number2_minus_number2_tknYear">
-    <rule2Field ruleRhs="number2.0" field="low"/>
-    <rule2Field ruleRhs="number2.1" field="high"/>
+    <rule2Field ruleRhs="number2" field="number2"/>
+    <rule2Field ruleRhs="minus" field="minus"/>
+    <rule2Field ruleRhs="number2" field="number2"/>
+    <rule2Field ruleRhs="tknYear" field="tknYear"/>
   </class>
   <class name="net.sf.textbeans.parser.testobj.TAdEmail_Range" productionName="dayHoursRange__hour_minus_hour">
-    <rule2Field ruleRhs="hour.0" field="low"/>
-    <rule2Field ruleRhs="hour.1" field="high"/>
+    <rule2Field ruleRhs="hour" field="hour"/>
+    <rule2Field ruleRhs="minus" field="minus"/>
+    <rule2Field ruleRhs="hour" field="hour"/>
   </class>
   <class name="net.sf.textbeans.parser.testobj.TAdEmail_Date" productionName="date__month_year">
     <rule2Field ruleRhs="month" field="month"/>
@@ -29,6 +33,7 @@
   </class>
   <class name="net.sf.textbeans.parser.testobj.TAdEmail_Date" productionName="date__month_minus_year">
     <rule2Field ruleRhs="month" field="month"/>
+    <rule2Field ruleRhs="minus" field="minus"/>
     <rule2Field ruleRhs="year" field="year"/>
   </class>
   <class name="net.sf.textbeans.parser.testobj.TAdEmail_Date" productionName="date__month">

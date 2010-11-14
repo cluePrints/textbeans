@@ -6,6 +6,7 @@ import java.beans.PropertyDescriptor;
 
 import net.sf.textbeans.util.TypeConvertor;
 
+// TODO: report if trying to bind to not existing prop
 public class PropertyBinder implements RhsBinder {
 	private TypeConvertor convertor = new TypeConvertor();
 

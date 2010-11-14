@@ -6,24 +6,35 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringReader;
-import java.util.List;
+import java.io.StringWriter;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTree;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import net.sf.textbeans.parser.ReaderTextBindingParser;
+import net.sf.textbeans.parser.TatooTest;
 
-import com.google.common.collect.Lists;
+import com.google.common.base.Charsets;
+import com.google.common.io.Files;
 
 public class DemoGui {
+	private static final String FILE_EXT = ".ebnf";
+
 	public static void main(String[] args) {
-		JFrame wndMain = new JFrame();
-		wndMain.setSize(300, 200);
+		final JFrame wndMain = new JFrame();
+		wndMain.setSize(800, 600);
 		wndMain.setLayout(new BorderLayout());
 		wndMain.addWindowListener(new WindowAdapter() {
 			@Override
@@ -31,79 +42,94 @@ public class DemoGui {
 				System.exit(0);
 			}
 		});
-		
+
 		JPanel mainPanel = new JPanel();
-		mainPanel.setLayout(new GridLayout(2, 2));
+		mainPanel.setLayout(new GridLayout(2, 2, 1, 1));
 		wndMain.add(mainPanel);
-		
-		
+
 		final JTree trResult = new JTree();
-		trResult.setSize(300, 200);
 		wndMain.setVisible(true);
-		/*          |
-		 *  text    |  grammar
-		 * -------------------
-		 *  tree    |  binding
-		 *          |
-		 **/
-		
-		
-		final JTextArea taText = new JTextArea("text");
+		/*
+		 * | text | grammar ------------------- tree | binding |
+		 */
+
+		final JTextArea taText = new JTextArea();
 		final JTextArea taGrammar = new JTextArea("grammar");
 		final JTextArea taBinding = new JTextArea("binding");
-		mainPanel.add(taText);
-		mainPanel.add(taGrammar);
-		mainPanel.add(trResult);
-		mainPanel.add(taBinding);
 		
-		JButton btnCompile = new JButton("Go!");
+		add(mainPanel, taText, "Text to process: ");
+		add(mainPanel, trResult, "Resulting object tree: ");
+		add(mainPanel, taGrammar, "Parsing rules: ");
+		add(mainPanel, taBinding, "Binding rules: ");
+		
+		
+
+		JPanel pnlActions = new JPanel();
+		JButton btnCompile = new JButton("Compile rules and parse");
 		btnCompile.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				ReaderTextBindingParser parser = new ReaderTextBindingParser();
-				parser.compile(asReader(taGrammar));
-				parser.loadAstRules(asReader(taBinding));
-				parser.parse(asReader(taText));
-				trResult.setModel(new ObjectTreeModel(parser.getResult().getClass().getSimpleName(), parser.getResult()));
+				test(trResult, taText, taGrammar, taBinding);
 			}
 		});
-		wndMain.add(btnCompile, BorderLayout.SOUTH);
+
+		JButton btnLoad = new JButton("Load test case");
+		btnLoad.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				JFileChooser fChooser = new JFileChooser(TatooTest.TEST_DIR);
+				FileNameExtensionFilter filter = new FileNameExtensionFilter(
+						"EBNF grammar descriptions", FILE_EXT.substring(1));
+				fChooser.setFileFilter(filter);
+				int returnVal = fChooser.showOpenDialog(wndMain);
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					File selectedFile = fChooser.getSelectedFile();
+					String nameNExt = selectedFile.getName();
+					String name = nameNExt.substring(0, nameNExt.length()-FILE_EXT.length());
+					String dir = selectedFile.getParentFile().getPath() +"/";
+					tryLoad(taGrammar, dir + name + FILE_EXT);
+					tryLoad(taText, dir + name +".txt");
+					tryLoad(taBinding, dir + name +".xml");
+				}
+			}
+		});
+		pnlActions.add(btnLoad);
+		pnlActions.add(btnCompile);
+		wndMain.add(pnlActions, BorderLayout.NORTH);
 	}
-	
-	private static Reader asReader(JTextArea area)
-	{
+
+	private static void add(JComponent mainPanel, final JComponent taBinding,
+			String title) {
+		taBinding.setBorder(BorderFactory.createTitledBorder(title));
+		mainPanel.add(new JScrollPane(taBinding));
+	}
+
+	private static Reader asReader(JTextArea area) {
 		return new StringReader(area.getText());
 	}
-}
 
-class A {
-	String name = "name";
-	List<String> someStuff = Lists.newArrayList("first", "second", "third");
-	public List<String> getSomeStuff() {
-		return someStuff;
+	private static void tryLoad(JTextArea dest, String fileName) {
+		File file = new File(fileName);
+		if (file.exists()) {
+			try {
+				dest.setText(Files.toString(file, Charsets.UTF_8));
+			} catch (Exception ex) {
+				StringWriter stringWriter = new StringWriter();
+				ex.printStackTrace(new PrintWriter(stringWriter));
+				dest.setText(stringWriter.toString());
+			}
+		} else {
+			dest.setText("");
+		}
 	}
 
-	public void setSomeStuff(List<String> someStuff) {
-		this.someStuff = someStuff;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}	
-}
-
-class AA {
-	A a = new A();
-
-	public A getA() {
-		return a;
-	}
-
-	public void setA(A a) {
-		this.a = a;
+	private static void test(final JTree trResult, final JTextArea taText,
+			final JTextArea taGrammar, final JTextArea taBinding) {
+		ReaderTextBindingParser parser = new ReaderTextBindingParser();
+		parser.compile(asReader(taGrammar));
+		parser.loadAstRules(asReader(taBinding));
+		parser.parse(asReader(taText));
+		trResult.setModel(new ObjectTreeModel(parser.getResult().getClass()
+				.getSimpleName(), parser.getResult()));
 	}
 }
