@@ -131,6 +131,7 @@ class BindingListener implements
 		return obj;
 	}
 
+	// TODO: resolve object properties in a way similar to map
 	Object lookFor(ListMultimap<String, Object> reducedDtos, String path) {
 		Iterator<String> splitPath = Splitter.on('.').split(path).iterator();
 		if (splitPath.hasNext()) {
