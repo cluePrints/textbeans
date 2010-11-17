@@ -5,6 +5,8 @@ import java.util.Map;
 
 import junit.framework.Assert;
 
+import net.sf.textbeans.parser.BindingListener;
+
 import org.junit.Test;
 
 import com.google.common.collect.LinkedListMultimap;

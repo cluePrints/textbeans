@@ -3,6 +3,7 @@ package net.sf.textbeans.parser;
 import java.io.File;
 import java.io.FileReader;
 
+import net.sf.textbeans.parser.BindingParser;
 import net.sf.textbeans.util.Const;
 
 public class BindingParsingTest extends TatooTest {
