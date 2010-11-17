@@ -38,7 +38,9 @@ public class AbstractBindingIntegrationTest {
 		String rulesFile = dir + name + Const.BINDING_EXT;
 		BindingParser p = new BindingParser().compile(new FileReader(grammarFile));
 		
-		generateBindingTemplate(dir, p);
+		if (generateTmpBinding) {
+			TemplateBindingGenerator.generateBindingTemplate(dir+name, p);
+		}
 		
 		if (new File(rulesFile).exists()) {
 			p.loadAstRules(new FileReader(rulesFile));
@@ -52,17 +54,5 @@ public class AbstractBindingIntegrationTest {
 		String actual = xStream.toXML(p.getResult());
 		String expected = Files.toString(new File(dir+name+Const.TEST_CASE_RES_EXT), Charsets.UTF_8);
 		XMLAssert.assertEquals(expected, actual);
-	}
-
-	private void generateBindingTemplate(String dir, BindingParser p)
-			throws IOException {
-		if (generateTmpBinding) {
-			Map<VariableDecl, Type> types = p.parser.getToolsFactory().getVariableTypeMap();
-			Collection<? extends ProductionDecl> prods = p.parser.getGrammarFactory().getAllProductions();
-			bGen = new TemplateBindingGenerator(prods, types);
-			BindingInfoWriter xWr = new XStreamBindingInfoWriter();
-			Writer wr = new FileWriter(new File(dir+name+".btmp.xml"));
-			xWr.toFile(bGen.createBindingTemplate(), wr);
-		}
 	}
 }

@@ -52,12 +52,10 @@ class BindingListener implements
 	public void shift(TerminalDecl terminal) {
 		DTOTerminalDecl dto = (DTOTerminalDecl) terminal;
 		semanticStack.push(Pair.newOne(dto.getId(), dto.data.toString()));
-		System.out.println("shift " + terminal);
 	}
 
 	public void reduce(ProductionDecl production) {
 		try {
-			System.out.println("production " + production);
 			List<? extends VariableDecl> ruleRhs = production.getRight();
 			ClassBinding classBnd = binding.searchByProductionId(production
 					.getId());
@@ -161,6 +159,5 @@ class BindingListener implements
 	}
 
 	public void accept(NonTerminalDecl nonTerminal) {
-		System.out.println("accept " + nonTerminal);
 	}
 }

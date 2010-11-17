@@ -30,14 +30,14 @@ class DelegatingParserListener implements
 class NopParserListener implements
 		ParserListener<TerminalDecl, NonTerminalDecl, ProductionDecl> {
 	public void shift(TerminalDecl terminal) {
-		System.out.println("shift " + terminal);
+		//System.out.println("shift " + terminal);
 	}
 
 	public void reduce(ProductionDecl production) {
-		System.out.println("production " + production);
+		//System.out.println("production " + production);
 	}
 
 	public void accept(NonTerminalDecl nonTerminal) {
-		System.out.println("accept " + nonTerminal);
+		//System.out.println("accept " + nonTerminal);
 	}
 }

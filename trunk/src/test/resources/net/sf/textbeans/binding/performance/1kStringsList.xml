@@ -1,0 +1,6 @@
+<binding>
+  <class name="java.util.LinkedList" productionName="string_star_0_empty"/>
+  <class ruleRhs="string_star_0" productionName="string_star_0_rec">
+    <rule2Method ruleRhs="string.str_contents" method="add"/>
+  </class>
+</binding>

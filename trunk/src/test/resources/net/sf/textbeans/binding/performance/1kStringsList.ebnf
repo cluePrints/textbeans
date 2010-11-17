@@ -1,0 +1,19 @@
+tokens:
+	file_start  	= '<linked-list>'
+	file_end		= '<\/linked-list>'
+	str_start		= '<string>'
+	str_end			= '<\/string>'
+	str_contents	= '[0-9]*'
+ 
+blanks:
+ 	space= "( |\t|\r|\n)+"
+
+starts:
+ 	root
+
+productions:
+	root = 
+		| 'file_start' string* 'file_end';
+		
+	string 
+		= 'str_start' 'str_contents' 'str_end';
