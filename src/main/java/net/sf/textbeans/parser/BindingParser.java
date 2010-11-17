@@ -7,7 +7,7 @@ import net.sf.textbeans.binding.BindingInfoReader;
 import net.sf.textbeans.binding.XStreamBindingInfoReader;
 
 public class BindingParser {
-	SimpleParser parser;
+	private SimpleParser parser;
 	private BindingInfoReader astDescReader = new XStreamBindingInfoReader();
 	BindingListener bindingListener;
 	public BindingParser compile(Reader grammar) {
@@ -20,6 +20,10 @@ public class BindingParser {
 		parser.lexerListener = new DTOParserForwarder(parser);
 		parser.setParsingListener(bindingListener);
 		return this;
+	}
+	
+	public SimpleParser getParser() {
+		return parser;
 	}
 	public void parse(Reader name) {
 		parser.parse(name);
