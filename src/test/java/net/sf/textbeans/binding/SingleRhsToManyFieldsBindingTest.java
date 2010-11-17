@@ -1,4 +1,6 @@
-package net.sf.textbeans.parser;
+package net.sf.textbeans.binding;
+
+import net.sf.textbeans.parser.AbstractBindingIntegrationTest;
 
 import org.junit.Before;
 

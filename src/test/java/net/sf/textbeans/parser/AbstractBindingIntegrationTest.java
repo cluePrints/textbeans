@@ -11,6 +11,7 @@ import java.util.Map;
 import net.sf.textbeans.binding.BindingInfoWriter;
 import net.sf.textbeans.binding.TemplateBindingGenerator;
 import net.sf.textbeans.binding.XStreamBindingInfoWriter;
+import net.sf.textbeans.parser.BindingParser;
 import net.sf.textbeans.util.Const;
 import net.sf.textbeans.util.XMLAssert;
 
@@ -25,7 +26,7 @@ import fr.umlv.tatoo.cc.parser.grammar.ProductionDecl;
 import fr.umlv.tatoo.cc.parser.grammar.VariableDecl;
 
 public class AbstractBindingIntegrationTest {
-	String name = "simplerOrder";
+	protected String name = "simplerOrder";
 	TemplateBindingGenerator bGen;
 	boolean generateTmpBinding = false;
 	

@@ -32,6 +32,7 @@ public class TatooTest {
 		cases.add(new Object[] { "simpleEmailOrder" });
 		cases.add(new Object[] { "simplerOrder" });
 		cases.add(new Object[] { "simpleOrder2" });
+		cases.add(new Object[] { "LRTableConflict" });
 		return cases;
 	}
 
