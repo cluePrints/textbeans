@@ -20,6 +20,8 @@ public class ClassBinding {
 	
 	public RhsElementBinding[] searchByRhsName(final String prodName)
 	{
+		if (fields == null || fields.isEmpty())
+			return new RhsElementBinding[0];
 		return Iterators.toArray(Iterators.filter(fields.iterator(), new RhsNameEq(prodName)), RhsElementBinding.class);
 	}
 

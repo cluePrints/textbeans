@@ -4,6 +4,7 @@ package fr.umlv.tatoo.runtime.parser;
 import java.util.Map;
 import java.util.Set;
 
+import net.sf.textbeans.parser.glr.GLRParser;
 import fr.umlv.tatoo.runtime.log.TatooLogger;
 import fr.umlv.tatoo.runtime.util.IntArrayList;
 import fr.umlv.tatoo.runtime.util.ReadOnlyIntStack;
@@ -20,7 +21,7 @@ import fr.umlv.tatoo.runtime.util.ReadOnlyIntStack;
  * @see fr.umlv.tatoo.runtime.tools.builder.Builder#parser(ParserTable)
  */
 public class Parser<T,N,P,V> implements SimpleParser<T> {
-  private Parser(
+  public Parser(
       ParserTable<T,N,P,V> table,
       ParserListener<? super T,? super N,? super P> listener,
       ParserErrorRecoveryPolicy<T,N,P,V> policy,N start,V version,
@@ -74,7 +75,7 @@ public class Parser<T,N,P,V> implements SimpleParser<T> {
       V version,
       LookaheadMap<? extends T,? super V> lookaheadMap) {
     
-    return new Parser<T,N,P,V>(table,listener,policy,start,version,lookaheadMap);
+    return new GLRParser<T,N,P,V>(table,listener,policy,start,version,lookaheadMap);
   }
   
   /**
@@ -386,7 +387,7 @@ public class Parser<T,N,P,V> implements SimpleParser<T> {
     return result!=ActionReturn.RELEX;
   }
   
-  private ActionReturn doStep(T next) {
+  protected ActionReturn doStep(T next) {
     Action<T,P,V>[] actions = table.getActions(next);
     if (actions == null) {
       throw new IllegalArgumentException("unknown terminal "+next);
@@ -519,11 +520,11 @@ public class Parser<T,N,P,V> implements SimpleParser<T> {
   private int branchingLevel;
   private BranchingParserListener<? super T> branchingParserListener;
   
-  private final IntArrayList stateStack;
-  private final ParserTable<T,N,P,V> table;
+  protected IntArrayList stateStack;
+  protected final ParserTable<T,N,P,V> table;
   private final /*maybenull*/ LookaheadMap<? extends T,? super V> lookaheadMap;
   private final ParserListener<? super T,? super N,? super P> listener;
-  private final ParserErrorRecoveryPolicy<T,N,P,V> policy;
+  protected final ParserErrorRecoveryPolicy<T,N,P,V> policy;
   
   // true if parser needs debugging
   private static final boolean DEBUG=false;

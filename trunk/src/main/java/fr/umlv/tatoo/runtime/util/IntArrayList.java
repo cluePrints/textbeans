@@ -1,5 +1,7 @@
 package fr.umlv.tatoo.runtime.util;
 
+import java.util.Arrays;
+
 
 /** A specific array list of integer that globally works as
  *  a stack to store parser state.
@@ -120,4 +122,30 @@ public class IntArrayList implements ReadOnlyIntStack {
       builder.setLength(builder.length()-1);
     return builder.toString();
   }
+  
+  @Override
+  public int hashCode() {
+  	final int prime = 31;
+  	int result = 1;
+  	result = prime * result + Arrays.hashCode(data);
+  	result = prime * result + height;
+  	return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+  	if (this == obj)
+  		return true;
+  	if (obj == null)
+  		return false;
+  	if (getClass() != obj.getClass())
+  		return false;
+  	IntArrayList other = (IntArrayList) obj;
+  	if (!Arrays.equals(data, other.data))
+  		return false;
+  	if (height != other.height)
+  		return false;
+  	return true;
+  }
+
 }
