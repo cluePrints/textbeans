@@ -2,15 +2,19 @@ package net.sf.textbeans.parser;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
+import net.sf.textbeans.parser.glr.GLRConflictResolverPolicy;
+import net.sf.textbeans.parser.glr.LRConflictResolveAction;
+import net.sf.textbeans.parser.glr.LRConflictResolveActionDecl;
 import fr.umlv.tatoo.cc.parser.grammar.GrammarFactory;
 import fr.umlv.tatoo.cc.parser.grammar.NonTerminalDecl;
 import fr.umlv.tatoo.cc.parser.grammar.ProductionDecl;
 import fr.umlv.tatoo.cc.parser.grammar.TerminalDecl;
 import fr.umlv.tatoo.cc.parser.grammar.VariableDecl;
 import fr.umlv.tatoo.cc.parser.grammar.VersionDecl;
-import fr.umlv.tatoo.cc.parser.main.ConflictResolverType;
 import fr.umlv.tatoo.cc.parser.main.ParserType;
 import fr.umlv.tatoo.cc.parser.parser.AcceptActionDecl;
 import fr.umlv.tatoo.cc.parser.parser.ActionDecl;
@@ -23,6 +27,7 @@ import fr.umlv.tatoo.cc.parser.parser.ReduceActionDecl;
 import fr.umlv.tatoo.cc.parser.parser.ShiftActionDecl;
 import fr.umlv.tatoo.cc.parser.parser.SimpleActionDeclVisitor;
 import fr.umlv.tatoo.cc.parser.parser.VersionedActionDecl;
+import fr.umlv.tatoo.cc.parser.table.ConflictResolverPolicy.ActionEntry;
 import fr.umlv.tatoo.cc.parser.table.LogInfoConflictDiagnosisReporter;
 import fr.umlv.tatoo.cc.parser.table.ParserTableDecl;
 import fr.umlv.tatoo.cc.parser.table.ParserTableDeclFactory;
@@ -64,7 +69,7 @@ public class RuntimeParserFactory {
         factory.getEof(), factory.getError(), 
         factory.getVersionManager(), actionFactory, 
         ParserType.lalr.getMethod(),
-        ConflictResolverType.DEFAULT.getConflictResolver(),null);
+        new GLRConflictResolverPolicy(),null);
     
     return createParserTable(factory, grammar);
   }
@@ -148,7 +153,8 @@ public class RuntimeParserFactory {
       actions[i]=runtimize(gotoes,actionDecls[i]);
     return actions;
   }
-  
+ 
+  @SuppressWarnings("rawtypes")
   private static Action<TerminalDecl,ProductionDecl,VersionDecl> runtimize(final Map<NonTerminalDecl,int[]> gotoes,ActionDecl decl) {
     SimpleActionDeclVisitor<Action<TerminalDecl,ProductionDecl,VersionDecl>> visitor=
       new SimpleActionDeclVisitor<Action<TerminalDecl,ProductionDecl,VersionDecl>>() {
@@ -195,6 +201,18 @@ public class RuntimeParserFactory {
           return ExitAction.<TerminalDecl,ProductionDecl,VersionDecl>getInstance();
         }
     };
-    return decl.accept(visitor);
+    if (decl instanceof LRConflictResolveActionDecl) {
+    	LRConflictResolveActionDecl c = (LRConflictResolveActionDecl) decl;
+    	Set<? extends ActionEntry> aes = c.getActions();
+    	Set<Action> actions = new HashSet<Action>();
+    	for (ActionEntry ae : aes) {
+    		ActionDecl ad = ae.getAction();
+    		Action<TerminalDecl, ProductionDecl, VersionDecl> ra = ad.accept(visitor);
+    		actions.add(ra);
+     	}
+    	return new LRConflictResolveAction<TerminalDecl, ProductionDecl, VersionDecl>(actions); 
+    }
+    Action<TerminalDecl, ProductionDecl, VersionDecl> runtimized = decl.accept(visitor);
+	return runtimized;
   }
 }
