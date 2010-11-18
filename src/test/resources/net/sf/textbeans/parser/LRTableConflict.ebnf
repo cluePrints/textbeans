@@ -14,5 +14,5 @@ starts:
 
 productions:
 	root
-		= 'a'* [high]
-		| 'a' [low];
+		= 'a'*
+		| 'a';

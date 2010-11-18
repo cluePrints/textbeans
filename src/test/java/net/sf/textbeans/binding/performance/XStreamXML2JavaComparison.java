@@ -20,7 +20,7 @@ import com.thoughtworks.xstream.XStream;
 public class XStreamXML2JavaComparison {
 	private static final String FILE_NAME = TatooTest.TEST_DIR
 			+ "/binding/performance/1kStringsList";
-	private int stringsNum = 150000;
+	private int stringsNum = 150;
 	private int stringsLength = 100;
 
 	@Before

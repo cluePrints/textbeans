@@ -1,0 +1,9 @@
+<binding>
+  <class name="java.lang.String" productionName="a_star_0_empty"/>
+  <class name="java.lang.String" productionName="a_star_0_rec">
+  </class>
+  <class name="java.lang.String" productionName="root__a_star_0">
+  </class>
+  <class name="java.lang.String" productionName="root__a">
+  </class>
+</binding>
