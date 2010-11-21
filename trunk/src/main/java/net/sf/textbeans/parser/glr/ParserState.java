@@ -4,6 +4,14 @@ import fr.umlv.tatoo.runtime.util.IntArrayList;
 
 public class ParserState implements Cloneable {
 	IntArrayList stack = new IntArrayList();
+	Object external;
+	public Object getExternal() {
+		return external;
+	}
+
+	public void setExternal(Object external) {
+		this.external = external;
+	}
 
 	public ParserState(IntArrayList stack) {
 		super();
@@ -19,6 +27,7 @@ public class ParserState implements Cloneable {
 		try {
 			ParserState clone = (ParserState) super.clone();
 			clone.stack = stack.duplicate();
+			clone.external = null;
 			return clone;
 		} catch (CloneNotSupportedException ex) {
 			throw new RuntimeException(ex);
@@ -27,7 +36,7 @@ public class ParserState implements Cloneable {
 
 	@Override
 	public String toString() {
-		return "ParserState [stack=" + stack + "]";
+		return "ParserState [stack=" + stack + ", external=" + external + "]";
 	}
 
 	@Override

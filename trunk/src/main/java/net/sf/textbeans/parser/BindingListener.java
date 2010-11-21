@@ -15,7 +15,11 @@ import net.sf.textbeans.binding.Rhs2MethodBinding;
 import net.sf.textbeans.binding.RhsBinder;
 import net.sf.textbeans.binding.RhsElementBinding;
 import net.sf.textbeans.binding.RuleElementToFieldBinding;
+import net.sf.textbeans.parser.glr.GLRBranchFollowedListener;
+import net.sf.textbeans.parser.glr.GLRBranchSpawnedListener;
+import net.sf.textbeans.util.Cloner;
 import net.sf.textbeans.util.Pair;
+import net.sf.textbeans.util.XStreamCloner;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
@@ -30,14 +34,17 @@ import fr.umlv.tatoo.cc.parser.grammar.TerminalDecl;
 import fr.umlv.tatoo.cc.parser.grammar.VariableDecl;
 import fr.umlv.tatoo.runtime.parser.ParserListener;
 
-@SuppressWarnings({ "unchecked", "serial"})
+@SuppressWarnings({ "unchecked", "serial" })
 class BindingListener implements
-		ParserListener<TerminalDecl, NonTerminalDecl, ProductionDecl> {
+		ParserListener<TerminalDecl, NonTerminalDecl, ProductionDecl>,
+		GLRBranchSpawnedListener,
+		GLRBranchFollowedListener {
+	private Cloner cloner = new XStreamCloner();
 	Binding binding;
 	LinkedList<Pair<String, ? extends Object>> semanticStack = Lists
 			.newLinkedList();
-	
-	private Map<Class<?>, ? extends RhsBinder> binders = new HashMap<Class<?>, RhsBinder>(){
+
+	private Map<Class<?>, ? extends RhsBinder> binders = new HashMap<Class<?>, RhsBinder>() {
 		{
 			put(RuleElementToFieldBinding.class, new PropertyBinder());
 			put(Rhs2MethodBinding.class, new MethodBinder());
@@ -50,11 +57,13 @@ class BindingListener implements
 	}
 
 	public void shift(TerminalDecl terminal) {
+		System.out.println("Shift "+terminal);
 		DTOTerminalDecl dto = (DTOTerminalDecl) terminal;
 		semanticStack.push(Pair.newOne(dto.getId(), dto.data.toString()));
 	}
 
 	public void reduce(ProductionDecl production) {
+		System.out.println("Reduce "+production);
 		try {
 			List<? extends VariableDecl> ruleRhs = production.getRight();
 			ClassBinding classBnd = binding.searchByProductionId(production
@@ -88,8 +97,7 @@ class BindingListener implements
 				rhsNames.add(rhsName);
 			}
 			for (String rhsName : rhsNames) {
-				RhsElementBinding[] rhsBnds = classBnd
-						.searchByRhsName(rhsName);
+				RhsElementBinding[] rhsBnds = classBnd.searchByRhsName(rhsName);
 
 				for (RhsElementBinding rhsBnd : rhsBnds) {
 					Object dto = lookFor(reducedDtos, rhsBnd.getRhsElement());
@@ -116,9 +124,8 @@ class BindingListener implements
 				prodClazz = Class.forName(classBnd.getClassName());
 				obj = prodClazz.newInstance();
 			} catch (ClassNotFoundException ex) {
-				throw new RuntimeException(
-						"Error while binding production " + production
-								+ " to a class: " + prodClazz);
+				throw new RuntimeException("Error while binding production "
+						+ production + " to a class: " + prodClazz);
 			}
 		} else if (classBnd.getRuleRhs() != null) {
 			obj = Iterables.getOnlyElement(reducedDtos.get(classBnd
@@ -159,5 +166,15 @@ class BindingListener implements
 	}
 
 	public void accept(NonTerminalDecl nonTerminal) {
+	}
+
+	@Override
+	public void onBranchFollowing(Object stateToLoad) {
+		this.semanticStack = (LinkedList<Pair<String, ? extends Object>>) stateToLoad;
+	}
+
+	@Override
+	public LinkedList<Pair<String, ? extends Object>> onBranchSpawned() {
+		return cloner.clone(this.semanticStack);
 	}
 }

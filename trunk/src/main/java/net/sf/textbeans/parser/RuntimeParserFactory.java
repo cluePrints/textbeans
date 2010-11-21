@@ -155,7 +155,7 @@ public class RuntimeParserFactory {
   }
  
   @SuppressWarnings("rawtypes")
-  private static Action<TerminalDecl,ProductionDecl,VersionDecl> runtimize(final Map<NonTerminalDecl,int[]> gotoes,ActionDecl decl) {
+  static Action<TerminalDecl,ProductionDecl,VersionDecl> runtimize(final Map<NonTerminalDecl,int[]> gotoes,ActionDecl decl) {
     SimpleActionDeclVisitor<Action<TerminalDecl,ProductionDecl,VersionDecl>> visitor=
       new SimpleActionDeclVisitor<Action<TerminalDecl,ProductionDecl,VersionDecl>>() {
         @Override

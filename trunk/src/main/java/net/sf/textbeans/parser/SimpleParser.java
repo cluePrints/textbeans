@@ -3,6 +3,8 @@ package net.sf.textbeans.parser;
 import java.io.Reader;
 import java.util.HashMap;
 
+import net.sf.textbeans.parser.glr.GLRParser;
+
 import fr.umlv.tatoo.cc.common.generator.Type;
 import fr.umlv.tatoo.cc.lexer.charset.encoding.Encoding;
 import fr.umlv.tatoo.cc.lexer.charset.encoding.UTF8Encoding;
@@ -22,7 +24,8 @@ import fr.umlv.tatoo.runtime.lexer.Lexer;
 import fr.umlv.tatoo.runtime.lexer.LexerListener;
 import fr.umlv.tatoo.runtime.parser.Parser;
 import fr.umlv.tatoo.runtime.parser.ParserListener;
-
+import fr.umlv.tatoo.runtime.parser.ParserTable;
+import fr.umlv.tatoo.runtime.tools.builder.Builder;
 
 public class SimpleParser {
 	Parser<TerminalDecl, NonTerminalDecl, ProductionDecl, VersionDecl> dataParser;
@@ -43,7 +46,7 @@ public class SimpleParser {
 
 	public SimpleParser compile(Reader grammarFileReader) {
 		SimpleParser p = this;
-		
+
 		// ebnf
 		EBNFParser textBeansGrammarParser = EBNFParser.createEBNFParser(
 				p.ruleFactory, p.encoding, p.grammarFactory, p.ebnfSupport,
@@ -55,9 +58,13 @@ public class SimpleParser {
 				.iterator().next();
 
 		VersionDecl version = p.grammarFactory.createVersion("DEFAULT", null);
-		
-		p.dataParser = RuntimeParserFactory.createRuntimeParser(
-				p.grammarFactory, start, version, p.parserListener);
+
+		ParserTable<TerminalDecl, NonTerminalDecl, ProductionDecl, VersionDecl> parserTable = RuntimeParserFactory.createParserTable(grammarFactory);
+
+		p.dataParser = Builder.parser(parserTable).listener(p.parserListener)
+				.start(start).version(version).setFactory(GLRParser.FACTORY)
+				.createParser();
+
 		return p;
 	}
 
@@ -74,13 +81,15 @@ public class SimpleParser {
 			ParserListener<TerminalDecl, NonTerminalDecl, ProductionDecl> l) {
 		parserListener.setDelegate(l);
 	}
-	
+
 	public GrammarFactory getGrammarFactory() {
 		return grammarFactory;
 	}
+
 	public HashMap<String, Type> getAttributeMap() {
 		return attributeMap;
 	}
+
 	public ToolsFactory getToolsFactory() {
 		return toolsFactory;
 	}
