@@ -5,6 +5,7 @@ import java.io.Reader;
 import net.sf.textbeans.binding.Binding;
 import net.sf.textbeans.binding.BindingInfoReader;
 import net.sf.textbeans.binding.XStreamBindingInfoReader;
+import net.sf.textbeans.parser.glr.IGLRParser;
 
 public class BindingParser {
 	private SimpleParser parser;
@@ -17,6 +18,12 @@ public class BindingParser {
 	public BindingParser loadAstRules(Reader ast) {
 		Binding binding = astDescReader.fromFile(ast);
 		bindingListener = new BindingListener(binding);
+		// TODO: interface here?
+		if (parser.dataParser instanceof IGLRParser) {
+			IGLRParser p = (IGLRParser) parser.dataParser;
+			p.setBranchFollowingListener(bindingListener);
+			p.setBranchSpawnedListener(bindingListener);
+		}
 		parser.lexerListener = new DTOParserForwarder(parser);
 		parser.setParsingListener(bindingListener);
 		return this;

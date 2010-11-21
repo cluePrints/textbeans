@@ -4,8 +4,8 @@ package fr.umlv.tatoo.runtime.parser;
 import java.util.Map;
 import java.util.Set;
 
-import net.sf.textbeans.parser.glr.GLRParser;
 import fr.umlv.tatoo.runtime.log.TatooLogger;
+import fr.umlv.tatoo.runtime.tools.builder.ParserFactory;
 import fr.umlv.tatoo.runtime.util.IntArrayList;
 import fr.umlv.tatoo.runtime.util.ReadOnlyIntStack;
 
@@ -75,8 +75,20 @@ public class Parser<T,N,P,V> implements SimpleParser<T> {
       V version,
       LookaheadMap<? extends T,? super V> lookaheadMap) {
     
-    return new GLRParser<T,N,P,V>(table,listener,policy,start,version,lookaheadMap);
+    return new Parser<T,N,P,V>(table,listener,policy,start,version,lookaheadMap);
   }
+  
+	public static final ParserFactory FACTORY = new ParserFactory() {
+
+		public <T, N, P, V> Parser<T, N, P, V> createParser(
+				ParserTable<T, N, P, V> table,
+				ParserListener<? super T, ? super N, ? super P> listener,
+				ParserErrorRecoveryPolicy<T, N, P, V> policy, N start,
+				V version, LookaheadMap<? extends T, ? super V> lookaheadMap) {
+			return Parser.createParser(table, listener, policy, start, version,
+					lookaheadMap);
+		}
+	};
   
   /**
    * Resets the parser and clears the state stack.

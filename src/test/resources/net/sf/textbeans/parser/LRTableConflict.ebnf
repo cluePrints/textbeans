@@ -13,6 +13,6 @@ starts:
  	root
 
 productions:
-	root
+	root:java.util.LinkedList
 		= 'a'*
 		| 'a';

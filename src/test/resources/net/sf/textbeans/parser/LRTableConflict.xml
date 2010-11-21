@@ -1,9 +1,10 @@
 <binding>
-  <class name="java.lang.String" productionName="a_star_0_empty"/>
-  <class name="java.lang.String" productionName="a_star_0_rec">
+  <class name="java.util.LinkedList" productionName="a_star_0_empty"/>
+  <class ruleRhs="a_star_0" productionName="a_star_0_rec">
+    <rule2Method ruleRhs="a" method="add"/>
   </class>
-  <class name="java.lang.String" productionName="root__a_star_0">
-  </class>
-  <class name="java.lang.String" productionName="root__a">
+ 
+  <class name="java.util.LinkedList" productionName="root__a">
+    <rule2Method ruleRhs="a" method="add"/>
   </class>
 </binding>

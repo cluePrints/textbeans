@@ -775,11 +775,17 @@ public class Builder {
     private ParserListener<? super T,? super N,? super P> listener;
     private N start;
     private V version;
+    private ParserFactory factory = Parser.FACTORY;
     
     ParserBuilder(ParserTable<T,N,P,V> parserTable,ParserListener<? super T,? super N,? super P> listener) {
       this.parserTable=parserTable;
       this.listener=listener;
     }
+    
+    public Builder.ParserBuilder<T, N, P, V> setFactory(ParserFactory factory) {
+		this.factory = factory;
+		return this;
+	}
     
     /** Set the start non terminal.
      *  The parser will try to recognized the grammar starting
@@ -823,7 +829,7 @@ public class Builder {
       if (version==null)
         version=parserTable.getDefaultVersion();
       
-      return new ExpertParserBuilder<T,N,P,V>(parserTable,listener,start,version);
+      return new ExpertParserBuilder<T,N,P,V>(parserTable,listener,start,version, factory);
     }
     
     /** Create a new parser.
@@ -980,16 +986,18 @@ public class Builder {
     private final ParserListener<? super T,? super N,? super P> listener;
     private final N start;
     private final V version;
+    private final ParserFactory factory;
     ParserErrorRecoveryPolicy<T,N,P,V> errorPolicy;
     LookaheadMap<? extends T,? super V> lookaheadMap;
     
     ExpertParserBuilder(ParserTable<T,N,P,V> parserTable,
         ParserListener<? super T,? super N,? super P> listener,
-        N start, V version) {
+        N start, V version, ParserFactory factory) {
       super(parserTable);
       this.listener=listener;
       this.start=start;
       this.version=version;
+      this.factory=factory;
     }
     
     /** {@inheritDoc}
@@ -1030,7 +1038,7 @@ public class Builder {
       if (errorPolicy==null) {
         noErrorPolicy(); 
       }
-      return Parser.createParser(parserTable,listener,errorPolicy,start,version,lookaheadMap);
+      return factory.createParser(parserTable,listener,errorPolicy,start,version,lookaheadMap);
     }
   }
   
