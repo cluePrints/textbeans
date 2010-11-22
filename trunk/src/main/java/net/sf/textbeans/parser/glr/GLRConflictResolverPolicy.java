@@ -1,7 +1,12 @@
 package net.sf.textbeans.parser.glr;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
+import net.sf.textbeans.util.ActionEntryComparator;
+import net.sf.textbeans.util.ObjectIdComparator;
 import fr.umlv.tatoo.cc.parser.grammar.TerminalDecl;
 import fr.umlv.tatoo.cc.parser.parser.ActionDecl;
 import fr.umlv.tatoo.cc.parser.parser.ActionDeclFactory;
@@ -21,9 +26,14 @@ public class GLRConflictResolverPolicy extends DefaultConflictResolverPolicy {
 		if (actions.size() < 2) {
 			return super.priorityAction(type, reporter, actionFactory, actions, node, terminal, eof);
 		} else {
+			List<ActionEntry<A>> actionsList = new ArrayList<ActionEntry<A>>(actions);
+			// TODO: asc/desc really matters, why?
+			// probably something todo with ConflictResolveAction
+			Collections.sort(actionsList, ActionEntryComparator.ACTION_ID_DESC);
+			
 			// TODO: seems A will be one of interfaces which LRConflictResolveActionDecl implements
 			// though requires attention
-			return (A) new LRConflictResolveActionDecl(type, actionFactory, actions, node, terminal, eof);
+			return (A) new LRConflictResolveActionDecl(type, actionFactory, actionsList, node, terminal, eof);
 		}
 	}	
 }

@@ -7,4 +7,6 @@
   <class name="java.util.LinkedList" productionName="root__a">
     <rule2Method ruleRhs="a" method="add"/>
   </class>
+  
+  <class ruleRhs="a_star_0" productionName="root__a_star_0"/>  
 </binding>

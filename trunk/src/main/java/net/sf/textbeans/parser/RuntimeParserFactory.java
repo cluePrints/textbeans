@@ -2,9 +2,9 @@ package net.sf.textbeans.parser;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import net.sf.textbeans.parser.glr.GLRConflictResolverPolicy;
 import net.sf.textbeans.parser.glr.LRConflictResolveAction;
@@ -203,8 +203,8 @@ public class RuntimeParserFactory {
     };
     if (decl instanceof LRConflictResolveActionDecl) {
     	LRConflictResolveActionDecl c = (LRConflictResolveActionDecl) decl;
-    	Set<? extends ActionEntry> aes = c.getActions();
-    	Set<Action> actions = new HashSet<Action>();
+    	List<? extends ActionEntry> aes = c.getActions();
+    	List<Action> actions = new LinkedList<Action>();
     	for (ActionEntry ae : aes) {
     		ActionDecl ad = ae.getAction();
     		Action<TerminalDecl, ProductionDecl, VersionDecl> ra = ad.accept(visitor);

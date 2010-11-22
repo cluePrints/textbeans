@@ -1,6 +1,9 @@
 package net.sf.textbeans.parser.glr;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 import net.sf.textbeans.util.Memento;
 import fr.umlv.tatoo.runtime.parser.Action;
@@ -14,7 +17,7 @@ import fr.umlv.tatoo.runtime.tools.builder.ParserFactory;
 
 public class GLRParser<T, N, P, V> extends Parser<T, N, P, V> implements
 		Memento<ParserState>, IGLRParser {
-	private LinkedList<ParserState> states = new LinkedList<ParserState>();
+	private LinkedList<ParserState> stateStacks = new LinkedList<ParserState>();
 	private GLRBranchFollowedListener branchFollowingListener = GLRBranchFollowedListener.NONE;
 	private GLRBranchSpawnedListener branchSpawnedListener = GLRBranchSpawnedListener.NONE;
 
@@ -23,7 +26,7 @@ public class GLRParser<T, N, P, V> extends Parser<T, N, P, V> implements
 			ParserErrorRecoveryPolicy<T, N, P, V> policy, N start, V version,
 			LookaheadMap<? extends T, ? super V> lookaheadMap) {
 		super(table, listener, policy, start, version, lookaheadMap);
-		states.add(getState());
+		stateStacks.add(getState());
 	}
 
 	public static final ParserFactory FACTORY = new ParserFactory() {
@@ -38,54 +41,106 @@ public class GLRParser<T, N, P, V> extends Parser<T, N, P, V> implements
 		}
 	};
 
+	/**
+	 * Iterate over state stacks. 
+	 * If that stateStack caused parser to spawn branches - remove from list 
+	 */
 	@Override
 	protected ActionReturn doStep(T next) {
-		int num = states.size();
-		for (int i = 0; i < num; i++) {
-			ParserState state = states.get(i);
+		// TODO: if only one stateStack?
+		List<ParserState> survivedStacks = new LinkedList<ParserState>();
+		List<ParserState> statesToIterate = new ArrayList<ParserState>(stateStacks);
+		for (ParserState state : statesToIterate) {
 			loadState(state);
-			superDoStep(next);
+			List<ParserState> justSpawned = superDoStep(next, state);
+			if (justSpawned.isEmpty()) {
+				survivedStacks.add(state);
+			} else {
+				survivedStacks.addAll(justSpawned);
+			}
 		}
+		stateStacks.clear();
+		stateStacks.addAll(survivedStacks);
 		return null;
 	}
 
-	protected ActionReturn superDoStep(T next) {
+	// <1> perform action, if it's KEEP - do it once more
+	// <2> if conflict:
+			// remove current stateStack from the list and save			
+			// for each conflicting action:
+			// clone saved stateStack
+			// recursively perform <1>
+			// if conflict, recursively do <2>
+	
+	// works ok if:
+	//	A. stateStack with branch spawned is removed from the list
+	//  B. program eventually stop(i.e. branches spawned should not be acted immediately):)
+	protected List<ParserState> superDoStep(T next, ParserState curr) {
 		Action<T, P, V>[] actions = table.getActions(next);
 
+		List<ParserState> branchesSpawned = new LinkedList<ParserState>(); 
 		ActionReturn result;
 		do {
 			if (policy.errorRecoveryNeedsContinuation()) {
 				result = policy.continueRecoverOnError(this, stateStack, next);
 			} else {
 				Action<T, P, V> act = actions[stateStack.last()];
-				result = act.doPerform(this, next);
-				result = handleConflictsIfAny(next, result);
+				
+				result = doAction(next, curr, branchesSpawned, act);
 			}
 		} while (result == ActionReturn.KEEP);
+		return branchesSpawned;
+	}
+
+	private ActionReturn doAction(T next, ParserState current, List<ParserState> branchesSpawned,
+			Action<T, P, V> act) {
+		ActionReturn result = null;
+		do {
+			result = act.doPerform(this, next);
+			List<ParserState> spawned = handleConflictsIfAny(next, result);
+			if (!spawned.isEmpty()) {
+				branchesSpawned.addAll(spawned);
+			}
+			
+			if (result == ActionReturn.KEEP) {
+				Action<T, P, V>[] actions = table.getActions(next);
+				act = actions[stateStack.last()];
+			}
+		} while (result == ActionReturn.KEEP); 
 		return result;
 	}
 
-	ActionReturn handleConflictsIfAny(T next, ActionReturn result) {
+	// TODO: log4j NDC logging to track simultaneously followed branch in some comprehensive way
+	List<ParserState> handleConflictsIfAny(T next, ActionReturn result) {
+		List<ParserState> branchesSpawned = new LinkedList<ParserState>();
 		if (result instanceof ConflictActionReturn) {
 			ConflictActionReturn c = (ConflictActionReturn) result;
+			
+			// save state
 			ParserState savedState = getState();
 			Object savedExternalState = branchSpawnedListener.onBranchSpawned();
 			savedState.setExternal(savedExternalState);
-			states.remove(savedState);
-			for (Action<T, P, V> a : c.getActions()) {
-				ParserState spawnState = savedState.clone();
-				Object externalState = branchSpawnedListener.onBranchSpawned();
-				spawnState.setExternal(externalState);
 
+			Iterator<Action> it = c.getActions().iterator();
+			while (it.hasNext()) {
+				Action a = it.next();
+				// clone
+				ParserState spawnState = savedState.clone();
+				spawnState.setExternal(branchSpawnedListener.onBranchSpawned());				
+				
+				// use cloned
 				loadState(spawnState);
-				result = a.doPerform(this, next);
-				result = handleConflictsIfAny(next, result);
-				if (!states.contains(spawnState)) {
-					states.add(spawnState);
+				result = doAction(next, spawnState, branchesSpawned, a);
+				if (!(result instanceof ConflictActionReturn)) 
+					branchesSpawned.add(spawnState);
+				
+				// restore initial
+				if (it.hasNext()) {
+					loadState(savedState);
 				}
 			}
 		}
-		return result;
+		return branchesSpawned;
 	}
 
 	@Override
@@ -109,6 +164,6 @@ public class GLRParser<T, N, P, V> extends Parser<T, N, P, V> implements
 	public void setBranchSpawnedListener(
 			GLRBranchSpawnedListener branchSpawnedListener) {
 		this.branchSpawnedListener = branchSpawnedListener;
-		this.states.getLast().setExternal(branchSpawnedListener.onBranchSpawned());
+		this.stateStacks.getLast().setExternal(branchSpawnedListener.onBranchSpawned());
 	}
 }
