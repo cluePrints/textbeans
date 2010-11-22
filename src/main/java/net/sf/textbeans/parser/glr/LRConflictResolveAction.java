@@ -1,14 +1,14 @@
 package net.sf.textbeans.parser.glr;
 
-import java.util.Set;
+import java.util.List;
 
 import fr.umlv.tatoo.runtime.parser.Action;
 import fr.umlv.tatoo.runtime.parser.Parser;
 
 @SuppressWarnings("rawtypes") 
 public class LRConflictResolveAction<T, P, V>  extends Action<T,P,V> {
-	private Set<Action> actions;
-	public LRConflictResolveAction(Set<Action> actions) {
+	private List<Action> actions;
+	public LRConflictResolveAction(List<Action> actions) {
 		super();
 		this.actions = actions;
 	}

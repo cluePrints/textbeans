@@ -1,7 +1,7 @@
 package net.sf.textbeans.parser.glr;
 
 import java.util.Collections;
-import java.util.Set;
+import java.util.List;
 
 import fr.umlv.tatoo.cc.parser.grammar.TerminalDecl;
 import fr.umlv.tatoo.cc.parser.grammar.VersionDecl;
@@ -18,7 +18,7 @@ import fr.umlv.tatoo.cc.parser.table.NodeDecl;
 public class LRConflictResolveActionDecl extends VersionedActionDecl implements BranchTableActionDecl, RegularTableActionDecl {
 	Class<?> type;
 	ActionDeclFactory actionFactory;
-	Set<? extends ActionEntry<?>> actions;
+	List<? extends ActionEntry<?>> actions;
 	NodeDecl<?> node;
 	TerminalDecl terminal;
 	public Class<?> getType() {
@@ -37,11 +37,11 @@ public class LRConflictResolveActionDecl extends VersionedActionDecl implements 
 		this.actionFactory = actionFactory;
 	}
 
-	public Set<? extends ActionEntry<?>> getActions() {
+	public List<? extends ActionEntry<?>> getActions() {
 		return actions;
 	}
 
-	public void setActions(Set<? extends ActionEntry<?>> actions) {
+	public void setActions(List<? extends ActionEntry<?>> actions) {
 		this.actions = actions;
 	}
 
@@ -109,7 +109,7 @@ public class LRConflictResolveActionDecl extends VersionedActionDecl implements 
 
 	public LRConflictResolveActionDecl(Class<?> type,
 			ActionDeclFactory actionFactory,
-			Set<? extends ActionEntry<?>> actions, NodeDecl<?> node,
+			List<? extends ActionEntry<?>> actions, NodeDecl<?> node,
 			TerminalDecl terminal, TerminalDecl eof) {
 		super(actions.hashCode(), Collections.<VersionDecl, ActionDecl>emptyMap());
 		this.type = type;

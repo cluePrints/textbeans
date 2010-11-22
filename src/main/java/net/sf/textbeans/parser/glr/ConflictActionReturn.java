@@ -1,24 +1,24 @@
 package net.sf.textbeans.parser.glr;
 
-import java.util.Set;
+import java.util.List;
 
 import fr.umlv.tatoo.runtime.parser.Action;
 import fr.umlv.tatoo.runtime.parser.ActionReturn;
 
 @SuppressWarnings("rawtypes")
 public class ConflictActionReturn implements ActionReturn{
-	public ConflictActionReturn(Set<Action> actions) {
+	public ConflictActionReturn(List<Action> actions) {
 		super();
 		this.actions = actions;
 	}
 
-	Set<Action> actions;
+	List<Action> actions;
 
-	public Set<Action> getActions() {
+	public List<Action> getActions() {
 		return actions;
 	}
 
-	public void setActions(Set<Action> actions) {
+	public void setActions(List<Action> actions) {
 		this.actions = actions;
 	}
 }

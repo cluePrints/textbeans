@@ -40,7 +40,7 @@ public class LRConflictTest{
 		SimpleParser sp = (SimpleParser) ReflectionTestUtils.getField(p, "parser");		
 		GLRParser g = (GLRParser) ReflectionTestUtils.getField(sp, "dataParser");
 		LinkedList<ParserState> states = (LinkedList<ParserState>) ReflectionTestUtils
-				.getField(g, "states");
+				.getField(g, "stateStacks");
 		
 		ParserState parsingBranch = (ParserState) states.get(i);
 		LinkedList<net.sf.textbeans.util.Pair<String, ? extends Object>> parsingBranchExternal = (LinkedList<net.sf.textbeans.util.Pair<String, ? extends Object>>) parsingBranch.getExternal();

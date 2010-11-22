@@ -57,13 +57,11 @@ class BindingListener implements
 	}
 
 	public void shift(TerminalDecl terminal) {
-		System.out.println("Shift "+terminal);
 		DTOTerminalDecl dto = (DTOTerminalDecl) terminal;
 		semanticStack.push(Pair.newOne(dto.getId(), dto.data.toString()));
 	}
 
 	public void reduce(ProductionDecl production) {
-		System.out.println("Reduce "+production);
 		try {
 			List<? extends VariableDecl> ruleRhs = production.getRight();
 			ClassBinding classBnd = binding.searchByProductionId(production
@@ -174,7 +172,8 @@ class BindingListener implements
 	}
 
 	@Override
-	public LinkedList<Pair<String, ? extends Object>> onBranchSpawned() {
-		return cloner.clone(this.semanticStack);
+	public LinkedList<Pair<String, ? extends Object>> onBranchSpawned() {		
+		LinkedList<Pair<String, ? extends Object>> c = cloner.clone(this.semanticStack);
+		return c;
 	}
 }
