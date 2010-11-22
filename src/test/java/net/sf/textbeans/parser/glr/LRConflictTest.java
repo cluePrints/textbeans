@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 
 import junit.framework.Assert;
 import net.sf.textbeans.parser.BindingParser;
@@ -32,19 +33,29 @@ public class LRConflictTest{
 		String dataFile = dir + name + Const.TEST_CASE_EXT;
 		p.parse(new FileReader(dataFile));
 
-		Assert.assertEquals(Arrays.asList("a"), getRes(p, 0));
-		Assert.assertEquals(Arrays.asList("a", "a", "a", "a"), getRes(p, 1));
+		assertContains(p, Arrays.asList("a"), Arrays.asList("a", "a", "a", "a"));
+	}
+	
+	private void assertContains(BindingParser p, List<String>... strs) 
+	{
+		LinkedList<ParserState> states = getStateStacks(p);
+
+		LinkedList boundStuff = new LinkedList();
+		for (ParserState state : states) {
+			LinkedList<net.sf.textbeans.util.Pair<String, ? extends Object>> parsingBranchExternal = (LinkedList<net.sf.textbeans.util.Pair<String, ? extends Object>>) state.getExternal();
+			boundStuff.add(parsingBranchExternal.get(0).v);
+		}
+		
+		for (List<String> lst : strs) {
+			Assert.assertTrue(boundStuff.contains(lst));
+		}
 	}
 
-	private LinkedList getRes(BindingParser p, int i) {
+	private LinkedList<ParserState> getStateStacks(BindingParser p) {
 		SimpleParser sp = (SimpleParser) ReflectionTestUtils.getField(p, "parser");		
 		GLRParser g = (GLRParser) ReflectionTestUtils.getField(sp, "dataParser");
 		LinkedList<ParserState> states = (LinkedList<ParserState>) ReflectionTestUtils
 				.getField(g, "stateStacks");
-		
-		ParserState parsingBranch = (ParserState) states.get(i);
-		LinkedList<net.sf.textbeans.util.Pair<String, ? extends Object>> parsingBranchExternal = (LinkedList<net.sf.textbeans.util.Pair<String, ? extends Object>>) parsingBranch.getExternal();
-		LinkedList res = ((LinkedList) parsingBranchExternal.get(0).v);
-		return res;
+		return states;
 	}
 }

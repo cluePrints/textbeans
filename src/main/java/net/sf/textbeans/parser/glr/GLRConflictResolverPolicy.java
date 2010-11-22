@@ -27,10 +27,6 @@ public class GLRConflictResolverPolicy extends DefaultConflictResolverPolicy {
 			return super.priorityAction(type, reporter, actionFactory, actions, node, terminal, eof);
 		} else {
 			List<ActionEntry<A>> actionsList = new ArrayList<ActionEntry<A>>(actions);
-			// TODO: asc/desc really matters, why?
-			// probably something todo with ConflictResolveAction
-			Collections.sort(actionsList, ActionEntryComparator.ACTION_ID_DESC);
-			
 			// TODO: seems A will be one of interfaces which LRConflictResolveActionDecl implements
 			// though requires attention
 			return (A) new LRConflictResolveActionDecl(type, actionFactory, actionsList, node, terminal, eof);
