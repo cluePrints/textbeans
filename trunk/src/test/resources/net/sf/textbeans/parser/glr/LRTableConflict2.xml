@@ -1,0 +1,14 @@
+<binding>
+  <class name="java.util.LinkedList" productionName="a_star_0_empty"/>
+  <class name="java.util.LinkedList" productionName="a_star_1_empty"/>
+  <class ruleRhs="a_star_0" productionName="a_star_0_rec">
+    <rule2Method ruleRhs="a" method="add"/>
+  </class>
+  <class ruleRhs="a_star_1" productionName="a_star_1_rec">
+  	<rule2Method ruleRhs="a" method="add"/>
+  </class>
+  <class name="java.util.LinkedList" productionName="root__a_star_0_a_star_1">
+    <rule2Method ruleRhs="a_star_0" field="addAll"/>
+    <rule2Method ruleRhs="a_star_0" field="addAll"/>
+  </class>
+</binding>

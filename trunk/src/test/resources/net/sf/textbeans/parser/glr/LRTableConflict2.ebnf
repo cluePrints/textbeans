@@ -1,0 +1,17 @@
+priorities:
+high= 1 left
+low= 2 left
+
+tokens:
+	a = 'a'
+ 
+blanks:
+ 	space= "( |\t|\r|\n)+"
+ 	ignored = "."
+
+starts:
+ 	root
+
+productions:
+	root:java.util.LinkedList
+		= 'a'* 'a'*;

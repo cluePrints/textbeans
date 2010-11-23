@@ -38,6 +38,23 @@ public class GLRParserTest {
 		List<ParserState> states = getStateStacks(parser);
 		assertEquals(1, states.size());
 	}
+	
+	@Test
+	public void shouldInitiallySaveStateOnListenerSet() throws Exception
+	{
+		final GLRParser parser = initParser();
+		LinkedList<ParserState> states = getStateStacks(parser);
+		
+		GLRBranchSpawnedListener l = createMock(GLRBranchSpawnedListener.class);
+		String ext = new String("aaaa");
+		expect(l.onBranchSpawned()).andReturn(ext);
+		replay(l);
+		
+		parser.setBranchSpawnedListener(l);
+		
+		ParserState state = states.getLast();
+		assertEquals(ext, state.getExternal());
+	}
 
 	private LinkedList<ParserState> getStateStacks(IGLRParser parser) {
 		return (LinkedList<ParserState>) ReflectionTestUtils.getField(parser,
