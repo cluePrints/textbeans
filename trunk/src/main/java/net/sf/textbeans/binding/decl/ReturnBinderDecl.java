@@ -4,19 +4,19 @@ package net.sf.textbeans.binding.decl;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 
-@XStreamAlias(value="rule2Method")
-public class Rhs2MethodBinding implements RhsElementBinding {
+@XStreamAlias(value="return")
+public class ReturnBinderDecl implements RhsElementBinding {
 	@XStreamAsAttribute
 	private String ruleRhs;
 	@XStreamAsAttribute
-	private String method;
+	private String value;
 
-	public Rhs2MethodBinding(String rhsElement, String target) {
+	public ReturnBinderDecl(String rhsElement, String target) {
 		super();
 		this.ruleRhs = rhsElement;
-		this.method = target;
+		this.value = target;
 	}
-	
+
 	public String getRhsElement() {
 		return ruleRhs;
 	}
@@ -24,12 +24,17 @@ public class Rhs2MethodBinding implements RhsElementBinding {
 	public void setRhsElement(String rhsElement) {
 		this.ruleRhs = rhsElement;
 	}
-
-	public String getMethod() {
-		return method;
+	
+	public String getType() {
+		return value;
 	}
 
-	public void setMethod(String method) {
-		this.method = method;
+	public void setType(String type) {
+		this.value = type;
+	}
+
+	@Override
+	public String toString() {
+		return "ReturnBinderDecl [ruleRhs=" + ruleRhs + ", type=" + value + "]";
 	}
 }

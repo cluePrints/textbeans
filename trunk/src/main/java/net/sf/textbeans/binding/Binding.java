@@ -7,8 +7,9 @@ import net.sf.textbeans.binding.decl.ClassBinding;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterators;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
-
+@XStreamAlias(value="binding")
 public class Binding {
 	@XStreamImplicit
 	private List<ClassBinding> bindings = new LinkedList<ClassBinding>();
