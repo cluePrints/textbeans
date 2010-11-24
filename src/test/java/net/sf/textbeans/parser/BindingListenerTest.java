@@ -40,7 +40,7 @@ public class BindingListenerTest {
 	}
 	
 	@Test
-	public void shouldReturnNullOnNotFound()
+	public void shouldReturnNotFoundObjOnNotFound()
 	{
 		ListMultimap<String, Object> map = from(new HashMap<String, Object>(){{
 			put("a", null);
@@ -51,7 +51,7 @@ public class BindingListenerTest {
 			put("zz", "bb");
 		}});
 		BindingListener l = new BindingListener(null);
-		Assert.assertEquals(null, l.lookFor(map, "fee.john"));
+		Assert.assertEquals(BindingListener.NOT_FOUND, l.lookFor(map, "fee.john"));
 	}
 	
 	@Test

@@ -10,8 +10,10 @@ import java.util.Set;
 import net.sf.textbeans.binding.Binding;
 import net.sf.textbeans.binding.binders.MethodBinder;
 import net.sf.textbeans.binding.binders.PropertyBinder;
+import net.sf.textbeans.binding.binders.ReturnBinder;
 import net.sf.textbeans.binding.binders.RhsBinder;
 import net.sf.textbeans.binding.decl.ClassBinding;
+import net.sf.textbeans.binding.decl.ReturnBinderDecl;
 import net.sf.textbeans.binding.decl.Rhs2MethodBinding;
 import net.sf.textbeans.binding.decl.RhsElementBinding;
 import net.sf.textbeans.binding.decl.RuleElementToFieldBinding;
@@ -39,6 +41,7 @@ class BindingListener implements
 		ParserListener<TerminalDecl, NonTerminalDecl, ProductionDecl>,
 		GLRBranchSpawnedListener,
 		GLRBranchFollowedListener {
+	final static Object NOT_FOUND = new Object();
 	private Cloner cloner = new XStreamCloner();
 	Binding binding;
 	LinkedList<Pair<String, ? extends Object>> semanticStack = Lists
@@ -48,6 +51,7 @@ class BindingListener implements
 		{
 			put(RuleElementToFieldBinding.class, new PropertyBinder());
 			put(Rhs2MethodBinding.class, new MethodBinder());
+			put(ReturnBinderDecl.class, new ReturnBinder());
 		}
 	};
 
@@ -86,6 +90,8 @@ class BindingListener implements
 			// get obj to bind production rhs stuff to
 			Object obj = resolveProductionBinding(production, classBnd,
 					reducedDtos);
+			
+			obj = applyTransBindings(classBnd, obj);
 
 			// for each rhs name num try to get elem from map
 			// we could have similarly named stuff at the right, so sort
@@ -99,7 +105,7 @@ class BindingListener implements
 
 				for (RhsElementBinding rhsBnd : rhsBnds) {
 					Object dto = lookFor(reducedDtos, rhsBnd.getRhsElement());
-					if (dto == null)
+					if (dto == NOT_FOUND)
 						continue;
 
 					RhsBinder rhsBinder = binders.get(rhsBnd.getClass());
@@ -111,6 +117,17 @@ class BindingListener implements
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		}
+	}
+
+	private Object applyTransBindings(ClassBinding classBnd, Object obj) {
+		RhsElementBinding[] rhsBnds = classBnd.searchByRhsName(null);
+		if (rhsBnds.length > 0) {
+			for (RhsElementBinding rhsBnd : rhsBnds) {
+				RhsBinder rhsBinder = binders.get(rhsBnd.getClass());
+				obj = rhsBinder.bind(obj, rhsBnd, null);
+			}
+		}
+		return obj;
 	}
 
 	private Object resolveProductionBinding(ProductionDecl production,
@@ -159,9 +176,9 @@ class BindingListener implements
 						.getOnlyElement(subContents);
 				return lookFor(subMap, afterPreffix);
 			}
-			return Iterables.getOnlyElement(subContents, null);
+			return Iterables.getOnlyElement(subContents, NOT_FOUND);
 		}
-		return Iterables.getOnlyElement(reducedDtos.get(path));
+		return Iterables.getOnlyElement(reducedDtos.get(path), NOT_FOUND);
 	}
 
 	public void accept(NonTerminalDecl nonTerminal) {

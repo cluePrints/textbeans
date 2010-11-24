@@ -1,0 +1,12 @@
+<binding>
+  <class name="java.util.LinkedList" productionName="unit__null_value">
+    <rule2Method ruleRhs="null" method="add"/>
+    <rule2Method ruleRhs="value" method="add"/>
+  </class>
+  <class name="java.lang.Object" productionName="null__tnull">
+  	<return value="null"/>
+  </class>
+  <class name="java.lang.String" productionName="value__tvalue">
+    <return ruleRhs="tvalue"/>
+  </class>
+</binding>

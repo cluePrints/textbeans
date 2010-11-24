@@ -6,9 +6,11 @@ import java.util.List;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterators;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
+@XStreamAlias(value="class")
 public class ClassBinding {
 	@XStreamAsAttribute
 	private String name;
@@ -88,6 +90,13 @@ class RhsNameEq implements Predicate<RhsElementBinding>
 	@Override
 	public boolean apply(RhsElementBinding input) {
 		String longName = input.getRhsElement();
-		return longName.startsWith(name +".") || name.equals(longName);
+		if (longName == null) {
+			return name == null;
+		} else {
+			if (name == null) {
+				return false;
+			}
+			return longName.startsWith(name +".") || name.equals(longName);
+		}
 	}
 }

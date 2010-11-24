@@ -1,8 +1,10 @@
 package net.sf.textbeans.binding.decl;
 
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 
+@XStreamAlias(value="rule2Field")
 public class RuleElementToFieldBinding implements RhsElementBinding{
 	@XStreamAsAttribute
 	private String ruleRhs;

@@ -1,0 +1,17 @@
+tokens:
+	tnull = "null"
+	tvalue = "this"
+ 
+blanks:
+ 	space= "( |\t|\r|\n)+"
+
+starts:
+ 	unit
+
+productions:
+	unit 
+    	= null value;
+    null
+     	= 'tnull';
+    value 
+    	= 'tvalue';

@@ -27,8 +27,8 @@ import fr.umlv.tatoo.cc.parser.grammar.VariableDecl;
 
 public class AbstractBindingIntegrationTest {
 	protected String name = "simplerOrder";
-	TemplateBindingGenerator bGen;
-	boolean generateTmpBinding = false;
+	protected TemplateBindingGenerator bGen;
+	protected boolean generateTmpBinding = false;
 	
 	@Test
 	public void test() throws Exception
