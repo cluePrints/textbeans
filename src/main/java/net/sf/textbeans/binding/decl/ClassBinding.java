@@ -1,7 +1,8 @@
-package net.sf.textbeans.binding;
+package net.sf.textbeans.binding.decl;
 
 import java.util.LinkedList;
 import java.util.List;
+
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterators;

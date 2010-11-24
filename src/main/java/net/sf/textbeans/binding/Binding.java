@@ -3,6 +3,8 @@ package net.sf.textbeans.binding;
 import java.util.LinkedList;
 import java.util.List;
 
+import net.sf.textbeans.binding.decl.ClassBinding;
+
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterators;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;

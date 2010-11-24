@@ -7,6 +7,13 @@ import java.util.List;
 
 import junit.framework.Assert;
 
+import net.sf.textbeans.binding.decl.ClassBinding;
+import net.sf.textbeans.binding.decl.Rhs2MethodBinding;
+import net.sf.textbeans.binding.io.BindingInfoReader;
+import net.sf.textbeans.binding.io.BindingInfoWriter;
+import net.sf.textbeans.binding.io.XStreamBindingInfoReader;
+import net.sf.textbeans.binding.io.XStreamBindingInfoWriter;
+
 import org.junit.Test;
 
 public class XMLSerializationTest {

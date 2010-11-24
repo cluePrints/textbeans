@@ -1,4 +1,5 @@
-package net.sf.textbeans.binding;
+package net.sf.textbeans.binding.decl;
+
 
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 
@@ -8,7 +9,7 @@ public class Rhs2MethodBinding implements RhsElementBinding {
 	@XStreamAsAttribute
 	private String method;
 
-	Rhs2MethodBinding(String rhsElement, String target) {
+	public Rhs2MethodBinding(String rhsElement, String target) {
 		super();
 		this.ruleRhs = rhsElement;
 		this.method = target;

@@ -1,4 +1,5 @@
-package net.sf.textbeans.binding;
+package net.sf.textbeans.binding.decl;
+
 
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 
