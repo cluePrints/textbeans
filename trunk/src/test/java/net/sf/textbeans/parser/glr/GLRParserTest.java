@@ -171,13 +171,13 @@ public class GLRParserTest {
 	/**
 	 * 
 	 * 		  
-	 *  5 <-- 2 --> 4
+	 *  ! <-- 2 --> !
 	 *        ^
 	 *        |
 	 *  0 --> 1 --> 3
 	 */
 	@Test
-	public void shouldFollowSpawnBranchesRecursively() throws Exception {
+	public void shouldNotFollowSpawnBranchesRecursively() throws Exception {
 		final GLRParser parser = initParser();		
 		Action a24 = mockAction(parser, 4, ActionReturn.NEXT);
 		Action a25 = mockAction(parser, 5, ActionReturn.NEXT);
@@ -189,10 +189,9 @@ public class GLRParserTest {
 		LinkedList<ParserState> states = getStateStacks(parser);
 		parser.doStep(null);
 
-		assertStates(states.get(0).getStack(), 0, 1, 2, 4);
-		assertStates(states.get(1).getStack(), 0, 1, 2, 5);
-		assertStates(states.get(2).getStack(), 0, 1, 3);
-		assertEquals(3, states.size());
+		assertStates(states.get(0).getStack(), 0, 1, 2);
+		assertStates(states.get(1).getStack(), 0, 1, 3);
+		assertEquals(2, states.size());
 	}
 
 	private void assertStates(IntArrayList lst, int... states) {

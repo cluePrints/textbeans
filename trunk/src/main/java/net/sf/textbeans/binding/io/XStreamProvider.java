@@ -1,4 +1,9 @@
-package net.sf.textbeans.binding;
+package net.sf.textbeans.binding.io;
+
+import net.sf.textbeans.binding.Binding;
+import net.sf.textbeans.binding.decl.ClassBinding;
+import net.sf.textbeans.binding.decl.Rhs2MethodBinding;
+import net.sf.textbeans.binding.decl.RuleElementToFieldBinding;
 
 import com.thoughtworks.xstream.XStream;
 

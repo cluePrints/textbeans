@@ -8,13 +8,13 @@ import java.util.Map;
 import java.util.Set;
 
 import net.sf.textbeans.binding.Binding;
-import net.sf.textbeans.binding.ClassBinding;
-import net.sf.textbeans.binding.MethodBinder;
-import net.sf.textbeans.binding.PropertyBinder;
-import net.sf.textbeans.binding.Rhs2MethodBinding;
-import net.sf.textbeans.binding.RhsBinder;
-import net.sf.textbeans.binding.RhsElementBinding;
-import net.sf.textbeans.binding.RuleElementToFieldBinding;
+import net.sf.textbeans.binding.binders.MethodBinder;
+import net.sf.textbeans.binding.binders.PropertyBinder;
+import net.sf.textbeans.binding.binders.RhsBinder;
+import net.sf.textbeans.binding.decl.ClassBinding;
+import net.sf.textbeans.binding.decl.Rhs2MethodBinding;
+import net.sf.textbeans.binding.decl.RhsElementBinding;
+import net.sf.textbeans.binding.decl.RuleElementToFieldBinding;
 import net.sf.textbeans.parser.glr.GLRBranchFollowedListener;
 import net.sf.textbeans.parser.glr.GLRBranchSpawnedListener;
 import net.sf.textbeans.util.Cloner;
@@ -102,7 +102,8 @@ class BindingListener implements
 					if (dto == null)
 						continue;
 
-					binders.get(rhsBnd.getClass()).bind(obj, rhsBnd, dto);
+					RhsBinder rhsBinder = binders.get(rhsBnd.getClass());
+					obj = rhsBinder.bind(obj, rhsBnd, dto);
 				}
 			}
 

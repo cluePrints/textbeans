@@ -1,6 +1,6 @@
 package net.sf.textbeans.util;
 
-import net.sf.textbeans.binding.XStreamProvider;
+import net.sf.textbeans.binding.io.XStreamProvider;
 
 import com.thoughtworks.xstream.XStream;
 

@@ -1,6 +1,8 @@
-package net.sf.textbeans.binding;
+package net.sf.textbeans.binding.io;
 
 import java.io.Reader;
+
+import net.sf.textbeans.binding.Binding;
 
 import com.thoughtworks.xstream.XStream;
 

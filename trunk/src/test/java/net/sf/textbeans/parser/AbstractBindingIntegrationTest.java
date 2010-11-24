@@ -8,9 +8,9 @@ import java.io.Writer;
 import java.util.Collection;
 import java.util.Map;
 
-import net.sf.textbeans.binding.BindingInfoWriter;
 import net.sf.textbeans.binding.TemplateBindingGenerator;
-import net.sf.textbeans.binding.XStreamBindingInfoWriter;
+import net.sf.textbeans.binding.io.BindingInfoWriter;
+import net.sf.textbeans.binding.io.XStreamBindingInfoWriter;
 import net.sf.textbeans.parser.BindingParser;
 import net.sf.textbeans.util.Const;
 import net.sf.textbeans.util.XMLAssert;

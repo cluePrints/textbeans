@@ -7,6 +7,9 @@ import java.io.Writer;
 import java.util.Collection;
 import java.util.Map;
 
+import net.sf.textbeans.binding.decl.ClassBinding;
+import net.sf.textbeans.binding.io.BindingInfoWriter;
+import net.sf.textbeans.binding.io.XStreamBindingInfoWriter;
 import net.sf.textbeans.parser.BindingParser;
 
 import fr.umlv.tatoo.cc.common.generator.Type;

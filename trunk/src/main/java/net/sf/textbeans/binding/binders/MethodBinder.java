@@ -1,7 +1,9 @@
-package net.sf.textbeans.binding;
+package net.sf.textbeans.binding.binders;
 
 import java.lang.reflect.Method;
 
+import net.sf.textbeans.binding.decl.Rhs2MethodBinding;
+import net.sf.textbeans.binding.decl.RhsElementBinding;
 import net.sf.textbeans.util.TypeConvertor;
 
 // TODO: multi-args methods support
@@ -9,7 +11,7 @@ public class MethodBinder implements RhsBinder {
 	private TypeConvertor convertor = new TypeConvertor();
 
 	@Override
-	public void bind(Object destination, RhsElementBinding binding, Object value) {
+	public Object bind(Object destination, RhsElementBinding binding, Object value) {
 		try {
 			String name = ((Rhs2MethodBinding) binding).getMethod();
 			Method method = null;
@@ -25,5 +27,6 @@ public class MethodBinder implements RhsBinder {
 			throw new RuntimeException("Problem while trying to bind "
 					+ binding.getRhsElement(), ex);
 		}
+		return destination;
 	}
 }

@@ -3,8 +3,8 @@ package net.sf.textbeans.parser;
 import java.io.Reader;
 
 import net.sf.textbeans.binding.Binding;
-import net.sf.textbeans.binding.BindingInfoReader;
-import net.sf.textbeans.binding.XStreamBindingInfoReader;
+import net.sf.textbeans.binding.io.BindingInfoReader;
+import net.sf.textbeans.binding.io.XStreamBindingInfoReader;
 import net.sf.textbeans.parser.glr.IGLRParser;
 
 public class BindingParser {

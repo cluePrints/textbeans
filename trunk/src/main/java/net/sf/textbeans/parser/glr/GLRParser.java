@@ -86,21 +86,17 @@ public class GLRParser<T, N, P, V> extends Parser<T, N, P, V> implements
 			} else {
 				Action<T, P, V> act = actions[stateStack.last()];
 				
-				result = doAction(next, curr, branchesSpawned, act);
+				result = doAction(next, curr, act);
+				branchesSpawned.addAll(handleConflictsIfAny(next, result));
 			}
 		} while (result == ActionReturn.KEEP);
 		return branchesSpawned;
 	}
 
-	private ActionReturn doAction(T next, ParserState current, List<ParserState> branchesSpawned,
-			Action<T, P, V> act) {
+	private ActionReturn doAction(T next, ParserState current, Action<T, P, V> act) {
 		ActionReturn result = null;
 		do {
 			result = act.doPerform(this, next);
-			List<ParserState> spawned = handleConflictsIfAny(next, result);
-			if (!spawned.isEmpty()) {
-				branchesSpawned.addAll(spawned);
-			}
 			
 			if (result == ActionReturn.KEEP) {
 				Action<T, P, V>[] actions = table.getActions(next);
@@ -130,9 +126,8 @@ public class GLRParser<T, N, P, V> extends Parser<T, N, P, V> implements
 				
 				// use cloned
 				loadState(spawnState);
-				result = doAction(next, spawnState, branchesSpawned, a);
-				if (!(result instanceof ConflictActionReturn)) 
-					branchesSpawned.add(spawnState);
+				result = doAction(next, spawnState, a);
+				branchesSpawned.add(spawnState);
 				
 				// restore initial
 				if (it.hasNext()) {
