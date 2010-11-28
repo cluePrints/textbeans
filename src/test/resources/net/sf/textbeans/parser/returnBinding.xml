@@ -7,6 +7,6 @@
   	<return value="null"/>
   </class>
   <class name="java.lang.String" productionName="value__tvalue">
-    <return ruleRhs="tvalue"/>
+    <return ruleRhs="tvalue" as="java.lang.String"/>
   </class>
 </binding>
