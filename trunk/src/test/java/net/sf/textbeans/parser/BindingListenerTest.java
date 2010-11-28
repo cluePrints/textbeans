@@ -26,7 +26,7 @@ public class BindingListenerTest {
 			}}));
 			put("zz", "bb");
 		}});
-		BindingListener l = new BindingListener(null);
+		BindingListener l = new BindingListener(null, null);
 		Assert.assertEquals(3, l.lookFor(map, "fee.number"));
 	}
 	
@@ -50,8 +50,8 @@ public class BindingListenerTest {
 			}}));
 			put("zz", "bb");
 		}});
-		BindingListener l = new BindingListener(null);
-		Assert.assertEquals(BindingListener.NOT_FOUND, l.lookFor(map, "fee.john"));
+		BindingListener l = new BindingListener(null, null);
+		Assert.assertEquals(BindingListener.NOTHING, l.lookFor(map, "fee.john"));
 	}
 	
 	@Test
@@ -60,7 +60,7 @@ public class BindingListenerTest {
 		ListMultimap<String, Object> map = LinkedListMultimap.create();
 		map.put("fee", "first");
 		map.put("fee", "second");
-		BindingListener l = new BindingListener(null);
+		BindingListener l = new BindingListener(null, null);
 		Assert.assertEquals("second", l.lookFor(map, "fee.1"));
 	}
 	
@@ -75,7 +75,7 @@ public class BindingListenerTest {
 			}}));
 			put("zz", "bb");
 		}});
-		BindingListener l = new BindingListener(null);
+		BindingListener l = new BindingListener(null, null);
 		Assert.assertEquals("bb", l.lookFor(map, "zz"));
 	}
 }

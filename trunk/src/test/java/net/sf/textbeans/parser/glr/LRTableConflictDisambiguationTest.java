@@ -2,50 +2,62 @@ package net.sf.textbeans.parser.glr;
 
 import java.io.File;
 import java.io.FileReader;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 import junit.framework.Assert;
+import net.sf.textbeans.binding.Binding;
 import net.sf.textbeans.binding.TemplateBindingGenerator;
+import net.sf.textbeans.parser.BindingFacade;
 import net.sf.textbeans.parser.BindingParser;
 import net.sf.textbeans.parser.SimpleParser;
 import net.sf.textbeans.parser.TatooTest;
+import net.sf.textbeans.parser.testobj.TLRTableConflictDisambiguation_Order;
 import net.sf.textbeans.util.Const;
+import net.sf.textbeans.util.Pair;
 
 import org.junit.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import com.google.common.collect.LinkedListMultimap;
+
 @SuppressWarnings({"rawtypes", "unchecked"})
-public class LRConflict2Test{
-	final String name = "LRTableConflict2";
+public class LRTableConflictDisambiguationTest{
+	final String name = "LRTableConflictDisambiguation";
 	final String dir = TatooTest.TEST_DIR+"/parser/glr/";
+	private Binding binding;
 	
-	// TODO: this is really cool case for disambiguation/prunning stuff	
 	@Test
-	public void shouldFollowParsingBranches() throws Exception
+	public void shouldReturnProperResult() throws Exception
 	{
 		String grammarFile = dir + name + Const.EBNF_EXT;
 		String rulesFile = dir + name + Const.BINDING_EXT;
 		BindingParser p = new BindingParser().compile(new FileReader(
 				grammarFile));
+		p.setDisambiguatior(DisambiguationStrategy.MIN_UNPARSED);
 		if (new File(rulesFile).exists()) {
-			p.loadAstRules(new FileReader(rulesFile));
+			binding = p.loadAstRules(new FileReader(rulesFile));
 		}
 		String dataFile = dir + name + Const.TEST_CASE_EXT;
-		p.parse(new FileReader(dataFile));
+		
+		p.parse(new FileReader(dataFile));		
 
-		assertContains(p, Arrays.asList("a", "a", "a", "a"));
+		LinkedList<TLRTableConflictDisambiguation_Order> result = (LinkedList<TLRTableConflictDisambiguation_Order>) p.getResult();
+		TLRTableConflictDisambiguation_Order order = result.get(0);
+		Assert.assertEquals(1, result.size());
+		Assert.assertEquals(Integer.valueOf(234), order.getId());
+		Assert.assertEquals(Integer.valueOf(50000), order.getPrice());
 	}
 	
 	private void assertContains(BindingParser p, List<String>... strs) 
 	{
 		LinkedList<ParserState> states = getStateStacks(p);
-
+		BindingFacade f = new BindingFacade();
 		LinkedList boundStuff = new LinkedList();
 		for (ParserState state : states) {
 			LinkedList<net.sf.textbeans.util.Pair<String, ? extends Object>> parsingBranchExternal = (LinkedList<net.sf.textbeans.util.Pair<String, ? extends Object>>) state.getExternal();
-			boundStuff.add(parsingBranchExternal.get(0).v);
+			boundStuff.add(f.lookForResultCandidate(parsingBranchExternal, binding));
 		}
 		
 		for (List<String> lst : strs) {
