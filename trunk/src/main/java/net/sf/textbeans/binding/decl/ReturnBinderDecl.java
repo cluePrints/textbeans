@@ -10,6 +10,8 @@ public class ReturnBinderDecl implements RhsElementBinding {
 	private String ruleRhs;
 	@XStreamAsAttribute
 	private String value;
+	@XStreamAsAttribute
+	private String as;
 
 	public ReturnBinderDecl(String rhsElement, String target) {
 		super();
@@ -25,16 +27,19 @@ public class ReturnBinderDecl implements RhsElementBinding {
 		this.ruleRhs = rhsElement;
 	}
 	
-	public String getType() {
+	public String getValue() {
 		return value;
 	}
 
-	public void setType(String type) {
-		this.value = type;
+	public void setValue(String value) {
+		this.value = value;
 	}
 
-	@Override
-	public String toString() {
-		return "ReturnBinderDecl [ruleRhs=" + ruleRhs + ", type=" + value + "]";
+	public String getExpectedType() {
+		return as;
+	}
+
+	public void setExpectedType(String as) {
+		this.as = as;
 	}
 }

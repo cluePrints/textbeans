@@ -10,12 +10,12 @@ import net.sf.textbeans.parser.glr.IGLRParser;
 public class BindingParser {
 	private SimpleParser parser;
 	private BindingInfoReader astDescReader = new XStreamBindingInfoReader();
-	BindingListener bindingListener;
+	private BindingListener bindingListener;
 	public BindingParser compile(Reader grammar) {
 		parser = new SimpleParser().compile(grammar);
 		return this;
 	}
-	public BindingParser loadAstRules(Reader ast) {
+	public Binding loadAstRules(Reader ast) {
 		Binding binding = astDescReader.fromFile(ast);
 		bindingListener = new BindingListener(binding);
 		// TODO: interface here?
@@ -26,7 +26,7 @@ public class BindingParser {
 		}
 		parser.lexerListener = new DTOParserForwarder(parser);
 		parser.setParsingListener(bindingListener);
-		return this;
+		return binding;
 	}
 	
 	public SimpleParser getParser() {
@@ -38,7 +38,7 @@ public class BindingParser {
 	
 	public Object getResult()
 	{		
-		return bindingListener.semanticStack.get(0).v;
+		return bindingListener.getResult();
 	}
 }
 
