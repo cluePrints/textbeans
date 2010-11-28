@@ -1,7 +1,6 @@
 package net.sf.textbeans.parser.glr;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -91,17 +90,21 @@ public class GLRParser<T, N, P, V> extends Parser<T, N, P, V> implements
 			} else {
 				Action<T, P, V> act = actions[stateStack.last()];
 				
-				result = doAction(next, curr, act);
-				branchesSpawned.addAll(handleConflictsIfAny(next, result));
+				result = doAction(next, curr, branchesSpawned, act);
 			}
 		} while (result == ActionReturn.KEEP);
 		return branchesSpawned;
 	}
 
-	private ActionReturn doAction(T next, ParserState current, Action<T, P, V> act) {
+	private ActionReturn doAction(T next, ParserState current, List<ParserState> branchesSpawned,
+			Action<T, P, V> act) {
 		ActionReturn result = null;
 		do {
 			result = act.doPerform(this, next);
+			List<ParserState> spawned = handleConflictsIfAny(next, result);
+			if (!spawned.isEmpty()) {
+				branchesSpawned.addAll(spawned);
+			}
 			
 			if (result == ActionReturn.KEEP) {
 				Action<T, P, V>[] actions = table.getActions(next);
@@ -112,7 +115,6 @@ public class GLRParser<T, N, P, V> extends Parser<T, N, P, V> implements
 	}
 
 	// TODO: log4j NDC logging to track simultaneously followed branch in some comprehensive way
-	@SuppressWarnings({"rawtypes", "unchecked"})
 	List<ParserState> handleConflictsIfAny(T next, ActionReturn result) {
 		List<ParserState> branchesSpawned = new LinkedList<ParserState>();
 		if (result instanceof ConflictActionReturn) {
@@ -122,7 +124,7 @@ public class GLRParser<T, N, P, V> extends Parser<T, N, P, V> implements
 			ParserState savedState = getState();
 			Object savedExternalState = branchSpawnedListener.onBranchSpawned();
 			savedState.setExternal(savedExternalState);
-			
+
 			Iterator<Action> it = c.getActions().iterator();
 			while (it.hasNext()) {
 				Action a = it.next();
@@ -132,8 +134,9 @@ public class GLRParser<T, N, P, V> extends Parser<T, N, P, V> implements
 				
 				// use cloned
 				loadState(spawnState);
-				result = doAction(next, spawnState, a);
-				branchesSpawned.add(spawnState);
+				result = doAction(next, spawnState, branchesSpawned, a);
+				if (!(result instanceof ConflictActionReturn)) 
+					branchesSpawned.add(spawnState);
 				
 				// restore initial
 				if (it.hasNext()) {
