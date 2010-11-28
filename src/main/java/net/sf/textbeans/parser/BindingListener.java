@@ -40,11 +40,12 @@ class BindingListener implements
 	Binding binding;
 	LinkedList<Pair<String, ? extends Object>> semanticStack = Lists
 			.newLinkedList();
-	private BindingFacade bindingFacade = new BindingFacade();
+	private BindingFacade bindingFacade;
 
-	public BindingListener(Binding binding) {
+	public BindingListener(Binding binding, BindingFacade bindingFacade) {
 		super();
 		this.binding = binding;
+		this.bindingFacade = bindingFacade;
 	}
 
 	public void shift(TerminalDecl terminal) {
@@ -184,8 +185,8 @@ class BindingListener implements
 		return c;
 	}
 	
-	public Object getResult()
+	public LinkedList<Pair<String, ? extends Object>> getResultTree()
 	{
-		return bindingFacade.lookForResultCandidate(semanticStack, binding);
+		return semanticStack;
 	}
 }

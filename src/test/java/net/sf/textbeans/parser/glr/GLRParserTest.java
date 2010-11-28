@@ -33,7 +33,7 @@ public class GLRParserTest {
 
 	@Test
 	public void shouldInitWithSingleStateStack() throws Exception {
-		IGLRParser parser = initParser();
+		MultiResult parser = initParser();
 
 		List<ParserState> states = getStateStacks(parser);
 		assertEquals(1, states.size());
@@ -56,7 +56,7 @@ public class GLRParserTest {
 		assertEquals(ext, state.getExternal());
 	}
 
-	private LinkedList<ParserState> getStateStacks(IGLRParser parser) {
+	private LinkedList<ParserState> getStateStacks(MultiResult parser) {
 		return (LinkedList<ParserState>) ReflectionTestUtils.getField(parser,
 				"stateStacks");
 	}
