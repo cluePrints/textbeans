@@ -1,0 +1,12 @@
+<binding>
+  <class name="?" productionName="unit__null_value">
+    <rule2Field ruleRhs="null" field="null"/>
+    <rule2Field ruleRhs="value" field="value"/>
+  </class>
+  <class name="?" productionName="null__tnull">
+    <rule2Field ruleRhs="tnull" field="tnull"/>
+  </class>
+  <class name="?" productionName="value__tvalue">
+    <rule2Field ruleRhs="tvalue" field="tvalue"/>
+  </class>
+</binding>
