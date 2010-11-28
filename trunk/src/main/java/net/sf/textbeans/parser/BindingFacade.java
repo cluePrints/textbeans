@@ -33,7 +33,7 @@ public class BindingFacade {
 		return binders.get(b.getClass());
 	}
 	
-	public Object lookForResultCandidate(LinkedList<Pair<String, ? extends Object>> semanticStack, Binding b)
+	public Object lookForResultCandidate(List<Pair<String, ? extends Object>> semanticStack, Binding b)
 	{
 		List<ClassBinding> bindings = b.getBindings();
 		Collections.sort(bindings, ClassBinding.PRIORITY_DESC);

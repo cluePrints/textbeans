@@ -1,11 +1,16 @@
 package net.sf.textbeans.parser.glr;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 import net.sf.textbeans.util.Memento;
+import net.sf.textbeans.util.Pair;
+
+import com.google.common.collect.Lists;
+
 import fr.umlv.tatoo.runtime.parser.Action;
 import fr.umlv.tatoo.runtime.parser.ActionReturn;
 import fr.umlv.tatoo.runtime.parser.LookaheadMap;
@@ -107,6 +112,7 @@ public class GLRParser<T, N, P, V> extends Parser<T, N, P, V> implements
 	}
 
 	// TODO: log4j NDC logging to track simultaneously followed branch in some comprehensive way
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	List<ParserState> handleConflictsIfAny(T next, ActionReturn result) {
 		List<ParserState> branchesSpawned = new LinkedList<ParserState>();
 		if (result instanceof ConflictActionReturn) {
@@ -116,7 +122,7 @@ public class GLRParser<T, N, P, V> extends Parser<T, N, P, V> implements
 			ParserState savedState = getState();
 			Object savedExternalState = branchSpawnedListener.onBranchSpawned();
 			savedState.setExternal(savedExternalState);
-
+			
 			Iterator<Action> it = c.getActions().iterator();
 			while (it.hasNext()) {
 				Action a = it.next();
@@ -160,5 +166,15 @@ public class GLRParser<T, N, P, V> extends Parser<T, N, P, V> implements
 			GLRBranchSpawnedListener branchSpawnedListener) {
 		this.branchSpawnedListener = branchSpawnedListener;
 		this.stateStacks.getLast().setExternal(branchSpawnedListener.onBranchSpawned());
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<List<Pair<String, ? extends Object>>> getResultTrees() {
+		List<List<Pair<String, ? extends Object>>> res = Lists.newLinkedList();
+		for (ParserState state : stateStacks) {
+			res.add((List<Pair<String, ? extends Object>>) state.getExternal());
+		}
+		return res;
 	}
 }
