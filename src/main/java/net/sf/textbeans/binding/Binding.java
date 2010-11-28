@@ -1,5 +1,6 @@
 package net.sf.textbeans.binding;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -23,10 +24,10 @@ public class Binding {
 		bindings.add(b);
 	}
 	public List<ClassBinding> getBindings() {
-		return bindings;
+		return new ArrayList<ClassBinding>(bindings);
 	}
 	public void setBindings(List<ClassBinding> bindings) {
-		this.bindings = bindings;
+		this.bindings = new ArrayList<ClassBinding>(bindings);
 	}
 	
 }

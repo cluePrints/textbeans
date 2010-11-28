@@ -14,6 +14,8 @@ public class PropertyBinder implements RhsBinder {
 
 	@Override
 	public Object bind(Object destination, RhsElementBinding binding, Object value) {
+		if (destination == null)
+			return null;
 		try {
 			String name = ((RuleElementToFieldBinding) binding).getField();
 			BeanInfo inf = Introspector.getBeanInfo(destination.getClass());
