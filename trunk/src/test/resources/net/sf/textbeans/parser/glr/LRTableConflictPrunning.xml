@@ -1,0 +1,26 @@
+<binding>
+  <class name="java.util.LinkedList" productionName="order_star_0_empty"/>
+  <class ruleRhs="order_star_0" productionName="order_star_0_rec" returnPriority="1">
+    <rule2Method ruleRhs="order" method="add"/>
+  </class>
+  <class name="net.sf.textbeans.parser.testobj.TLRTableConflictDisambiguation_Order" productionName="id_only">
+    <rule2Field ruleRhs="id" field="id"/>
+  </class>
+  <class name="net.sf.textbeans.parser.testobj.TLRTableConflictDisambiguation_Order" productionName="price_only">
+    <rule2Field ruleRhs="price" field="price"/>
+  </class>
+  <class name="net.sf.textbeans.parser.testobj.TLRTableConflictDisambiguation_Order" productionName="id_price">
+    <rule2Field ruleRhs="id" field="id"/>
+    <rule2Field ruleRhs="price" field="price"/>
+  </class>
+  <class name="net.sf.textbeans.parser.testobj.TLRTableConflictDisambiguation_Order" productionName="price_id">
+    <rule2Field ruleRhs="price" field="price"/>
+    <rule2Field ruleRhs="id" field="id"/>
+  </class>
+  <class name="java.lang.Object" productionName="id__number">
+    <return ruleRhs="number" as="java.lang.Integer"/>
+  </class>
+  <class name="java.lang.Object" productionName="price__number">
+  	<return ruleRhs="number" as="java.lang.Integer"/>
+  </class>
+</binding>

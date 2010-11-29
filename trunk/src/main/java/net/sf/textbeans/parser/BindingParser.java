@@ -9,6 +9,7 @@ import net.sf.textbeans.binding.io.XStreamBindingInfoReader;
 import net.sf.textbeans.parser.glr.DisambiguationStrategy;
 import net.sf.textbeans.parser.glr.IGLRParser;
 import net.sf.textbeans.parser.glr.MultiResult;
+import net.sf.textbeans.parser.glr.ObjectChangeHook;
 import net.sf.textbeans.util.Pair;
 
 public class BindingParser {
@@ -18,10 +19,12 @@ public class BindingParser {
 	private Binding binding;
 	private BindingFacade bindingFacade;
 	private DisambiguationStrategy disambiguatior = DisambiguationStrategy.SIMPLE;
+
 	public BindingParser compile(Reader grammar) {
 		parser = new SimpleParser().compile(grammar);
 		return this;
 	}
+
 	public Binding loadAstRules(Reader ast) {
 		binding = astDescReader.fromFile(ast);
 		bindingFacade = new BindingFacade();
@@ -36,27 +39,33 @@ public class BindingParser {
 		parser.setParsingListener(bindingListener);
 		return binding;
 	}
-	
+
 	public SimpleParser getParser() {
 		return parser;
 	}
+
 	public void parse(Reader name) {
 		parser.parse(name);
 	}
-	
-	public Object getResult()
-	{		
+
+	public Object getResult() {
 		if (parser.dataParser instanceof MultiResult) {
-			List<List<Pair<String, ? extends Object>>> resultTrees = ((MultiResult) parser.dataParser).getResultTrees();
-			List<Pair<String, ? extends Object>> chosenTree = disambiguatior.choose(resultTrees);
+			List<List<Pair<String, ? extends Object>>> resultTrees = ((MultiResult) parser.dataParser)
+					.getResultTrees();
+			List<Pair<String, ? extends Object>> chosenTree = disambiguatior
+					.choose(resultTrees);
 			return bindingFacade.lookForResultCandidate(chosenTree, binding);
 		} else {
-			return bindingFacade.lookForResultCandidate(bindingListener.getResultTree(), binding);
+			return bindingFacade.lookForResultCandidate(
+					bindingListener.getResultTree(), binding);
 		}
 	}
+
 	public void setDisambiguatior(DisambiguationStrategy disambiguatior) {
 		this.disambiguatior = disambiguatior;
 	}
+
+	public void setHook(ObjectChangeHook hook) {
+		bindingListener.setHook(hook);
+	}
 }
-
-

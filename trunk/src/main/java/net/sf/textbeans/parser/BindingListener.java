@@ -11,6 +11,7 @@ import net.sf.textbeans.binding.decl.ClassBinding;
 import net.sf.textbeans.binding.decl.RhsElementBinding;
 import net.sf.textbeans.parser.glr.GLRBranchFollowedListener;
 import net.sf.textbeans.parser.glr.GLRBranchSpawnedListener;
+import net.sf.textbeans.parser.glr.ObjectChangeHook;
 import net.sf.textbeans.util.Cloner;
 import net.sf.textbeans.util.Pair;
 import net.sf.textbeans.util.XStreamCloner;
@@ -41,6 +42,7 @@ class BindingListener implements
 	LinkedList<Pair<String, ? extends Object>> semanticStack = Lists
 			.newLinkedList();
 	private BindingFacade bindingFacade;
+	private ObjectChangeHook hook = ObjectChangeHook.NONE;
 
 	public BindingListener(Binding binding, BindingFacade bindingFacade) {
 		super();
@@ -102,8 +104,12 @@ class BindingListener implements
 				}
 			}
 
+			hook.onObjectChanged(obj);
 			semanticStack.push(Pair.newOne(production.getLeft().getId(), obj));
 		} catch (Exception ex) {
+			if (ex instanceof RuntimeException) {
+				throw (RuntimeException) ex;
+			}
 			throw new RuntimeException(ex);
 		}
 	}
@@ -188,5 +194,9 @@ class BindingListener implements
 	public LinkedList<Pair<String, ? extends Object>> getResultTree()
 	{
 		return semanticStack;
+	}
+
+	public void setHook(ObjectChangeHook hook) {
+		this.hook = hook;
 	}
 }

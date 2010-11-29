@@ -1,0 +1,29 @@
+priorities:
+
+tokens:
+	number	= '[0-9]+'
+ 
+blanks:
+ 	space= "( |\t|\r|\n)+"
+ 
+comments:
+ 	comment="#([^\r\n])*(\r)?\n"
+ 	ignored="."  
+
+starts:
+ 	batch
+
+productions:	
+	batch
+    	= order* {batch};
+    
+    order:net.sf.textbeans.parser.testobj.TLRTableConflictDisambiguation_Order  
+    	= id {id_only} 
+    	| price {price_only}
+    	| price id {price_id};
+    	
+    id:java.lang.Integer
+    	= 'number';
+    	
+    price:java.lang.Integer
+        = 'number';

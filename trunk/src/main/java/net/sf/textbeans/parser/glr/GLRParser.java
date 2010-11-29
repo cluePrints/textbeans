@@ -134,9 +134,13 @@ public class GLRParser<T, N, P, V> extends Parser<T, N, P, V> implements
 				
 				// use cloned
 				loadState(spawnState);
-				result = doAction(next, spawnState, branchesSpawned, a);
-				if (!(result instanceof ConflictActionReturn)) 
-					branchesSpawned.add(spawnState);
+				try {
+					result = doAction(next, spawnState, branchesSpawned, a);
+					if (!(result instanceof ConflictActionReturn)) 
+						branchesSpawned.add(spawnState);
+				} catch (DeadBranchException ex) {
+					System.out.println("Branch "+this.stateStack+" is not valid - won't be followed.");
+				}
 				
 				// restore initial
 				if (it.hasNext()) {
