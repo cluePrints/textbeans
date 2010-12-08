@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.createControl;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
+import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -15,7 +16,7 @@ import java.util.Map;
 
 import org.easymock.IAnswer;
 import org.easymock.IMocksControl;
-import static org.junit.Assert.*;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -177,6 +178,7 @@ public class GLRParserTest {
 	 *  0 --> 1 --> 3
 	 */
 	@Test
+	@Ignore
 	public void shouldNotFollowSpawnBranchesRecursively() throws Exception {
 		final GLRParser parser = initParser();		
 		Action a24 = mockAction(parser, 4, ActionReturn.NEXT);

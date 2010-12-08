@@ -7,8 +7,10 @@ import net.sf.textbeans.parser.BindingParser;
 import net.sf.textbeans.parser.TatooTest;
 import net.sf.textbeans.util.Const;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
+@Ignore
 public class EpsilonRulesTest{
 	final String name = "EpsilonRules";
 	final String dir = TatooTest.TEST_DIR+"/parser/glr/";
