@@ -1,8 +1,8 @@
 package net.sf.textbeans.util;
 
 public class Pair<K, V> {
-	public K k;
-	public V v;
+	public final K k;
+	public final V v;
 	public Pair(K k, V v) {
 		super();
 		this.k = k;
@@ -14,5 +14,11 @@ public class Pair<K, V> {
 	@Override
 	public String toString() {
 		return "("+k+","+v+")";
+	}
+	public K getK() {
+		return k;
+	}
+	public V getV() {
+		return v;
 	}
 }

@@ -50,9 +50,10 @@ class BindingListener implements
 		this.bindingFacade = bindingFacade;
 	}
 
-	public void shift(TerminalDecl terminal) {
+	public void shift(TerminalDecl terminal) {		
 		DTOTerminalDecl dto = (DTOTerminalDecl) terminal;
 		semanticStack.push(Pair.newOne(dto.getId(), dto.data.toString()));
+		System.out.println("Shift "+dto);
 	}
 
 	public void reduce(ProductionDecl production) {
