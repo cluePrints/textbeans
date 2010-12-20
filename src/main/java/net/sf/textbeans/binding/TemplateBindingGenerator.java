@@ -49,14 +49,19 @@ public class TemplateBindingGenerator {
 
 	public static void generateBindingTemplate(String name, BindingParser p)
 			throws IOException {
-			Map<VariableDecl, Type> types = p.getParser().getToolsFactory()
-					.getVariableTypeMap();
-			Collection<? extends ProductionDecl> prods = p.getParser()
-					.getGrammarFactory().getAllProductions();
-			TemplateBindingGenerator bGen = new TemplateBindingGenerator(prods, types);
-			BindingInfoWriter xWr = new XStreamBindingInfoWriter();
-			Writer wr = new FileWriter(new File(name + ".btmp.xml"));
-			xWr.toFile(bGen.createBindingTemplate(), wr);
+		Writer wr = new FileWriter(new File(name + ".btmp.xml"));
+		generateBindingTemplate(wr, p);
+	}
+
+	public static void generateBindingTemplate(Writer wr, BindingParser p) {
+		Map<VariableDecl, Type> types = p.getParser().getToolsFactory()
+				.getVariableTypeMap();
+		Collection<? extends ProductionDecl> prods = p.getParser()
+				.getGrammarFactory().getAllProductions();
+		TemplateBindingGenerator bGen = new TemplateBindingGenerator(prods,
+				types);
+		BindingInfoWriter xWr = new XStreamBindingInfoWriter();
+		xWr.toFile(bGen.createBindingTemplate(), wr);
 	}
 
 }

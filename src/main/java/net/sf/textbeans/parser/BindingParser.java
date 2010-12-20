@@ -17,7 +17,7 @@ public class BindingParser {
 	private BindingInfoReader astDescReader = new XStreamBindingInfoReader();
 	private BindingListener bindingListener;
 	private Binding binding;
-	private BindingFacade bindingFacade;
+	private BindingFacade bindingFacade = new BindingFacade();
 	private DisambiguationStrategy disambiguatior = DisambiguationStrategy.SIMPLE;
 
 	public BindingParser compile(Reader grammar) {
@@ -26,8 +26,7 @@ public class BindingParser {
 	}
 
 	public Binding loadAstRules(Reader ast) {
-		binding = astDescReader.fromFile(ast);
-		bindingFacade = new BindingFacade();
+		binding = astDescReader.fromFile(ast);		
 		bindingListener = new BindingListener(binding, bindingFacade);
 		// TODO: interface here?
 		if (parser.dataParser instanceof MultiResult) {
@@ -55,6 +54,17 @@ public class BindingParser {
 			List<Pair<String, ? extends Object>> chosenTree = disambiguatior
 					.choose(resultTrees);
 			return bindingFacade.lookForResultCandidate(chosenTree, binding);
+		} else {
+			return bindingFacade.lookForResultCandidate(
+					bindingListener.getResultTree(), binding);
+		}
+	}
+	
+	public Object getResults() {
+		if (parser.dataParser instanceof MultiResult) {
+			List<List<Pair<String, ? extends Object>>> resultTrees = ((MultiResult) parser.dataParser)
+					.getResultTrees();
+			return resultTrees;
 		} else {
 			return bindingFacade.lookForResultCandidate(
 					bindingListener.getResultTree(), binding);

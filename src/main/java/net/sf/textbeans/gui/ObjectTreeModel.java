@@ -12,6 +12,8 @@ import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
+import net.sf.textbeans.util.Pair;
+
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Sets;
 
@@ -61,7 +63,7 @@ public class ObjectTreeModel implements TreeModel{
 	@Override
 	public Prop getChild(Object p, int index) {
 		Prop prop = (Prop) p;
-		try {
+		try {			
 			if (prop.value instanceof Collection) {
 				return new Prop("["+index+"]",
 						Iterators.get(((Collection) prop.value).iterator(), index),
@@ -130,14 +132,19 @@ public class ObjectTreeModel implements TreeModel{
 		
 		public Prop(String name, Object value, int idx) {
 			super();
+			if (value instanceof Pair) {
+				Pair pair = (Pair) value;
+				name = String.valueOf(pair.getK());
+				value = pair.getV(); 
+			}
 			this.name = name;
-			this.value = value;
+			this.value = value instanceof Class ? ((Class) value).getSimpleName() : value;
 			this.idx = idx;
 		}
 
 		@Override
 		public String toString() {
-			String result = String.valueOf(name);
+			String result = String.valueOf(name)+(value != null ? ":"+value.getClass().getSimpleName() : "");
 			if (ObjectTreeModel.this.isLeaf0(this)) {
 				result+= "="+String.valueOf(value);
 			}
