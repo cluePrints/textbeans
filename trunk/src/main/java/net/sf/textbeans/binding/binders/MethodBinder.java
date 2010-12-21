@@ -12,6 +12,7 @@ public class MethodBinder implements RhsBinder {
 
 	@Override
 	public Object bind(Object destination, RhsElementBinding binding, Object value) {
+		boolean methodFound = false;
 		try {
 			String name = ((Rhs2MethodBinding) binding).getMethod();
 			Method method = null;
@@ -19,13 +20,22 @@ public class MethodBinder implements RhsBinder {
 				if (name.equals(m.getName())
 						&& m.getParameterTypes().length == 1) {
 					method = m;
+					if (methodFound) {
+						throw new RuntimeException("Duplicate method with same name and single param.");
+					}
+					methodFound = true;
 				}
 			}
-			Class<?> type = method.getParameterTypes()[0];
-			method.invoke(destination, convertor.convert(value, type));
+			if (methodFound) {
+				Class<?> type = method.getParameterTypes()[0];
+				method.invoke(destination, convertor.convert(value, type));
+			}
 		} catch (Exception ex) {
 			throw new RuntimeException("Problem while trying to bind "
 					+ binding.getRhsElement(), ex);
+		}
+		if (!methodFound) {
+			throw new RuntimeException("Method was not found for: "+binding);
 		}
 		return destination;
 	}
