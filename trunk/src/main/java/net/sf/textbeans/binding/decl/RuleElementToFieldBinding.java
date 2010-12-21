@@ -32,4 +32,11 @@ public class RuleElementToFieldBinding implements RhsElementBinding{
 	public void setField(String field) {
 		this.field = field;
 	}
+	
+	@Override
+	public String toString() {
+		return "Rule2Field [ruleRhs=" + ruleRhs + ", field="
+				+ field + "]";
+	}
+
 }

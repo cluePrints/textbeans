@@ -42,4 +42,11 @@ public class ReturnBinderDecl implements RhsElementBinding {
 	public void setExpectedType(String as) {
 		this.as = as;
 	}
+
+	@Override
+	public String toString() {
+		return "Return [ruleRhs=" + ruleRhs + ", value=" + value
+				+ ", as=" + as + "]";
+	}
+	
 }
