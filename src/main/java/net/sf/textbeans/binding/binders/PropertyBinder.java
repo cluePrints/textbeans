@@ -16,19 +16,24 @@ public class PropertyBinder implements RhsBinder {
 	public Object bind(Object destination, RhsElementBinding binding, Object value) {
 		if (destination == null)
 			return null;
+		boolean triggered = false;
 		try {
 			String name = ((RuleElementToFieldBinding) binding).getField();
 			BeanInfo inf = Introspector.getBeanInfo(destination.getClass());
 			for (PropertyDescriptor desc : inf.getPropertyDescriptors()) {
-				if (name.equalsIgnoreCase(desc.getName())) {
+				if (name != null && name.equals(desc.getName())) {
 					Class<?> propType = desc.getPropertyType();
 					Object valueToSet = convertor.convert(value, propType);
 					desc.getWriteMethod().invoke(destination, valueToSet);
+					triggered = true;
 				}
 			}
 		} catch (Exception ex) {
 			throw new RuntimeException("Problem while trying to bind '"
 					+ binding.getRhsElement()+"' to "+destination.getClass(), ex);
+		}
+		if (!triggered) {
+			throw new RuntimeException("Property was not found for: "+binding);
 		}
 		return destination;
 	}
