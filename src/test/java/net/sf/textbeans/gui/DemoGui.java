@@ -24,7 +24,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTree;
+import javax.swing.event.TreeModelListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreePath;
 
 import net.sf.textbeans.binding.TemplateBindingGenerator;
 import net.sf.textbeans.parser.BindingParser;
@@ -36,7 +39,7 @@ import com.google.common.io.Files;
 
 public class DemoGui {
 	public static void main(String[] args) {
-		final JCheckBox cbShowAll = new JCheckBox("Show all parsing branches");
+		final JCheckBox cbShowAll = new JCheckBox("All branches");
 		
 		final JFrame wndMain = new JFrame();
 		wndMain.setSize(800, 600);
@@ -68,7 +71,7 @@ public class DemoGui {
 		add(mainPanel, taBinding, "Binding rules: ");
 
 		JPanel pnlActions = new JPanel();
-		JButton btnCompile = new JButton("Compile rules and parse");
+		JButton btnCompile = new JButton("Parse");
 		btnCompile.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -111,6 +114,31 @@ public class DemoGui {
 			}
 		});
 		pnlActions.add(btnLoad);
+		pnlActions.add(new JButton("Reload"));
+		JButton btnSave = new JButton("Save");
+		btnSave.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				JFileChooser fChooser = new JFileChooser(TatooTest.TEST_DIR);
+				fChooser.setFileSelectionMode(JFileChooser.SAVE_DIALOG);
+				FileNameExtensionFilter filter = new FileNameExtensionFilter(
+						"EBNF grammar descriptions", Const.EBNF_EXT
+								.substring(1));
+				fChooser.setFileFilter(filter);
+				int returnVal = fChooser.showOpenDialog(wndMain);
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					File selectedFile = fChooser.getSelectedFile();
+					String nameNExt = selectedFile.getName();
+					String name = nameNExt.substring(0, nameNExt.length()
+							- Const.EBNF_EXT.length());
+					String dir = selectedFile.getParentFile().getPath() + "/";
+					trySave(taGrammar, dir + name + Const.EBNF_EXT);
+					trySave(taText, dir + name + ".txt");
+					trySave(taBinding, dir + name + ".xml");
+				}
+			}
+		});
+		pnlActions.add(btnSave);
 		pnlActions.add(btnCompile);
 		pnlActions.add(btnGenerateBinding);
 		pnlActions.add(cbShowAll);
@@ -141,11 +169,24 @@ public class DemoGui {
 			dest.setText("");
 		}
 	}
+	
+	private static void trySave(JTextArea dest, String fileName) {
+		File file = new File(fileName);
+		{
+			try {
+				Files.write(dest.getText(), file, Charsets.UTF_8);
+				dest.getText();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+	}
 
 	private static void test(final JFrame wndMain, boolean showAll, final JTree trResult, final JTextArea taText,
 			final JTextArea taGrammar, final JTextArea taBinding) {
 		String stageInProgress = "parser initialized using definition";
 		try {
+			trResult.setModel(new ObjectTreeModel("Root", null));
 			BindingParser parser = new BindingParser();
 			parser.compile(asReader(taGrammar));
 			stageInProgress = "mapping rules parsing";
