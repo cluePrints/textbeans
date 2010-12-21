@@ -22,6 +22,7 @@ import fr.umlv.tatoo.runtime.buffer.impl.LocationTracker;
 import fr.umlv.tatoo.runtime.buffer.impl.ReaderWrapper;
 import fr.umlv.tatoo.runtime.lexer.Lexer;
 import fr.umlv.tatoo.runtime.lexer.LexerListener;
+import fr.umlv.tatoo.runtime.lexer.LexingException;
 import fr.umlv.tatoo.runtime.parser.Parser;
 import fr.umlv.tatoo.runtime.parser.ParserListener;
 import fr.umlv.tatoo.runtime.parser.ParserTable;
@@ -52,7 +53,11 @@ public class SimpleParser {
 				p.ruleFactory, p.encoding, p.grammarFactory, p.ebnfSupport,
 				p.toolsFactory, p.attributeMap);
 
-		textBeansGrammarParser.parse(grammarFileReader);
+		try {
+			textBeansGrammarParser.parse(grammarFileReader);
+		} catch (LexingException ex) {
+			throw new RuntimeException("Error in parser grammar definition:\n"+ex.getMessage());
+		}
 
 		NonTerminalDecl start = p.grammarFactory.getStartNonTerminalSet()
 				.iterator().next();
