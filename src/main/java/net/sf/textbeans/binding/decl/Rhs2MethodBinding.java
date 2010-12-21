@@ -32,4 +32,10 @@ public class Rhs2MethodBinding implements RhsElementBinding {
 	public void setMethod(String method) {
 		this.method = method;
 	}
+
+	@Override
+	public String toString() {
+		return "Rhs2Method [method=" + method + ", ruleRhs=" + ruleRhs
+				+ "]";
+	}
 }

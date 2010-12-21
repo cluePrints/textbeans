@@ -1,5 +1,6 @@
 package net.sf.textbeans.parser;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -92,6 +93,7 @@ class BindingListener implements
 				String rhsName = rhsElem.getId();
 				rhsNames.add(rhsName);
 			}
+			List<RhsElementBinding> triggeredBinders = new LinkedList<RhsElementBinding>();
 			for (String rhsName : rhsNames) {
 				RhsElementBinding[] rhsBnds = classBnd.searchByRhsName(rhsName);
 
@@ -102,6 +104,15 @@ class BindingListener implements
 
 					RhsBinder rhsBinder = bindingFacade.getBinderFor(rhsBnd);
 					obj = rhsBinder.bind(obj, rhsBnd, dto);
+					triggeredBinders.add(rhsBnd);
+				}
+			}
+			
+			if (classBnd.getFields() != null) {
+				ArrayList<RhsElementBinding> notTriggered = new ArrayList<RhsElementBinding>(classBnd.getFields());
+				notTriggered.removeAll(triggeredBinders);
+				if (notTriggered.size() > 0) {
+					throw new RuntimeException("Bindings not triggered: "+notTriggered+". For "+classBnd.getProductionName()+". Possibly invalid mapping");
 				}
 			}
 
