@@ -1,17 +1,11 @@
 tokens:
-	id  	= '[A-Z]{2}[0-9]{8}'
-	at  	= 'at'
-	fee		= '[0-9]+bp'
- 
+   id= '[A-Z]{2}[0-9]{8}'
+   at= 'at'
+   fee= '[0-9]+bp'
 blanks:
- 	space= "( |\t|\r|\n)+"
-
+    space= "( |\t|\r|\n)+"
 starts:
- 	batch
-
+    batch
 productions:
-	batch 
-		= order*;
-    
-    order 
-    	= 'id' 'at' 'fee';
+    batch = order*;
+    order = 'id' 'at' 'fee';

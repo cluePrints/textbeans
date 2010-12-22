@@ -1,6 +1,7 @@
 package net.sf.textbeans.parser;
 
 import java.io.Reader;
+import java.lang.reflect.Constructor;
 import java.util.List;
 
 import net.sf.textbeans.binding.Binding;
@@ -18,7 +19,7 @@ public class BindingParser {
 	private BindingListener bindingListener;
 	private Binding binding;
 	private BindingFacade bindingFacade = new BindingFacade();
-	private DisambiguationStrategy disambiguatior = DisambiguationStrategy.SIMPLE;
+	private DisambiguationStrategy disambiguatior = null;
 
 	public BindingParser compile(Reader grammar) {
 		parser = new SimpleParser().compile(grammar);
@@ -34,6 +35,12 @@ public class BindingParser {
 			p.setBranchFollowingListener(bindingListener);
 			p.setBranchSpawnedListener(bindingListener);
 		}
+		DisambiguationStrategy disambiguator = resolve(binding.getDisambiguatorClass());
+		setDisambiguatior(disambiguator);
+		
+		ObjectChangeHook prunner = resolve(binding.getPrunnerClass());
+		setHook(prunner);
+		
 		parser.lexerListener = new DTOParserForwarder(parser);
 		parser.setParsingListener(bindingListener);
 		return binding;
@@ -51,8 +58,13 @@ public class BindingParser {
 		if (parser.dataParser instanceof MultiResult) {
 			List<List<Pair<String, ? extends Object>>> resultTrees = ((MultiResult) parser.dataParser)
 					.getResultTrees();
-			List<Pair<String, ? extends Object>> chosenTree = disambiguatior
-					.choose(resultTrees);
+			
+			List<Pair<String, ? extends Object>> chosenTree;
+			if (disambiguatior != null ) {
+				chosenTree = disambiguatior.choose(resultTrees);
+			} else {
+				chosenTree = DisambiguationStrategy.SIMPLE.choose(resultTrees);
+			}
 			return bindingFacade.lookForResultCandidate(chosenTree, binding);
 		} else {
 			return bindingFacade.lookForResultCandidate(
@@ -77,5 +89,20 @@ public class BindingParser {
 
 	public void setHook(ObjectChangeHook hook) {
 		bindingListener.setHook(hook);
+	}
+	
+	@SuppressWarnings("unchecked")
+	private <T> T resolve(String clazzName) 
+	{
+		if (clazzName == null)
+			return null;
+		
+		try {
+			Class<T> clazz = (Class<T>) Class.forName(clazzName);
+			Constructor<T> c = clazz.getConstructor();
+			return c.newInstance();
+		} catch (Exception ex) {
+			throw new RuntimeException("Could not load class: "+clazzName);
+		}
 	}
 }
