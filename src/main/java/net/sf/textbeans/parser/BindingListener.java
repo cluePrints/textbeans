@@ -43,7 +43,7 @@ class BindingListener implements
 	LinkedList<Pair<String, ? extends Object>> semanticStack = Lists
 			.newLinkedList();
 	private BindingFacade bindingFacade;
-	private ObjectChangeHook hook = ObjectChangeHook.NONE;
+	private ObjectChangeHook hook = null;
 
 	public BindingListener(Binding binding, BindingFacade bindingFacade) {
 		super();
@@ -116,7 +116,9 @@ class BindingListener implements
 				}
 			}
 
-			hook.onObjectChanged(obj);
+			if (hook != null) {
+				hook.onObjectChanged(obj);
+			}
 			semanticStack.push(Pair.newOne(production.getLeft().getId(), obj));
 		} catch (Exception ex) {
 			if (ex instanceof RuntimeException) {

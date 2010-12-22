@@ -138,15 +138,15 @@ public class ObjectTreeModel implements TreeModel{
 				value = pair.getV(); 
 			}
 			this.name = name;
-			this.value = value instanceof Class ? ((Class) value).getSimpleName() : value;
+			this.value = value;
 			this.idx = idx;
 		}
 
 		@Override
 		public String toString() {
-			String result = String.valueOf(name)+(value != null ? ":"+value.getClass().getSimpleName() : "");
+			String result = String.valueOf(name)/*+(value != null ? ":"+value.getClass().getSimpleName() : "")*/;
 			if (ObjectTreeModel.this.isLeaf0(this)) {
-				result+= "="+String.valueOf(value);
+				result+= "="+String.valueOf(value instanceof Class ? ((Class) value).getSimpleName()+".class" : value);
 			}
 			return result;
 		}
